@@ -10,4 +10,8 @@ func InitRouters(e *gin.Engine) {
 	r := e.Group("")
 	r.GET("/ping", method.Pong)
 	r.GET("/test_db", method.TestDBMessage)
+
+	api := e.Group("api")
+	api.POST("/order", method.CreateNewOrder)
+
 }
