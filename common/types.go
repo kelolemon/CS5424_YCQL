@@ -1,6 +1,6 @@
 package common
 
-type CreateOrderInfo struct {
+type CreateOrderReq struct {
 	WarehouseID     int32   `json:"w_id"`
 	DistrictID      int32   `json:"d_id"`
 	CustomerID      int32   `json:"c_id"`
@@ -8,4 +8,7 @@ type CreateOrderInfo struct {
 	ItermNumber     []int32 `json:"iterm_number"`
 	SupplyWarehouse []int32 `json:"supply_warehouse"`
 	Quantity        []int32 `json:"quantity"`
+}
+
+type CreateOrderResp struct {
 }

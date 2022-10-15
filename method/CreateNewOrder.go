@@ -2,6 +2,7 @@ package method
 
 import (
 	"cs5234/common"
+	"cs5234/helper"
 	"encoding/json"
 	"log"
 
@@ -15,8 +16,8 @@ import (
 func CreateNewOrder(c *gin.Context) {
 	raw, _ := c.GetRawData()
 	log.Printf("[info] create new order, request body = %v", string(raw))
-	var createNewOrderInfo common.CreateOrderInfo
-	err := json.Unmarshal(raw, &createNewOrderInfo)
+	var createNewOrderReq common.CreateOrderReq
+	err := json.Unmarshal(raw, &createNewOrderReq)
 	if err != nil {
 		log.Printf("[warn] request json converted error, err=%v, request body =%v", err, string(raw))
 		c.JSON(400, gin.H{
@@ -25,8 +26,6 @@ func CreateNewOrder(c *gin.Context) {
 		return
 	}
 	//todo create new order from db and output item info, need to add helper/CreateNewOrder and corresponding sql in dao/xx
-
-	c.JSON(200, gin.H{
-		"message": "ok",
-	})
+	res, err := helper.CreateNewOrder(createNewOrderReq)
+	c.JSON(200, res)
 }
