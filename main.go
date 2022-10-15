@@ -1,10 +1,12 @@
 package main
 
 import (
+	"log"
+
 	"cs5234/client"
 	"cs5234/router"
+
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 func main() {

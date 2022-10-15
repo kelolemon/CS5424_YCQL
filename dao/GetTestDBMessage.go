@@ -1,9 +1,11 @@
 package dao
 
 import (
-	"cs5234/client"
-	"github.com/yugabyte/gocql"
 	"log"
+
+	"cs5234/client"
+	
+	"github.com/yugabyte/gocql"
 )
 
 func QueryTestDBMessage() (msg string, err error) {

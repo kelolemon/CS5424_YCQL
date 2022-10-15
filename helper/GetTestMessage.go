@@ -1,9 +1,11 @@
 package helper
 
 import (
-	"cs5234/dao"
-	"github.com/gin-gonic/gin"
 	"log"
+
+	"cs5234/dao"
+	
+	"github.com/gin-gonic/gin"
 )
 
 func GetTestMessage(c *gin.Context) (msg string, err error) {

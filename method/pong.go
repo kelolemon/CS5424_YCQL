@@ -2,6 +2,7 @@ package method
 
 import (
 	"cs5234/helper"
+
 	"github.com/gin-gonic/gin"
 )
 
