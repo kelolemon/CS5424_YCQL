@@ -24,6 +24,8 @@ func CreateNewOrder(c *gin.Context) {
 		})
 		return
 	}
+	//todo create new order from db and output item info, need to add helper/CreateNewOrder and corresponding sql in dao/xx
+
 	c.JSON(200, gin.H{
 		"message": "ok",
 	})
