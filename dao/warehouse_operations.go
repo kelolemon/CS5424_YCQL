@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func SetNewWYTD(W_ID int32, Payment int32) (err error) {
+func UpdateWarehouseYTD(warehouseID int32, Payment int32) (err error) {
 	session, err := client.DBCluster.CreateSession()
 	if err != nil {
 		log.Printf("[warn] Get DB session err,err=%v", err)
@@ -14,7 +14,7 @@ func SetNewWYTD(W_ID int32, Payment int32) (err error) {
 
 	defer session.Close()
 
-	if err := session.Query(`UPDATE Warehouse SET W_YTD = W_YTD + ? WHERE W_ID = ?`, Payment, W_ID).Exec(); err != nil {
+	if err := session.Query(`UPDATE Warehouse SET W_YTD = W_YTD + ? WHERE W_ID = ?`, Payment, warehouseID).Exec(); err != nil {
 		log.Printf("[warn] Query err, err, err=%v", err)
 		return err
 	}

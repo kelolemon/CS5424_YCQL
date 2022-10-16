@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/gin-gonic/gin v1.8.1
+	github.com/stretchr/testify v1.8.0
 	github.com/yugabyte/gocql v0.0.0-20220204171058-0bd8e6cb12d0
 )
 
