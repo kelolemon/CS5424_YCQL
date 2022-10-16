@@ -37,3 +37,19 @@ func SetNewDNextOID(WareHouseID int32, DistrictID int32, DistrictNextOrderID int
 
 	return nil
 }
+
+func SetNewDYTD(WareHouseID int32, DistrictID int32, Payment int32) (err error) {
+	session, err := client.DBCluster.CreateSession()
+	if err != nil {
+		log.Printf("[warn] Get DB session err, err=%v", err)
+		return err
+	}
+
+	defer session.Close()
+
+	if err := session.Query(`UPDATE District SET D_YTD = D_YTD + ? WHERE D_W_ID = ? AND D_ID = ?`, Payment, WareHouseID, DistrictID); err != nil {
+		log.Printf("[warn] Query err, err=%v", err)
+	}
+
+	return nil
+}

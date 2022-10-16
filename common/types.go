@@ -12,3 +12,13 @@ type CreateOrderReq struct {
 
 type CreateOrderResp struct {
 }
+
+type CreateNewPaymentReq struct {
+	WarehouseID int32 `json:"c_w_id"`
+	DistrictID  int32 `json:"c_d_id"`
+	CustomerID  int32 `json:"c_id"`
+	Payment     int32 `json:"payment"`
+}
+
+type CreateNewPaymentResp struct {
+}
