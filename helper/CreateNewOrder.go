@@ -81,6 +81,20 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderReq, err err
 			return common.CreateOrderReq{}, err
 		}
 	}
-	totalAmount = totalAmount * (1 + districtRes.DistrictTax)
+	// 6. TOTAL AMOUNT = TOTAL AMOUNT × (1+D TAX +W TAX) × (1−C DISCOUNT),
+	// where W TAX is the tax rate for warehouse W ID, D TAX is the tax rate for district (W ID, D ID),
+	//and C DISCOUNT is the discount for customer C ID.
+	warehouseRes, err := dao.GetWarehouseInfo(r.WarehouseID)
+	if err != nil {
+		log.Printf("[warn] get warehouse info error, err=%v", err)
+		return common.CreateOrderReq{}, err
+	}
+	customerRes, err := dao.GetCustomerInfo(r.CustomerID)
+	if err != nil {
+		log.Printf("[warn] get customer info error, err=%v", err)
+		return common.CreateOrderReq{}, err
+	}
+	totalAmount = totalAmount * (1 + districtRes.DistrictTax) * (1 + warehouseRes.Tax) * (1 - customerRes.Discount)
+
 	return res, nil
 }
