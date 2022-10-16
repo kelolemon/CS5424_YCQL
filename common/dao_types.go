@@ -35,6 +35,27 @@ type District struct {
 }
 
 type Customer struct {
+	WarehouseID     int32   `cql:"c_w_id"`
+	DistrictID      int32   `cql:"c_d_id"`
+	ID              int32   `cql:"c_id"`
+	FirstName       string  `cql:"c_first"`
+	MiddleName      string  `cql:"c_middle"`
+	LastName        string  `cql:"c_last"`
+	Street1         string  `cql:"c_street_1"`
+	Street2         string  `cql:"c_street_2"`
+	City            string  `cql:"c_city"`
+	State           string  `cql:"c_state"`
+	Zip             string  `cql:"c_zip"`
+	Phone           string  `cql:"c_phone"`
+	CreationTime    int64   `cql:"c_since"`
+	CreditStatus    string  `cql:"c_credit"`
+	CreditLimit     float64 `cql:"c_credit_lim"`
+	Discount        float64 `cql:"c_discount"`
+	Balance         float64 `cql:"c_balance"`
+	YtdPayment      float64 `cql:"c_ytd_payment"`
+	NumPaymentMade  int32   `cql:"c_payment_cnt"`
+	NumDeliveryMade int32   `cql:"c_delivery_cnt"`
+	Data            string  `cql:"c_data"`
 }
 
 type Warehouse struct {
