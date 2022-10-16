@@ -71,9 +71,9 @@ type Warehouse struct {
 }
 
 type Item struct {
-	ID      int32  `cql:"i_id"`
-	Name    string `cql:"i_name"`
-	Price   string `cql:"i_price"`
-	ImageID int32  `cql:"i_im_id"`
-	Data    string `cql:"i_daya"`
+	ID      int32   `cql:"i_id"`
+	Name    string  `cql:"i_name"`
+	Price   float64 `cql:"i_price"`
+	ImageID int32   `cql:"i_im_id"`
+	Data    string  `cql:"i_daya"`
 }
