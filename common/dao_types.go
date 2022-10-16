@@ -1,37 +1,37 @@
 package common
 
 type Stock struct {
-	StockWarehouseID int32   `cql:"S_W_ID"`
-	StockItemID      int32   `cql:"S_I_ID"`
-	StockQuantity    int32   `cql:"S_QUANTITY"`
-	StockYTD         float64 `cql:"S_YTD"`
-	StockOrderCnt    int32   `cql:"S_ORDER_CNT"`
-	StockRemoteCnt   int32   `cql:"S_REMOTE_CNT"`
-	StockDist1       string  `cql:"S_DIST_01"`
-	StockDist2       string  `cql:"S_DIST_02"`
-	StockDist3       string  `cql:"S_DIST_03"`
-	StockDist4       string  `cql:"S_DIST_04"`
-	StockDist5       string  `cql:"S_DIST_05"`
-	StockDist6       string  `cql:"S_DIST_06"`
-	StockDist7       string  `cql:"S_DIST_07"`
-	StockDist8       string  `cql:"S_DIST_08"`
-	StockDist9       string  `cql:"S_DIST_09"`
-	StockDist10      string  `cql:"S_DIST_10"`
-	StockData        string  `cql:"S_DATA"`
+	StockWarehouseID int32   `cql:"s_w_id"`
+	StockItemID      int32   `cql:"s_i_id"`
+	StockQuantity    int32   `cql:"s_quantity"`
+	StockYTD         float64 `cql:"s_ytd"`
+	StockOrderCnt    int32   `cql:"s_order_cnt"`
+	StockRemoteCnt   int32   `cql:"s_remote_cnt"`
+	StockDist1       string  `cql:"s_dist_01"`
+	StockDist2       string  `cql:"s_dist_02"`
+	StockDist3       string  `cql:"s_dist_03"`
+	StockDist4       string  `cql:"s_dist_04"`
+	StockDist5       string  `cql:"s_dist_05"`
+	StockDist6       string  `cql:"s_dist_06"`
+	StockDist7       string  `cql:"s_dist_07"`
+	StockDist8       string  `cql:"s_dist_08"`
+	StockDist9       string  `cql:"s_dist_09"`
+	StockDist10      string  `cql:"s_dist_10"`
+	StockData        string  `cql:"s_date"`
 }
 
 type District struct {
-	DistrictWarehouseID int32   `cql:"D_W_ID"`
-	DistrictID          int32   `cql:"D_ID"`
-	DistrictName        string  `cql:"D_NAME"`
-	DistrictStreet1     string  `cql:"D_STREET_1"`
-	DistrictStreet2     string  `cql:"D_STREET_2"`
-	DistrictCity        string  `cql:"D_CITY"`
-	DistrictState       string  `cql:"D_STATE"`
-	DistrictZip         string  `cql:"D_ZIP"`
-	DistrictTax         float64 `cql:"D_TAX"`
-	DistrictYTD         float64 `cql:"D_YTD"`
-	DistrictNextOrderID int32   `cql:"D_NEXT_O_ID"`
+	DistrictWarehouseID int32   `cql:"d_w_id"`
+	DistrictID          int32   `cql:"d_id"`
+	DistrictName        string  `cql:"d_name"`
+	DistrictStreet1     string  `cql:"d_street_1"`
+	DistrictStreet2     string  `cql:"d_street_2"`
+	DistrictCity        string  `cql:"d_city"`
+	DistrictState       string  `cql:"d_state"`
+	DistrictZip         string  `cql:"d_zip"`
+	DistrictTax         float64 `cql:"d_tax"`
+	DistrictYTD         float64 `cql:"d_ytd"`
+	DistrictNextOrderID int32   `cql:"d_next_o_id"`
 }
 
 type Customer struct {
@@ -71,9 +71,9 @@ type Warehouse struct {
 }
 
 type Item struct {
-	ID      int32  `cql:"i_id"`
-	Name    string `cql:"i_name"`
-	Price   string `cql:"i_price"`
-	ImageID int32  `cql:"i_im_id"`
-	Data    string `cql:"i_daya"`
+	ID      int32   `cql:"i_id"`
+	Name    string  `cql:"i_name"`
+	Price   float64 `cql:"i_price"`
+	ImageID int32   `cql:"i_im_id"`
+	Data    string  `cql:"i_daya"`
 }
