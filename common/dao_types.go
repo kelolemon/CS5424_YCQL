@@ -19,3 +19,17 @@ type Stock struct {
 	StockDist10      string  `cql:"S_DIST_10"`
 	StockData        string  `cql:"S_DATA"`
 }
+
+type District struct {
+	DistrictWarehouseID int32   `cql:"D_W_ID"`
+	DistrictID          int32   `cql:"D_ID"`
+	DistrictName        string  `cql:"D_NAME"`
+	DistrictStreet1     string  `cql:"D_STREET_1"`
+	DistrictStreet2     string  `cql:"D_STREET_2"`
+	DistrictCity        string  `cql:"D_CITY"`
+	DistrictState       string  `cql:"D_STATE"`
+	DistrictZip         string  `cql:"D_ZIP"`
+	DistrictTax         float64 `cql:"D_TAX"`
+	DistrictYTD         float64 `cql:"D_YTD"`
+	DistrictNextOrderID int32   `cql:"D_NEXT_O_ID"`
+}
