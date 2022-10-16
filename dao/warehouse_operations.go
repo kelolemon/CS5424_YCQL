@@ -2,6 +2,7 @@ package dao
 
 import (
 	"cs5234/client"
+	"cs5234/common"
 	"log"
 )
 
@@ -20,4 +21,20 @@ func UpdateWarehouseYTD(warehouseID int32, Payment int32) (err error) {
 	}
 
 	return nil
+}
+
+func GetWarehouseInfo(warehouseID int32) (warehouseInfo common.Warehouse, err error) {
+	session, err := client.DBCluster.CreateSession()
+	if err != nil {
+		log.Printf("[warn] Get DB session err, err=%v", err)
+		return common.Warehouse{}, err
+	}
+	defer session.Close()
+
+	if err := session.Query(`SELECT * FROM Warehouse WHERE W_ID = ?`, warehouseID).Scan(&warehouseInfo); err != nil {
+		log.Printf("[warn] Querry err, err=%v", err)
+		return common.Warehouse{}, err
+	}
+
+	return warehouseInfo, nil
 }
