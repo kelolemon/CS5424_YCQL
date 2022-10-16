@@ -33,3 +33,15 @@ type District struct {
 	DistrictYTD         float64 `cql:"D_YTD"`
 	DistrictNextOrderID int32   `cql:"D_NEXT_O_ID"`
 }
+
+type Warehouse struct {
+	ID      int32   `cql:"w_id"`
+	Name    string  `cql:"w_name"`
+	Street1 string  `cql:"w_street_1"`
+	Street2 string  `cql:"w_street_2"`
+	City    string  `cql:"w_city"`
+	State   string  `cql:"w_state"`
+	Zip     string  `cql:"w_zip"`
+	Tax     float64 `cql:"w_tax"`
+	Ytd     float64 `cql:"w_ytd"`
+}
