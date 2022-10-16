@@ -36,11 +36,25 @@ type CreateOrderResp struct {
 }
 
 type CreateNewPaymentReq struct {
-	WarehouseID int32 `json:"c_w_id"`
-	DistrictID  int32 `json:"c_d_id"`
-	CustomerID  int32 `json:"c_id"`
-	Payment     int32 `json:"payment"`
+	WarehouseID int32   `json:"c_w_id"`
+	DistrictID  int32   `json:"c_d_id"`
+	CustomerID  int32   `json:"c_id"`
+	Payment     float64 `json:"payment"`
 }
 
 type CreateNewPaymentResp struct {
+	WarehouseID int32  `json:"c_w_id"`
+	DistrictID  int32  `json:"c_d_id"`
+	CustomerID  int32  `json:"c_id"`
+	FirstName   string `json:"c_first"`
+	MiddleName  string `json:"c_middle"`
+	LastName    string `json:"c_last"`
+	Street1     string `json:"c_street_1"`
+	Street2     string `json:"c_street_2"`
+	City        string `json:"c_city"`
+	State       string `json:"c_state"`
+	Zip         int32  `json:"c_zip"`
+	Phone       int32  `json:"c_phone"`
+	//Since       timestamppb.Timestamp `json:"c_since"`
+	Credit string `json:"c_credit"`
 }
