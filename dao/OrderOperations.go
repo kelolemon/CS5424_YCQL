@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func CreateNewOrder(OrderID int32, OderWarehouseID int32, OrderDistrictID int32, OrderCustomerID int32, OrderCarrierID int32, OOLCent int64, OAllLocal int32, OEntryDate int64) (err error) {
+func CreateNewOrder(OrderID int32, OderWarehouseID int32, OrderDistrictID int32, OrderCustomerID int32, OrderCarrierID int32, OOLCent int32, OAllLocal int32, OEntryDate int64) (err error) {
 	session, err := client.DBCluster.CreateSession()
 	if err != nil {
 		log.Printf("[warn] Get DB session err, err=%v", err)
