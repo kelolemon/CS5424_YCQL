@@ -34,6 +34,9 @@ type District struct {
 	DistrictNextOrderID int32   `cql:"D_NEXT_O_ID"`
 }
 
+type Customer struct {
+}
+
 type Warehouse struct {
 	ID      int32   `cql:"w_id"`
 	Name    string  `cql:"w_name"`
@@ -44,4 +47,12 @@ type Warehouse struct {
 	Zip     string  `cql:"w_zip"`
 	Tax     float64 `cql:"w_tax"`
 	Ytd     float64 `cql:"w_ytd"`
+}
+
+type Item struct {
+	ID    int32  `cql:"i_id"`
+	Name  string `cql:"i_name"`
+	Price string `cql:"i_price"`
+	IMID  int32  `cql:"i_im_id"`
+	Data  string `cql:"i_daya"`
 }
