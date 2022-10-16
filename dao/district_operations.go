@@ -38,7 +38,7 @@ func SetNewDNextOID(WareHouseID int32, DistrictID int32, DistrictNextOrderID int
 	return nil
 }
 
-func SetNewDYTD(WareHouseID int32, DistrictID int32, Payment int32) (err error) {
+func SetNewDistrictYTD(WareHouseID int32, DistrictID int32, Payment int32) (err error) {
 	session, err := client.DBCluster.CreateSession()
 	if err != nil {
 		log.Printf("[warn] Get DB session err, err=%v", err)
