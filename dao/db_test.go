@@ -12,8 +12,10 @@ func TestDBConnection(t *testing.T) {
 	session, err := client.DBCluster.CreateSession()
 	assert.NoError(t, err)
 
-	defer session.Close()
-	var id int32
-	err = session.Query(`SELECT w_id FROM Warehouse`).Consistency(gocql.One).Scan(&id)
-	assert.NoError(t, err)
+	if session != nil {
+		defer session.Close()
+		var count int32
+		err = session.Query(`SELECT count(*) FROM warehouse`).Consistency(gocql.One).Scan(&count)
+		assert.NoError(t, err)
+	}
 }
