@@ -58,6 +58,30 @@ type Customer struct {
 	Data            string  `cql:"c_data"`
 }
 
+type Order struct {
+	WarehouseID    int32 `cql:"o_w_id"`
+	DistrictID     int32 `cql:"o_d_id"`
+	ID             int32 `cql:"o_id"`
+	CustomerID     int32 `cql:"o_c_id"`
+	CarrierID      int32 `cql:"o_carrier_id"`
+	NumItemOrdered int32 `cql:"o_ol_cnt"`
+	OrderStatus    int32 `cql:"o_all_local"`
+	OrderEntryTime int64 `cql:"o_entry_d"`
+}
+
+type OrderLine struct {
+	WarehouseID       int32   `cql:"ol_w_id"`
+	DistrictID        int32   `cql:"ol_d_id"`
+	OrderID           int32   `cql:"ol_o_id"`
+	ID                int32   `cql:"ol_number"`
+	ItemID            int32   `cql:"ol_i_id"`
+	DeliveryTime      int64   `cql:"ol_delivery_d"`
+	Amount            float64 `cql:"ol_amount"`
+	SupplyWarehouseID int32   `cql:"ol_supply_w_id"`
+	Quantity          int32   `cql:"ol_quantity"`
+	Info              string  `cql:"ol_dist_info"`
+}
+
 type Warehouse struct {
 	ID      int32   `cql:"w_id"`
 	Name    string  `cql:"w_name"`
