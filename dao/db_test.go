@@ -8,25 +8,23 @@ import (
 )
 
 func TestDBConnection(t *testing.T) {
-	client.InitDB()
-	session, err := client.DBCluster.CreateSession()
+	dao, err := NewDao(client.GetDBConfig())
 	assert.NoError(t, err)
-	defer session.Close()
 
-	if session != nil {
+	if dao != nil {
+		defer dao.Session.Close()
 		var count int32
-		err = session.Query(`SELECT count(*) FROM warehouse`).Scan(&count)
+		err = dao.Session.Query(`SELECT count(*) FROM warehouse`).Scan(&count)
 		assert.NoError(t, err)
 	}
 }
 
 func TestWarehouseInsertion(t *testing.T) {
-	client.InitDB()
-	session, err := client.DBCluster.CreateSession()
+	dao, err := NewDao(client.GetDBConfig())
 	assert.NoError(t, err)
-	defer session.Close()
 
-	if session != nil {
+	if dao != nil {
+		defer dao.Session.Close()
 		warehouse := common.Warehouse{
 			ID:      1,
 			Name:    "sxvnjhpd",
@@ -38,7 +36,7 @@ func TestWarehouseInsertion(t *testing.T) {
 			Tax:     0.0384,
 			Ytd:     300000.0,
 		}
-		err = session.Query(`INSERT INTO warehouse(w_id, w_name, w_street_1, w_street_2, w_city, w_state, w_zip, w_tax, w_ytd) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		err = dao.Session.Query(`INSERT INTO warehouse(w_id, w_name, w_street_1, w_street_2, w_city, w_state, w_zip, w_tax, w_ytd) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 			&warehouse.ID,
 			&warehouse.Name,
 			&warehouse.Street1,
@@ -53,15 +51,14 @@ func TestWarehouseInsertion(t *testing.T) {
 }
 
 func TestWarehouseSelection(t *testing.T) {
-	client.InitDB()
-	session, err := client.DBCluster.CreateSession()
+	dao, err := NewDao(client.GetDBConfig())
 	assert.NoError(t, err)
-	defer session.Close()
 
-	if session != nil {
+	if dao != nil {
+		defer dao.Session.Close()
 		rawMap := make(map[string]interface{})
 		var warehouse common.Warehouse
-		err = session.Query(`SELECT * FROM warehouse where w_id = 1`).MapScan(rawMap)
+		err = dao.Session.Query(`SELECT * FROM warehouse where w_id = 1`).MapScan(rawMap)
 		assert.NoError(t, err)
 		err := common.ToCqlStruct(rawMap, &warehouse)
 		assert.NoError(t, err)

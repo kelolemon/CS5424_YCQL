@@ -6,7 +6,25 @@ import (
 )
 
 func GetDistrictsForWarehouse(WarehouseID int32) ([]common.District, error) {
-	return nil, nil
+	districts := make([]common.District, 0)
+	stmt := `SELECT * FROM District WHERE d_w_id = ?`
+	iter := dao.Session.Query(stmt).Iter()
+
+	for {
+		rawMap := make(map[string]interface{})
+		var district common.District
+		if !iter.MapScan(rawMap) {
+			break
+		}
+		err := common.ToCqlStruct(rawMap, &district)
+		if err != nil {
+			log.Fatalf("error fetching districts: %s", err)
+			return nil, err
+		}
+		districts = append(districts, district)
+	}
+
+	return districts, nil
 }
 
 func GetDistrictInfo(WareHouseID int32, DistrictID int32) (DistrictInfo common.District, err error) {
