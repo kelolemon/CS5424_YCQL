@@ -11,7 +11,7 @@ const (
 	Cluster3IP = "xcnd8.comp.nus.edu.sg"
 	Cluster4IP = "xcnd50.comp.nus.edu.sg"
 	TesterIP   = "127.0.0.1"
-	KeySpace   = "test"
+	KeySpace   = "CS5424"
 )
 
 var (
