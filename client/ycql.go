@@ -15,8 +15,7 @@ const (
 )
 
 var (
-	DBCluster *gocql.ClusterConfig
-	Session   *gocql.Session
+	Session *gocql.Session
 )
 
 func InitDB() (err error) {
