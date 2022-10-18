@@ -11,15 +11,11 @@ func GetDistrictsForWarehouse(WarehouseID int32) ([]common.District, error) {
 	stmt := `SELECT * FROM District WHERE d_w_id = ?`
 	iter := client.Session.Query(stmt).Iter()
 
-	for {
-		rawMap := make(map[string]interface{})
+	for rawMap := make(map[string]interface{}); !iter.MapScan(rawMap); {
 		var district common.District
-		if !iter.MapScan(rawMap) {
-			break
-		}
 		err := common.ToCqlStruct(rawMap, &district)
 		if err != nil {
-			log.Fatalf("error fetching districts: %s", err)
+			log.Printf("[warn] fetching district err, err=%v", err)
 			return nil, err
 		}
 		districts = append(districts, district)
@@ -47,8 +43,9 @@ func SetNewDNextOID(WareHouseID int32, DistrictID int32, DistrictNextOrderID int
 }
 
 func SetNewDistrictYTD(warehouseID int32, districtID int32, newDistrictYTD float64) (err error) {
-	if err := client.Session.Query(`UPDATE District SET D_YTD = ? WHERE D_W_ID = ? AND D_ID = ?`, newDistrictYTD, warehouseID, districtID); err != nil {
+	if err := client.Session.Query(`UPDATE District SET D_YTD = ? WHERE D_W_ID = ? AND D_ID = ?`, newDistrictYTD, warehouseID, districtID).Exec(); err != nil {
 		log.Printf("[warn] Query err, err=%v", err)
+		return err
 	}
 
 	return nil
