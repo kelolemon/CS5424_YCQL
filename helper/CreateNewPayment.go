@@ -17,7 +17,7 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 
 	// step 2. update district (c_w_id, c_d_id) => increment d_ytd by payment
 	currentDistrictInfo, err := dao.GetDistrictInfo(r.WarehouseID, r.DistrictID)
-	var newDistrictYTD = currentDistrictInfo.DistrictYTD + r.Payment
+	var newDistrictYTD = currentDistrictInfo.YTD + r.Payment
 
 	err = dao.SetNewDistrictYTD(r.WarehouseID, r.DistrictID, newDistrictYTD)
 	if err != nil {

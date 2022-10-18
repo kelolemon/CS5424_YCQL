@@ -11,7 +11,7 @@ import (
 func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err error) {
 	//1. Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
 	districtRes, err := dao.GetDistrictInfo(r.WarehouseID, r.DistrictID)
-	n := districtRes.DistrictNextOrderID
+	n := districtRes.NextOrderID
 	if err != nil {
 		log.Printf("[warn] GetNextOID error, err=%v", err)
 		return common.CreateOrderResp{}, err
@@ -50,18 +50,18 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 			return common.CreateOrderResp{}, err
 		}
 		// (b) ADJUSTED QTY = S QUANTITY − QUANTITY [i]
-		adjustedQTY := stockRes.StockQuantity - r.Quantity[i]
+		adjustedQTY := stockRes.Quantity - r.Quantity[i]
 		// (c) If ADJUSTED QTY < 10, then set ADJUSTED QTY = ADJUSTED QTY + 100
 		if adjustedQTY < 10 {
 			adjustedQTY += 100
 		}
 		// (d) Update the stock for (ITEM NUMBER[i], SUPPLIER WAREHOUSE[i])
-		stockRes.StockYTD += float64(r.Quantity[i])
-		stockRes.StockOrderCnt += 1
+		stockRes.YTD += float64(r.Quantity[i])
+		stockRes.OrderCnt += 1
 		if warehouseID != r.WarehouseID {
-			stockRes.StockOrderCnt += 1
+			stockRes.RemoteCnt += 1
 		}
-		err = dao.UpdateStockInfo(warehouseID, itemID, adjustedQTY, stockRes.StockYTD, stockRes.StockOrderCnt, stockRes.StockRemoteCnt)
+		err = dao.UpdateStockInfo(warehouseID, itemID, adjustedQTY, stockRes.YTD, stockRes.OrderCnt, stockRes.RemoteCnt)
 		if err != nil {
 			log.Printf("[warn] update stock info error, err=%v", err)
 			return common.CreateOrderResp{}, err
@@ -87,7 +87,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 			SupplyWarehouseID: r.SupplyWarehouse[i],
 			Quantity:          r.Quantity[i],
 			OrderAmount:       itemAmount,
-			StockQuantity:     stockRes.StockQuantity,
+			StockQuantity:     stockRes.Quantity,
 		})
 	}
 	// 6. TOTAL AMOUNT = TOTAL AMOUNT × (1+D TAX +W TAX) × (1−C DISCOUNT),
@@ -103,7 +103,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		log.Printf("[warn] get customer info error, err=%v", err)
 		return common.CreateOrderResp{}, err
 	}
-	totalAmount = totalAmount * (1 + districtRes.DistrictTax) * (1 + warehouseRes.Tax) * (1 - customerRes.Discount)
+	totalAmount = totalAmount * (1 + districtRes.Tax) * (1 + warehouseRes.Tax) * (1 - customerRes.Discount)
 	res = common.CreateOrderResp{
 		OrderID:      n,
 		WarehouseID:  r.WarehouseID,
@@ -113,7 +113,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		CreditStatus: customerRes.CreditStatus,
 		Discount:     customerRes.Discount,
 		WarehouseTax: warehouseRes.Tax,
-		DistrictTax:  districtRes.DistrictTax,
+		DistrictTax:  districtRes.Tax,
 		EntryDate:    orderEntryDate,
 		NumberItems:  r.NumberItems,
 		TotalAmount:  totalAmount,

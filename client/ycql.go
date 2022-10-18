@@ -14,11 +14,16 @@ const (
 	KeySpace   = "CS5424"
 )
 
-func GetDBConfig() *gocql.ClusterConfig {
+var (
+	DBCluster *gocql.ClusterConfig
+	Session   *gocql.Session
+)
+
+func InitDB() (err error) {
 	var dbCluster *gocql.ClusterConfig
 	dbCluster = gocql.NewCluster(TesterIP)
 	dbCluster.Keyspace = KeySpace
 	dbCluster.Consistency = gocql.Quorum
-
-	return dbCluster
+	Session, err = dbCluster.CreateSession()
+	return err
 }
