@@ -11,7 +11,7 @@ func GetDistrictsForWarehouse(WarehouseID int32) ([]common.District, error) {
 	stmt := `SELECT * FROM District WHERE d_w_id = ?`
 	iter := client.Session.Query(stmt).Iter()
 
-	for rawMap := make(map[string]interface{}); !iter.MapScan(rawMap); {
+	for rawMap := make(map[string]interface{}); !iter.MapScan(rawMap); rawMap = make(map[string]interface{}) {
 		var district common.District
 		err := common.ToCqlStruct(rawMap, &district)
 		if err != nil {
