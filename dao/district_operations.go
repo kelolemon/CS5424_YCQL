@@ -9,7 +9,7 @@ import (
 func GetDistrictsForWarehouse(WarehouseID int32) ([]common.District, error) {
 	districts := make([]common.District, 0)
 	stmt := `SELECT * FROM District WHERE d_w_id = ?`
-	iter := client.Session.Query(stmt).Iter()
+	iter := client.Session.Query(stmt, WarehouseID).Iter()
 
 	for rawMap := make(map[string]interface{}); !iter.MapScan(rawMap); rawMap = make(map[string]interface{}) {
 		var district common.District
