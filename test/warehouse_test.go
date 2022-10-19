@@ -3,6 +3,7 @@ package test
 import (
 	"cs5234/client"
 	"cs5234/common"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -14,7 +15,7 @@ func TestWarehouseInsertion(t *testing.T) {
 	if client.Session != nil {
 		defer client.Session.Close()
 		warehouse := common.Warehouse{
-			ID:      1,
+			ID:      2,
 			Name:    "sxvnjhpd",
 			Street1: "dxvcrastvybcwvmgnyk",
 			Street2: "xvzxkgxtspsjdgylue",
@@ -50,5 +51,6 @@ func TestWarehouseSelection(t *testing.T) {
 		assert.NoError(t, err)
 		err := common.ToCqlStruct(rawMap, &warehouse)
 		assert.NoError(t, err)
+		fmt.Printf("%v+\n", warehouse)
 	}
 }

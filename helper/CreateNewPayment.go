@@ -49,7 +49,7 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 			WarehouseName: currentWarehouseInfo.Name,
 		}
 
-		if err := dao.InsertCustomerBalanceInfo(newCustomerBalanceInfo); err != nil {
+		if err := dao.InsertCustomerBalanceInfo(&newCustomerBalanceInfo); err != nil {
 			log.Printf("[warn] insert customer balance info error, err=%v", err)
 			return common.CreateNewPaymentResp{}, err
 		}

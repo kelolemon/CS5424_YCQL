@@ -13,5 +13,6 @@ func InitRouters(e *gin.Engine) {
 
 	api := e.Group("api")
 	api.POST("/order", method.CreateNewOrder)
+	api.POST("/payment", method.CreateNewPayment)
 
 }
