@@ -105,9 +105,9 @@ type Item struct {
 type OrderByCustomer struct {
 	CustomerID          int32  `cql:"c_id"`
 	OrderEntryTime      int64  `cql:"o_entry_d"`
-	CustomerFirstName   string `cql:"c_first"`
-	CustomerMiddleName  string `cql:"c_middle"`
-	CustomerLastName    string `cql:"c_last"`
+	FirstName           string `cql:"c_first"`
+	MiddleName          string `cql:"c_middle"`
+	LastName            string `cql:"c_last"`
 	CustomerBalance     string `cql:"c_balance"`
 	CustomerLastOrderID int32  `cql:"c_last_o_id"`
 	OrderCarrierID      int32  `cql:"o_carrier_id"`
@@ -137,4 +137,14 @@ type OrderLineQuantityByOrder struct {
 	OrderID                 int32                 `cql:"o_id"`
 	OrderEntryTime          int64                 `cql:"o_entry_d"`
 	OrderLineQuantitiesList []OrderLineQuantities `cql:"ol_quantities"`
+}
+
+type CustomerBalance struct {
+	ID            int32   `cql:"c_id"`
+	Balance       float64 `cq1:"c_balance"`
+	FirstName     string  `cql:"c_first"`
+	MiddleName    string  `cql:"c_middle"`
+	LastName      string  `cql:"c_last"`
+	WarehouseName string  `cql:"w_name"`
+	DistrictName  string  `cql:"d_name"`
 }

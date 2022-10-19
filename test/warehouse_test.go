@@ -1,4 +1,4 @@
-package dao
+package test
 
 import (
 	"cs5234/client"
@@ -6,18 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
-
-func TestDBConnection(t *testing.T) {
-	err := client.InitDB()
-	assert.NoError(t, err)
-
-	if client.Session != nil {
-		defer client.Session.Close()
-		var count int32
-		err = client.Session.Query(`SELECT count(*) FROM warehouse`).Scan(&count)
-		assert.NoError(t, err)
-	}
-}
 
 func TestWarehouseInsertion(t *testing.T) {
 	err := client.InitDB()
@@ -34,7 +22,7 @@ func TestWarehouseInsertion(t *testing.T) {
 			State:   "OM",
 			Zip:     "123456789",
 			Tax:     0.0384,
-			Ytd:     300000.0,
+			YTD:     300000.0,
 		}
 		err = client.Session.Query(`INSERT INTO warehouse(w_id, w_name, w_street_1, w_street_2, w_city, w_state, w_zip, w_tax, w_ytd) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 			&warehouse.ID,
@@ -45,7 +33,7 @@ func TestWarehouseInsertion(t *testing.T) {
 			&warehouse.State,
 			&warehouse.Zip,
 			&warehouse.Tax,
-			&warehouse.Ytd).Exec()
+			&warehouse.YTD).Exec()
 		assert.NoError(t, err)
 	}
 }

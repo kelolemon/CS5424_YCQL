@@ -53,8 +53,8 @@ type CreateNewPaymentResp struct {
 	Street2     string `json:"c_street_2"`
 	City        string `json:"c_city"`
 	State       string `json:"c_state"`
-	Zip         int32  `json:"c_zip"`
-	Phone       int32  `json:"c_phone"`
+	Zip         string `json:"c_zip"`
+	Phone       string `json:"c_phone"`
 	Since       int64  `json:"c_since"`
 	Credit      string `json:"c_credit"`
 }
