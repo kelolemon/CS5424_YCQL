@@ -8,7 +8,7 @@ import (
 
 func GetItermInfo(itemID int32) (itemInfo common.Item, err error) {
 	if err := client.Session.Query(`SELECT * FROM ITEM WHERE I_ID = ?`, itemID).Scan(&itemInfo); err != nil {
-		log.Printf("[warn] Querry err, err=%v", err)
+		log.Printf("[warn] Query err, err=%v", err)
 		return common.Item{}, err
 	}
 

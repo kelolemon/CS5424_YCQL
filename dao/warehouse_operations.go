@@ -17,7 +17,7 @@ func SetNewWarehouseYTD(warehouseID int32, newWarehouseYTD float64) (err error) 
 
 func GetWarehouseInfo(warehouseID int32) (warehouseInfo common.Warehouse, err error) {
 	if err := client.Session.Query(`SELECT * FROM Warehouse WHERE W_ID = ?`, warehouseID).Scan(&warehouseInfo); err != nil {
-		log.Printf("[warn] Querry err, err=%v", err)
+		log.Printf("[warn] Query err, err=%v", err)
 		return common.Warehouse{}, err
 	}
 

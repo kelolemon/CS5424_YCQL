@@ -8,7 +8,7 @@ import (
 func CreateNewOrderLine(OLWarehouseID int32, OLDistrictID int32, OLOrderID int32, OLNumber int32, OLSupplyWarehouseID int32, OLDeliveryDate int64, OLItemID int32, OLAmount float64, OLQuantity int32, OLDistInfo string) (err error) {
 	if err := client.Session.Query(`INSERT INTO Order_Line (OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_SUPPLY_W_ID, OL_DELIVERY_D, OL_I_ID, OL_AMOUNT, OL_QUANTITY, OL_DIST_INFO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		OLWarehouseID, OLDistrictID, OLOrderID, OLNumber, OLSupplyWarehouseID, OLDeliveryDate, OLItemID, OLAmount, OLQuantity, OLDistInfo).Exec(); err != nil {
-		log.Printf("[warn] Querry err, err=%v", err)
+		log.Printf("[warn] Query err, err=%v", err)
 		return err
 	}
 

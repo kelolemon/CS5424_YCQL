@@ -26,7 +26,7 @@ func GetDistrictsForWarehouse(WarehouseID int32) ([]common.District, error) {
 
 func GetDistrictInfo(WareHouseID int32, DistrictID int32) (DistrictInfo common.District, err error) {
 	if err := client.Session.Query(`SELECT * FROM District WHERE D_W_ID = ? and D_ID = ?`, WareHouseID, DistrictID).Scan(&DistrictInfo); err != nil {
-		log.Printf("[warn] Querry err, err=%v", err)
+		log.Printf("[warn] Query err, err=%v", err)
 		return common.District{}, err
 	}
 
@@ -35,7 +35,7 @@ func GetDistrictInfo(WareHouseID int32, DistrictID int32) (DistrictInfo common.D
 
 func SetNewDNextOID(WareHouseID int32, DistrictID int32, DistrictNextOrderID int32) (err error) {
 	if err := client.Session.Query(`UPDATE District SET D_NEXT_O_ID = ? FROM WHERE D_W_ID = ? and D_ID = ?`, DistrictNextOrderID, WareHouseID, DistrictID).Exec(); err != nil {
-		log.Printf("[warn] Querry err, err=%v", err)
+		log.Printf("[warn] Query err, err=%v", err)
 		return err
 	}
 
