@@ -55,6 +55,6 @@ type CreateNewPaymentResp struct {
 	State       string `json:"c_state"`
 	Zip         int32  `json:"c_zip"`
 	Phone       int32  `json:"c_phone"`
-	//Since       timestamppb.Timestamp `json:"c_since"`
-	Credit string `json:"c_credit"`
+	Since       int64  `json:"c_since"`
+	Credit      string `json:"c_credit"`
 }

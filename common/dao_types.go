@@ -91,7 +91,7 @@ type Warehouse struct {
 	State   string  `cql:"w_state"`
 	Zip     string  `cql:"w_zip"`
 	Tax     float64 `cql:"w_tax"`
-	Ytd     float64 `cql:"w_ytd"`
+	YTD     float64 `cql:"w_ytd"`
 }
 
 type Item struct {
@@ -100,4 +100,41 @@ type Item struct {
 	Price   float64 `cql:"i_price"`
 	ImageID int32   `cql:"i_im_id"`
 	Data    string  `cql:"i_data"`
+}
+
+type OrderByCustomer struct {
+	CustomerID          int32  `cql:"c_id"`
+	OrderEntryTime      int64  `cql:"o_entry_d"`
+	CustomerFirstName   string `cql:"c_first"`
+	CustomerMiddleName  string `cql:"c_middle"`
+	CustomerLastName    string `cql:"c_last"`
+	CustomerBalance     string `cql:"c_balance"`
+	CustomerLastOrderID int32  `cql:"c_last_o_id"`
+	OrderCarrierID      int32  `cql:"o_carrier_id"`
+}
+
+type StockQuantities struct {
+	ItemID        int32 `cql:"i_id"`
+	StockQuantity int32 `cql:"s_quantity"`
+}
+
+type StockByOrderLine struct {
+	WarehouseID         int32             `cql:"w_id"`
+	DistrictID          int32             `cql:"d_id"`
+	OrderID             int32             `cql:"o_id"`
+	OrderEntryTime      int64             `cql:"o_entry_d"`
+	StockQuantitiesList []StockQuantities `cql:"s_quantities"`
+}
+
+type OrderLineQuantities struct {
+	ItemID            int32 `cql:"i_id"`
+	OrderLineQuantity int32 `cql:"ol_quantity"`
+}
+
+type OrderLineQuantityByOrder struct {
+	WarehouseID             int32                 `cql:"w_id"`
+	DistrictID              int32                 `cql:"d_id"`
+	OrderID                 int32                 `cql:"o_id"`
+	OrderEntryTime          int64                 `cql:"o_entry_d"`
+	OrderLineQuantitiesList []OrderLineQuantities `cql:"ol_quantities"`
 }

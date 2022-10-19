@@ -8,7 +8,7 @@ import (
 func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPaymentReq, err error) {
 	// step 1. update warehouse (c_w_id) => increment w_ytd by payment
 	currentWarehouseInfo, err := dao.GetWarehouseInfo(r.WarehouseID)
-	var newWarehouseYTD = currentWarehouseInfo.Ytd + r.Payment
+	var newWarehouseYTD = currentWarehouseInfo.YTD + r.Payment
 
 	err = dao.SetNewWarehouseYTD(r.WarehouseID, newWarehouseYTD)
 	if err != nil {
