@@ -99,5 +99,5 @@ type Item struct {
 	Name    string  `cql:"i_name"`
 	Price   float64 `cql:"i_price"`
 	ImageID int32   `cql:"i_im_id"`
-	Data    string  `cql:"i_daya"`
+	Data    string  `cql:"i_data"`
 }
