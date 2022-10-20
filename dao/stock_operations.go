@@ -7,7 +7,7 @@ import (
 )
 
 func UpdateStockInfo(WareHouseID int32, ItemID int32, StockQuantity int32, StockYTD float64, StockOrderCnt int32, StockRemoteCnt int32) (err error) {
-	if err := client.Session.Query(`UPDATE Stock SET S_QUANTITY = ?, S_YTD = ?, S_ORDER_CNT = ?, S_REMOTE_CNT = ? FROM WHERE S_W_ID = ? and S_I_ID = ?`,
+	if err := client.Session.Query(`UPDATE Stock SET S_QUANTITY = ?, S_YTD = ?, S_ORDER_CNT = ?, S_REMOTE_CNT = ? WHERE S_W_ID = ? and S_I_ID = ?`,
 		StockQuantity, StockYTD, StockOrderCnt, StockRemoteCnt, WareHouseID, ItemID).Exec(); err != nil {
 		log.Printf("[warn] Query err, err=%v", err)
 		return err
