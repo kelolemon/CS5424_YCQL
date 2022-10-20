@@ -24,18 +24,24 @@ func GetDistrictsForWarehouse(WarehouseID int32) ([]common.District, error) {
 	return districts, nil
 }
 
-func GetDistrictInfo(WareHouseID int32, DistrictID int32) (DistrictInfo common.District, err error) {
-	if err := client.Session.Query(`SELECT * FROM District WHERE D_W_ID = ? and D_ID = ?`, WareHouseID, DistrictID).Scan(&DistrictInfo); err != nil {
-		log.Printf("[warn] Query err, err=%v", err)
+func GetDistrictInfo(warehouseID int32, districtID int32) (district common.District, err error) {
+	rawMap := make(map[string]interface{})
+	if err := client.Session.Query(`SELECT * FROM district WHERE d_id = ? AND d_w_id = ?`, districtID, warehouseID).MapScan(rawMap); err != nil {
+		log.Printf("[warn] Get district information error, err=%v", err)
 		return common.District{}, err
 	}
 
-	return DistrictInfo, nil
+	err = common.ToCqlStruct(rawMap, &district)
+	if err != nil {
+		log.Printf("[warn] To cql struct error, err=%v", err)
+	}
+
+	return district, nil
 }
 
-func SetNewDNextOID(WareHouseID int32, DistrictID int32, DistrictNextOrderID int32) (err error) {
-	if err := client.Session.Query(`UPDATE District SET D_NEXT_O_ID = ? FROM WHERE D_W_ID = ? and D_ID = ?`, DistrictNextOrderID, WareHouseID, DistrictID).Exec(); err != nil {
-		log.Printf("[warn] Query err, err=%v", err)
+func SetNewDistrictNextOrderID(warehouseID int32, districtID int32, districtNextOrderID int32) (err error) {
+	if err := client.Session.Query(`UPDATE district SET d_next_o_id = ? WHERE d_w_id = ? AND d_id = ?`, districtNextOrderID, warehouseID, districtID).Exec(); err != nil {
+		log.Printf("[warn] Set new district next order id err, err=%v", err)
 		return err
 	}
 
@@ -43,8 +49,8 @@ func SetNewDNextOID(WareHouseID int32, DistrictID int32, DistrictNextOrderID int
 }
 
 func SetNewDistrictYTD(warehouseID int32, districtID int32, newDistrictYTD float64) (err error) {
-	if err := client.Session.Query(`UPDATE District SET D_YTD = ? WHERE D_W_ID = ? AND D_ID = ?`, newDistrictYTD, warehouseID, districtID).Exec(); err != nil {
-		log.Printf("[warn] Query err, err=%v", err)
+	if err := client.Session.Query(`UPDATE district SET d_ytd = ? WHERE d_w_id = ? AND d_id = ?`, newDistrictYTD, warehouseID, districtID).Exec(); err != nil {
+		log.Printf("[warn] Set new district ytd err, err=%v", err)
 		return err
 	}
 

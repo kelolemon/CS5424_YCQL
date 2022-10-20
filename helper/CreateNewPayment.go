@@ -31,7 +31,7 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 	var newCustomerYTD = currentCustomerInfo.YtdPayment + r.Payment
 	var newCustomerPaymentCnt = currentCustomerInfo.NumPaymentMade + 1
 
-	err = dao.SetNewCustomerPaymentInfo(r.CustomerID, newCustomerBalance, newCustomerYTD, newCustomerPaymentCnt)
+	err = dao.SetNewCustomerPaymentInfo(r.CustomerID, r.WarehouseID, r.DistrictID, newCustomerBalance, newCustomerYTD, newCustomerPaymentCnt)
 	if err != nil {
 		return common.CreateNewPaymentResp{}, err
 	}

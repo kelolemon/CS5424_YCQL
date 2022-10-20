@@ -17,7 +17,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		return common.CreateOrderResp{}, err
 	}
 	//2. Update the district (W ID, D ID) by incrementing D NEXT O ID by one
-	err = dao.SetNewDNextOID(r.WarehouseID, r.DistrictID, n+1)
+	err = dao.SetNewDistrictNextOrderID(r.WarehouseID, r.DistrictID, n+1)
 	if err != nil {
 		log.Printf("[warn] SetNextOID error, err=%v", err)
 		return common.CreateOrderResp{}, err

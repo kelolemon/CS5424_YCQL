@@ -47,7 +47,7 @@ func TestWarehouseSelection(t *testing.T) {
 		defer client.Session.Close()
 		rawMap := make(map[string]interface{})
 		var warehouse common.Warehouse
-		err = client.Session.Query(`SELECT * FROM warehouse where w_id = 1`).MapScan(rawMap)
+		err = client.Session.Query(`SELECT * FROM warehouse where w_id = 2`).MapScan(rawMap)
 		assert.NoError(t, err)
 		err := common.ToCqlStruct(rawMap, &warehouse)
 		assert.NoError(t, err)

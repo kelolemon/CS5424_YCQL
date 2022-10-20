@@ -6,20 +6,25 @@ import (
 	"log"
 )
 
-func SetNewCustomerPaymentInfo(CustomerID int32, newCustomerBalance float64, newCustomerYTD float64, newCustomerPaymentCnt int32) (err error) {
-	if err := client.Session.Query(`UPDATE Customer SET C_BALANCE = ?, C_YTD_PAYMENT = ?, C_PAYMENT_CNT = ? WHERE C_ID = ?`, newCustomerBalance, newCustomerYTD, newCustomerPaymentCnt, CustomerID).Exec(); err != nil {
-		log.Printf("[warn] Query err, err=%v", err)
+func SetNewCustomerPaymentInfo(customerID int32, customerWarehouseID int32, customerDistrictID int32, newCustomerBalance float64, newCustomerYTD float64, newCustomerPaymentCnt int32) (err error) {
+	if err := client.Session.Query(`UPDATE customer SET c_balance = ?, c_ytd_payment = ?, c_payment_cnt = ? WHERE c_id = ? AND c_w_id = ? AND c_d_id = ?`, newCustomerBalance, newCustomerYTD, newCustomerPaymentCnt, customerID, customerWarehouseID, customerDistrictID).Exec(); err != nil {
+		log.Printf("[warn] Set new customer payment information err, err=%v", err)
 		return err
 	}
 
 	return nil
 }
 
-func GetCustomerInfo(customerID int32) (customerInfo common.Customer, err error) {
-	if err := client.Session.Query(`SELECT * FROM Customer WHERE C_ID = ?`, customerID).Scan(&customerInfo); err != nil {
-		log.Printf("[warn] Query err, err=%v", err)
+func GetCustomerInfo(customerID int32) (customer common.Customer, err error) {
+	rawMap := make(map[string]interface{})
+	if err := client.Session.Query(`SELECT * FROM customer WHERE c_id = ?`, customerID).MapScan(rawMap); err != nil {
+		log.Printf("[warn] Get customer information error, err=%v", err)
 		return common.Customer{}, err
 	}
 
-	return customerInfo, nil
+	err = common.ToCqlStruct(rawMap, &customer)
+	if err != nil {
+		log.Printf("[warn] To cql struct error, err=%v", err)
+	}
+	return customer, nil
 }
