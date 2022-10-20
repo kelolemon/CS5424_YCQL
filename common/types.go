@@ -1,5 +1,7 @@
 package common
 
+import "time"
+
 type CreateOrderReq struct {
 	WarehouseID     int32   `json:"w_id"`
 	DistrictID      int32   `json:"d_id"`
@@ -29,7 +31,7 @@ type CreateOrderResp struct {
 	WarehouseTax float64    `json:"w_tax"`
 	DistrictTax  float64    `json:"d_tax"`
 	OrderID      int32      `json:"o_id"`
-	EntryDate    int64      `json:"o_entry_d"`
+	EntryDate    time.Time  `json:"o_entry_d"`
 	NumberItems  int32      `json:"number_items"`
 	TotalAmount  float64    `json:"total_amount"`
 	Items        []ItemList `json:"items"`
@@ -43,18 +45,18 @@ type CreateNewPaymentReq struct {
 }
 
 type CreateNewPaymentResp struct {
-	WarehouseID int32  `json:"c_w_id"`
-	DistrictID  int32  `json:"c_d_id"`
-	CustomerID  int32  `json:"c_id"`
-	FirstName   string `json:"c_first"`
-	MiddleName  string `json:"c_middle"`
-	LastName    string `json:"c_last"`
-	Street1     string `json:"c_street_1"`
-	Street2     string `json:"c_street_2"`
-	City        string `json:"c_city"`
-	State       string `json:"c_state"`
-	Zip         string `json:"c_zip"`
-	Phone       string `json:"c_phone"`
-	Since       int64  `json:"c_since"`
-	Credit      string `json:"c_credit"`
+	WarehouseID int32     `json:"c_w_id"`
+	DistrictID  int32     `json:"c_d_id"`
+	CustomerID  int32     `json:"c_id"`
+	FirstName   string    `json:"c_first"`
+	MiddleName  string    `json:"c_middle"`
+	LastName    string    `json:"c_last"`
+	Street1     string    `json:"c_street_1"`
+	Street2     string    `json:"c_street_2"`
+	City        string    `json:"c_city"`
+	State       string    `json:"c_state"`
+	Zip         string    `json:"c_zip"`
+	Phone       string    `json:"c_phone"`
+	Since       time.Time `json:"c_since"`
+	Credit      string    `json:"c_credit"`
 }

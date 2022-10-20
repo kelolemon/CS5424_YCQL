@@ -3,7 +3,6 @@ package helper
 import (
 	"cs5234/common"
 	"cs5234/dao"
-	"log"
 )
 
 func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPaymentResp, err error) {
@@ -37,27 +36,26 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 	}
 
 	// step 4. update customer balance (c_id) => if customer exists, update, else add a new record
-	currentCustomerBalanceInfo, err := dao.GetCustomerBalanceInfo(r.CustomerID)
-	if err == nil {
-		newCustomerBalanceInfo := common.CustomerBalance{
-			ID:            currentCustomerInfo.ID,
-			Balance:       newCustomerBalance,
-			FirstName:     currentCustomerInfo.FirstName,
-			MiddleName:    currentCustomerInfo.MiddleName,
-			LastName:      currentCustomerInfo.LastName,
-			DistrictName:  currentDistrictInfo.Name,
-			WarehouseName: currentWarehouseInfo.Name,
-		}
+	_, err = dao.GetCustomerBalanceInfo(r.CustomerID)
 
-		if err := dao.InsertCustomerBalanceInfo(&newCustomerBalanceInfo); err != nil {
-			log.Printf("[warn] insert customer balance info error, err=%v", err)
+	newCustomerBalanceInfo := common.CustomerBalance{
+		ID:            currentCustomerInfo.ID,
+		Balance:       newCustomerBalance,
+		FirstName:     currentCustomerInfo.FirstName,
+		MiddleName:    currentCustomerInfo.MiddleName,
+		LastName:      currentCustomerInfo.LastName,
+		DistrictName:  currentDistrictInfo.Name,
+		WarehouseName: currentWarehouseInfo.Name,
+	}
+
+	if err == nil {
+		if err = dao.DeleteCustomerBalance(r.CustomerID); err != nil {
 			return common.CreateNewPaymentResp{}, err
 		}
-	} else {
-		if err := dao.SetCustomerBalanceInfo(r.CustomerID, currentCustomerBalanceInfo.Balance-r.Payment); err != nil {
-			log.Printf("[warn] update customer balance info error, err=%v", err)
-			return common.CreateNewPaymentResp{}, err
-		}
+	}
+
+	if err = dao.InsertCustomerBalanceInfo(&newCustomerBalanceInfo); err != nil {
+		return common.CreateNewPaymentResp{}, err
 	}
 
 	res = common.CreateNewPaymentResp{
@@ -77,6 +75,5 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 		Credit:      currentCustomerInfo.CreditStatus,
 	}
 
-	// return
 	return res, nil
 }

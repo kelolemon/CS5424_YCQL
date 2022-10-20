@@ -166,7 +166,7 @@ CREATE TABLE CS5424.OrderLineQuantityByOrder (
 WITH CLUSTERING ORDER By (O_ENTRY_D DESC);
 
 CREATE TABLE CS5424.CustomerBalance (
-  C_ID text,
+  C_ID int,
   C_BALANCE double,
   C_FIRST text,
   C_MIDDLE text,
