@@ -30,7 +30,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 			break
 		}
 	}
-	orderEntryDate := time.Now().Unix()
+	orderEntryDate := time.Unix(time.Now().Unix(), 0)
 	err = dao.CreateNewOrder(n, r.WarehouseID, r.DistrictID, r.CustomerID, 0, r.NumberItems, orderAllLocal, orderEntryDate)
 	if err != nil {
 		log.Printf("[warn] create new order error, err=%v", err)
