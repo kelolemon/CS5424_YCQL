@@ -1,4 +1,4 @@
-package test
+package dao_test
 
 import (
 	"cs5234/client"

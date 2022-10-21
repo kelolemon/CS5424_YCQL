@@ -1,4 +1,4 @@
-package test
+package transaction_test
 
 import (
 	"cs5234/client"
