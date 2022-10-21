@@ -42,8 +42,8 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 	items := make([]common.ItemList, 0)
 	for i := int32(0); i < r.NumberItems; i++ {
 		warehouseID := r.SupplyWarehouse[i]
-		itemID := r.ItermNumber[i]
-		// (a) Let S QUANTITY denote the stock quantity for item ITEM NUMBER[i] and warehouse SUPPLIER WAREHOUSE[i]
+		itemID := r.ItemNumber[i]
+		// (a) Let S QUANTITY denote the stock quantity for item ITEM_NUMBER[i] and warehouse SUPPLIER_WAREHOUSE[i]
 		stockRes, err := dao.GetStockInfo(warehouseID, itemID)
 		if err != nil {
 			log.Printf("[warn] get stock info error, err=%v", err)
@@ -67,7 +67,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 			return common.CreateOrderResp{}, err
 		}
 		// (e) ITEM AMOUNT = QUANTITY[i] × I PRICE, where I PRICE is the price of ITEM NUMBER[i]
-		itemRes, err := dao.GetItermInfo(r.ItermNumber[i])
+		itemRes, err := dao.GetItermInfo(r.ItemNumber[i])
 		if err != nil {
 			log.Printf("[warn] get item price error, err=%v", err)
 			return common.CreateOrderResp{}, err
@@ -76,13 +76,13 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		// (f) TOTAL AMOUNT = TOTAL AMOUNT + ITEM AMOUNT
 		totalAmount += itemAmount
 		// (g) Create a new order-line
-		err = dao.CreateNewOrderLine(r.WarehouseID, r.DistrictID, n, i, r.SupplyWarehouse[i], time.Unix(time.Now().Unix(), 0), r.ItermNumber[i], itemAmount, r.Quantity[i], "S_DIST_"+strconv.FormatInt(int64(r.DistrictID), 10))
+		err = dao.CreateNewOrderLine(r.WarehouseID, r.DistrictID, n, i, r.SupplyWarehouse[i], time.Unix(time.Now().Unix(), 0), r.ItemNumber[i], itemAmount, r.Quantity[i], "S_DIST_"+strconv.FormatInt(int64(r.DistrictID), 10))
 		if err != nil {
 			log.Printf("[warn] create order line error, err=%v", err)
 			return common.CreateOrderResp{}, err
 		}
 		items = append(items, common.ItemList{
-			ItemNumber:        r.ItermNumber[i],
+			ItemNumber:        r.ItemNumber[i],
 			ItemName:          itemRes.Name,
 			SupplyWarehouseID: r.SupplyWarehouse[i],
 			Quantity:          r.Quantity[i],

@@ -23,8 +23,8 @@ func GetOrderByCustomerInfo(customerID int32, warehouseID int32, districtID int3
 }
 
 func InsertOrderByCustomerInfo(orderByCustomer *common.OrderByCustomer) (err error) {
-	err = client.Session.Query(`INSERT INTO orderbycustomer (c_w_id, c_d_id, c_id, o_entry_d, c_first, c_middle, c_last,
-                             c_balance, c_last_o_id, o_carrier_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+	err = client.Session.Query(`INSERT INTO orderbycustomer (c_w_id, c_d_id, c_id, o_entry_d, c_first, c_middle, 
+                             c_last, c_balance, c_last_o_id, o_carrier_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		orderByCustomer.WarehouseID, orderByCustomer.DistrictID, orderByCustomer.CustomerID,
 		orderByCustomer.OrderEntryTime, orderByCustomer.FirstName, orderByCustomer.MiddleName,
 		orderByCustomer.LastName, orderByCustomer.Balance, orderByCustomer.LastOrderID,
