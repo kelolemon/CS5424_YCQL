@@ -98,7 +98,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		log.Printf("[warn] get warehouse info error, err=%v", err)
 		return common.CreateOrderResp{}, err
 	}
-	customerRes, err := dao.GetCustomerInfo(r.CustomerID)
+	customerRes, err := dao.GetCustomerInfo(r.CustomerID, r.WarehouseID, r.DistrictID)
 	if err != nil {
 		log.Printf("[warn] get customer info error, err=%v", err)
 		return common.CreateOrderResp{}, err

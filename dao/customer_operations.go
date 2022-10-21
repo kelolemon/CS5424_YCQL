@@ -15,9 +15,9 @@ func SetNewCustomerPaymentInfo(customerID int32, customerWarehouseID int32, cust
 	return nil
 }
 
-func GetCustomerInfo(customerID int32) (customer common.Customer, err error) {
+func GetCustomerInfo(customerID int32, warehouseID int32, districtID int32) (customer common.Customer, err error) {
 	rawMap := make(map[string]interface{})
-	if err := client.Session.Query(`SELECT * FROM customer WHERE c_id = ?`, customerID).MapScan(rawMap); err != nil {
+	if err := client.Session.Query(`SELECT * FROM customer WHERE c_id = ? AND c_w_id = ? AND c_d_id = ?`, customerID, warehouseID, districtID).MapScan(rawMap); err != nil {
 		log.Printf("[warn] Get customer information error, err=%v", err)
 		return common.Customer{}, err
 	}

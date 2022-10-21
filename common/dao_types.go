@@ -143,6 +143,8 @@ type OrderLineQuantityByOrder struct {
 
 type CustomerBalance struct {
 	ID            int32   `cql:"c_id"`
+	WarehouseID   int32   `cql:"c_w_id"`
+	DistrictID    int32   `cql:"c_d_id"`
 	Balance       float64 `cq1:"c_balance"`
 	FirstName     string  `cql:"c_first"`
 	MiddleName    string  `cql:"c_middle"`

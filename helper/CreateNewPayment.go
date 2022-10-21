@@ -25,7 +25,7 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 	}
 
 	// step 3. update customer (c_id) => decrement c_balance by payment; increment c_ytd_payment by payment; increment c_payment_cnt by 1
-	currentCustomerInfo, err := dao.GetCustomerInfo(r.CustomerID)
+	currentCustomerInfo, err := dao.GetCustomerInfo(r.CustomerID, r.WarehouseID, r.DistrictID)
 	var newCustomerBalance = currentCustomerInfo.Balance - r.Payment
 	var newCustomerYTD = currentCustomerInfo.YtdPayment + r.Payment
 	var newCustomerPaymentCnt = currentCustomerInfo.NumPaymentMade + 1
@@ -36,7 +36,7 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 	}
 
 	// step 4. update customer balance (c_id) => if customer exists, update, else add a new record
-	_, err = dao.GetCustomerBalanceInfo(r.CustomerID)
+	_, err = dao.GetCustomerBalanceInfo(r.CustomerID, r.WarehouseID, r.DistrictID)
 
 	newCustomerBalanceInfo := common.CustomerBalance{
 		ID:            currentCustomerInfo.ID,
@@ -49,7 +49,7 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 	}
 
 	if err == nil {
-		if err = dao.DeleteCustomerBalance(r.CustomerID); err != nil {
+		if err = dao.DeleteCustomerBalance(r.CustomerID, r.WarehouseID, r.DistrictID); err != nil {
 			return common.CreateNewPaymentResp{}, err
 		}
 	}
