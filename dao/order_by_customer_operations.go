@@ -17,6 +17,7 @@ func GetOrderByCustomerInfo(customerID int32, warehouseID int32, districtID int3
 	err = common.ToCqlStruct(rawMap, &orderByCustomer)
 	if err != nil {
 		log.Printf("[warn] To cql struct error, err=%v", err)
+		return common.OrderByCustomer{}, err
 	}
 
 	return orderByCustomer, nil
@@ -31,6 +32,7 @@ func InsertOrderByCustomerInfo(orderByCustomer *common.OrderByCustomer) (err err
 		orderByCustomer.CarrierID).Exec()
 	if err != nil {
 		log.Printf("[warn] Insert new order by customer information err, err=%v", err)
+		return err
 	}
 
 	return nil
@@ -40,6 +42,7 @@ func DeleteOrderByCustomerInfo(customerID int32, warehouseID int32, districtID i
 	err = client.Session.Query(`DELETE FROM orderbycustomer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?`, warehouseID, districtID, customerID).Exec()
 	if err != nil {
 		log.Printf("[warn] Delete order by customer information err, err=%v", err)
+		return err
 	}
 
 	return nil

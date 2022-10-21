@@ -76,7 +76,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		// (f) TOTAL AMOUNT = TOTAL AMOUNT + ITEM AMOUNT
 		totalAmount += itemAmount
 		// (g) Create a new order-line
-		err = dao.CreateNewOrderLine(r.WarehouseID, r.DistrictID, n, i, r.SupplyWarehouse[i], time.Unix(time.Now().Unix(), 0), r.ItemNumber[i], itemAmount, r.Quantity[i], "S_DIST_"+strconv.FormatInt(int64(r.DistrictID), 10))
+		err = dao.CreateNewOrderLine(r.WarehouseID, r.DistrictID, n, i+1, r.SupplyWarehouse[i], time.Unix(time.Now().Unix(), 0), r.ItemNumber[i], itemAmount, r.Quantity[i], "S_DIST_"+strconv.FormatInt(int64(r.DistrictID), 10))
 		if err != nil {
 			log.Printf("[warn] create order line error, err=%v", err)
 			return common.CreateOrderResp{}, err
@@ -87,7 +87,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 			SupplyWarehouseID: r.SupplyWarehouse[i],
 			Quantity:          r.Quantity[i],
 			OrderAmount:       itemAmount,
-			StockQuantity:     stockRes.Quantity,
+			StockQuantity:     adjustedQTY,
 		})
 	}
 	// 6. TOTAL AMOUNT = TOTAL AMOUNT × (1+D TAX +W TAX) × (1−C DISCOUNT),
@@ -103,7 +103,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		log.Printf("[warn] get customer info error, err=%v", err)
 		return common.CreateOrderResp{}, err
 	}
-	totalAmount = totalAmount * (1 + districtRes.Tax) * (1 + warehouseRes.Tax) * (1 - customerRes.Discount)
+	totalAmount = totalAmount * (1 + districtRes.Tax + warehouseRes.Tax) * (1 - customerRes.Discount)
 	res = common.CreateOrderResp{
 		OrderID:      n,
 		WarehouseID:  r.WarehouseID,

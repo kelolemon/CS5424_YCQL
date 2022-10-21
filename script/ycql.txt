@@ -10,7 +10,7 @@ USE CS5424;
 CREATE TABLE CS5424.Item (
   I_ID int,
   I_NAME text,
-  I_PRICE int,
+  I_PRICE double,
   I_IM_ID int,
   I_DATA text,
   PRIMARY KEY (I_ID)
@@ -98,7 +98,7 @@ CREATE TABLE CS5424.Customer (
 
 CREATE TABLE CS5424.Stock (
   S_W_ID int,
-  S_I_ID text,
+  S_I_ID int,
   S_QUANTITY int,
   S_YTD double,
   S_ORDER_CNT int,

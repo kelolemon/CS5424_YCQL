@@ -16,6 +16,7 @@ func GetCustomerBalanceInfo(customerID int32, warehouseID int32, districtID int3
 	err = common.ToCqlStruct(rawMap, &customerBalance)
 	if err != nil {
 		log.Printf("[warn] To cql struct error, err=%v", err)
+		return common.CustomerBalance{}, err
 	}
 	return customerBalance, nil
 }
