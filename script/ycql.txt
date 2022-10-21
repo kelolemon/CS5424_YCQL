@@ -43,21 +43,6 @@ CREATE TABLE CS5424.OrderLine (
 )
 WITH CLUSTERING ORDER By (OL_SUPPLY_W_ID ASC, OL_DELIVERY_D ASC);
 
-CREATE TABLE CS5424.OrderLineByOrder (
-  O_ID int,
-  OL_W_ID int,
-  OL_D_ID int,
-  OL_O_ID int,
-  OL_I_ID int,
-  OL_DELIVERY_D timestamp,
-  OL_AMOUNT double,
-  OL_SUPPLY_W_ID int,
-  OL_QUANTITY int,
-  OL_DIST_INFO text,
-  PRIMARY KEY (O_ID, OL_W_ID, OL_D_ID, OL_O_ID)
-)
-WITH CLUSTERING ORDER By (OL_W_ID ASC, OL_D_ID ASC, OL_O_ID ASC);
-
 CREATE TABLE CS5424.Warehouse (
   W_ID int,
   W_ZIP text,

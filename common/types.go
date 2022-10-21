@@ -60,3 +60,28 @@ type CreateNewPaymentResp struct {
 	Since       time.Time `json:"c_since"`
 	Credit      string    `json:"c_credit"`
 }
+
+type GetLastOrderStatusReq struct {
+	WarehouseID int32 `json:"c_w_id"`
+	DistrictID  int32 `json:"c_d_id"`
+	CustomerID  int32 `json:"c_id"`
+}
+
+type LastOrderStatusItemList struct {
+	ItemID            int32     `json:"ol_i_id"`
+	SupplyWarehouseID int32     `json:"ol_supply_w_id"`
+	Quantity          int32     `json:"ol_quantity"`
+	Amount            float64   `json:"ol_amount"`
+	DeliveryDate      time.Time `json:"ol_delivery_d"`
+}
+
+type GetLastOrderStatusResp struct {
+	FirstName      string                    `json:"c_first"`
+	MiddleName     string                    `json:"c_middle"`
+	LastName       string                    `json:"c_last"`
+	Balance        string                    `json:"c_balance"`
+	OrderID        int32                     `json:"o_id"`
+	OrderEntryDate time.Time                 `json:"o_entry_d"`
+	OrderCarrierID int32                     `json:"o_carrier_id"`
+	Items          []LastOrderStatusItemList `json:"last_o_items"`
+}
