@@ -79,7 +79,7 @@ type GetLastOrderStatusResp struct {
 	FirstName      string                    `json:"c_first"`
 	MiddleName     string                    `json:"c_middle"`
 	LastName       string                    `json:"c_last"`
-	Balance        string                    `json:"c_balance"`
+	Balance        float64                   `json:"c_balance"`
 	OrderID        int32                     `json:"o_id"`
 	OrderEntryDate time.Time                 `json:"o_entry_d"`
 	OrderCarrierID int32                     `json:"o_carrier_id"`

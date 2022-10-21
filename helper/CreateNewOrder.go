@@ -76,7 +76,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		// (f) TOTAL AMOUNT = TOTAL AMOUNT + ITEM AMOUNT
 		totalAmount += itemAmount
 		// (g) Create a new order-line
-		err = dao.CreateNewOrderLine(r.WarehouseID, r.DistrictID, n, i, r.SupplyWarehouse[i], 0, r.ItermNumber[i], itemAmount, r.Quantity[i], "S_DIST_"+strconv.FormatInt(int64(r.DistrictID), 10))
+		err = dao.CreateNewOrderLine(r.WarehouseID, r.DistrictID, n, i, r.SupplyWarehouse[i], time.Unix(time.Now().Unix(), 0), r.ItermNumber[i], itemAmount, r.Quantity[i], "S_DIST_"+strconv.FormatInt(int64(r.DistrictID), 10))
 		if err != nil {
 			log.Printf("[warn] create order line error, err=%v", err)
 			return common.CreateOrderResp{}, err

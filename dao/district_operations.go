@@ -6,24 +6,6 @@ import (
 	"log"
 )
 
-func GetDistrictsForWarehouse(WarehouseID int32) ([]common.District, error) {
-	districts := make([]common.District, 0)
-	stmt := `SELECT * FROM District WHERE d_w_id = ?`
-	iter := client.Session.Query(stmt, WarehouseID).Iter()
-
-	for rawMap := make(map[string]interface{}); !iter.MapScan(rawMap); rawMap = make(map[string]interface{}) {
-		var district common.District
-		err := common.ToCqlStruct(rawMap, &district)
-		if err != nil {
-			log.Printf("[warn] fetching district err, err=%v", err)
-			return nil, err
-		}
-		districts = append(districts, district)
-	}
-
-	return districts, nil
-}
-
 func GetDistrictInfo(warehouseID int32, districtID int32) (district common.District, err error) {
 	rawMap := make(map[string]interface{})
 	if err := client.Session.Query(`SELECT * FROM district WHERE d_id = ? AND d_w_id = ?`, districtID, warehouseID).MapScan(rawMap); err != nil {

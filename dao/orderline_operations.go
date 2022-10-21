@@ -5,12 +5,15 @@ import (
 	"cs5234/common"
 	"fmt"
 	"log"
+	"time"
 )
 
-func CreateNewOrderLine(OLWarehouseID int32, OLDistrictID int32, OLOrderID int32, OLNumber int32, OLSupplyWarehouseID int32, OLDeliveryDate int64, OLItemID int32, OLAmount float64, OLQuantity int32, OLDistInfo string) (err error) {
-	if err := client.Session.Query(`INSERT INTO orderline (OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_SUPPLY_W_ID, OL_DELIVERY_D, OL_I_ID, OL_AMOUNT, OL_QUANTITY, OL_DIST_INFO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		OLWarehouseID, OLDistrictID, OLOrderID, OLNumber, OLSupplyWarehouseID, OLDeliveryDate, OLItemID, OLAmount, OLQuantity, OLDistInfo).Exec(); err != nil {
-		log.Printf("[warn] Query err, err=%v", err)
+func CreateNewOrderLine(warehouseID int32, districtID int32, orderID int32, orderLineNumber int32, supplyWarehouseID int32,
+	deliveryDate time.Time, itemID int32, amount float64, quantity int32, distInfo string) (err error) {
+	if err := client.Session.Query(`INSERT INTO orderline (ol_w_id, ol_d_id, ol_o_id, ol_number, ol_supply_w_id, 
+                       ol_delivery_d, ol_i_id, ol_amount, ol_quantity, ol_dist_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		warehouseID, districtID, orderID, orderLineNumber, supplyWarehouseID, deliveryDate, itemID, amount, quantity, distInfo).Exec(); err != nil {
+		log.Printf("[warn] Create new orderline err, err=%v", err)
 		return err
 	}
 

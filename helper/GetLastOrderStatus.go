@@ -7,22 +7,22 @@ import (
 
 func GetLastOrderStatus(r common.GetLastOrderStatusReq) (res common.GetLastOrderStatusResp, err error) {
 	// step 1. get orderByCustomer info. from table `orderByCustomer`
-	orderByCustomer, err := dao.GetOrderByCustomerInfo(r.CustomerID)
+	orderByCustomer, err := dao.GetOrderByCustomerInfo(r.CustomerID, r.WarehouseID, r.DistrictID)
 	if err != nil {
 		return common.GetLastOrderStatusResp{}, err
 	}
 
 	// step 2. use orderByCustomer.c_last_o_id to get the orderLine information in table `orderLine`
-	orderLines, err := dao.GetOrderLineByOrder(orderByCustomer.CustomerLastOrderID)
+	orderLines, err := dao.GetOrderLineByOrder(orderByCustomer.LastOrderID)
 
 	// step 3. pack the output data
 	res = common.GetLastOrderStatusResp{
 		FirstName:      orderByCustomer.FirstName,
 		MiddleName:     orderByCustomer.MiddleName,
 		LastName:       orderByCustomer.LastName,
-		Balance:        orderByCustomer.CustomerBalance,
-		OrderID:        orderByCustomer.CustomerLastOrderID,
-		OrderCarrierID: orderByCustomer.OrderCarrierID,
+		Balance:        orderByCustomer.Balance,
+		OrderID:        orderByCustomer.LastOrderID,
+		OrderCarrierID: orderByCustomer.CarrierID,
 		OrderEntryDate: orderByCustomer.OrderEntryTime,
 	}
 

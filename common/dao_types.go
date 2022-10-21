@@ -105,14 +105,16 @@ type Item struct {
 }
 
 type OrderByCustomer struct {
-	CustomerID          int32     `cql:"c_id"`
-	OrderEntryTime      time.Time `cql:"o_entry_d"`
-	FirstName           string    `cql:"c_first"`
-	MiddleName          string    `cql:"c_middle"`
-	LastName            string    `cql:"c_last"`
-	CustomerBalance     string    `cql:"c_balance"`
-	CustomerLastOrderID int32     `cql:"c_last_o_id"`
-	OrderCarrierID      int32     `cql:"o_carrier_id"`
+	CustomerID     int32     `cql:"c_id"`
+	WarehouseID    int32     `cql:"c_w_id"`
+	DistrictID     int32     `cql:"c_d_id"`
+	OrderEntryTime time.Time `cql:"o_entry_d"`
+	FirstName      string    `cql:"c_first"`
+	MiddleName     string    `cql:"c_middle"`
+	LastName       string    `cql:"c_last"`
+	Balance        float64   `cql:"c_balance"`
+	LastOrderID    int32     `cql:"c_last_o_id"`
+	CarrierID      int32     `cql:"o_carrier_id"`
 }
 
 type StockQuantities struct {

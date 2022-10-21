@@ -33,11 +33,11 @@ CREATE TABLE CS5424.OrderLine (
   OL_D_ID int,
   OL_O_ID int,
   OL_NUMBER int,
-  OL_SUPPLY_W_ID text,
+  OL_SUPPLY_W_ID int,
   OL_DELIVERY_D timestamp,
   OL_I_ID int,
   OL_AMOUNT double,
-  OL_QUANTITY double,
+  OL_QUANTITY int,
   OL_DIST_INFO text,
   PRIMARY KEY ((OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER), OL_SUPPLY_W_ID, OL_DELIVERY_D)
 )

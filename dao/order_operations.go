@@ -6,10 +6,11 @@ import (
 	"time"
 )
 
-func CreateNewOrder(OrderID int32, OrderWarehouseID int32, OrderDistrictID int32, OrderCustomerID int32, OrderCarrierID int32, OOLCent int32, OAllLocal int32, OEntryDate time.Time) (err error) {
-	if err := client.Session.Query(`INSERT INTO order (O_ID, O_W_ID, O_D_ID, O_C_ID, O_CARRIER_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-		OrderID, OrderWarehouseID, OrderDistrictID, OrderCustomerID, OrderCarrierID, OOLCent, OAllLocal, OEntryDate).Exec(); err != nil {
-		log.Printf("[warn] Query err, err=%v", err)
+func CreateNewOrder(orderID int32, warehouseID int32, districtID int32, customerID int32, carrierID int32, orderLineCnt int32, allLocal int32, entryDate time.Time) (err error) {
+	if err := client.Session.Query(`INSERT INTO "order" (o_id, o_w_id, o_d_id, o_c_id, o_carrier_id, o_ol_cnt, 
+                   o_all_local, o_entry_d) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, orderID, warehouseID, districtID,
+		customerID, carrierID, orderLineCnt, allLocal, entryDate).Exec(); err != nil {
+		log.Printf("[warn] Create new order err, err=%v", err)
 		return err
 	}
 
