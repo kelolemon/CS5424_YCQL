@@ -9,7 +9,12 @@ import (
 )
 
 func TestInsertCreateNewOrderTestData(t *testing.T) {
+	// add district test data
 	
+	// add warehouse test data
+
+	// add customer test data
+
 }
 
 func TestCreateNewOrder(t *testing.T) {

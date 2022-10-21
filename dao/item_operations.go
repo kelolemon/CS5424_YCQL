@@ -6,11 +6,16 @@ import (
 	"log"
 )
 
-func GetItermInfo(itemID int32) (itemInfo common.Item, err error) {
-	if err := client.Session.Query(`SELECT * FROM ITEM WHERE I_ID = ?`, itemID).Scan(&itemInfo); err != nil {
-		log.Printf("[warn] Query err, err=%v", err)
+func GetItermInfo(itemID int32) (item common.Item, err error) {
+	rawMap := make(map[string]interface{})
+	if err := client.Session.Query(`SELECT * FROM item WHERE i_id = ?`, itemID).MapScan(rawMap); err != nil {
+		log.Printf("[warn] Get item information error, err=%v", err)
 		return common.Item{}, err
 	}
 
-	return itemInfo, nil
+	err = common.ToCqlStruct(rawMap, &item)
+	if err != nil {
+		log.Printf("[warn] To cql struct error, err=%v", err)
+	}
+	return item, nil
 }
