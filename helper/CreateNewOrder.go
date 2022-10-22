@@ -47,6 +47,9 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 	}
 	//4.Initialize TOTAL AMOUNT = 0
 	totalAmount := float64(0)
+	//self stock by order & order line by order map
+	itemStockQuantity := make(map[int32]int32)
+	itemOrderQuantity := make(map[int32]int32)
 	//5. handle data，
 	items := make([]common.ItemList, 0)
 	for i := int32(0); i < r.NumberItems; i++ {
@@ -102,6 +105,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 			log.Printf("[warn] create order line error, err=%v", err)
 			return common.CreateOrderResp{}, err
 		}
+
 		items = append(items, common.ItemList{
 			ItemNumber:        r.ItemNumber[i],
 			ItemName:          itemRes.Name,
@@ -110,6 +114,8 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 			OrderAmount:       itemAmount,
 			StockQuantity:     adjustedQTY,
 		})
+		itemStockQuantity[r.ItemNumber[i]] = adjustedQTY
+		itemOrderQuantity[r.ItemNumber[i]] = r.Quantity[i]
 	}
 	// 6. TOTAL AMOUNT = TOTAL AMOUNT × (1+D TAX +W TAX) × (1−C DISCOUNT),
 	// where W TAX is the tax rate for warehouse W ID, D TAX is the tax rate for district (W ID, D ID),
@@ -119,11 +125,14 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		log.Printf("[warn] get warehouse info error, err=%v", err)
 		return common.CreateOrderResp{}, err
 	}
+
 	customerRes, err := dao.GetCustomerInfo(r.CustomerID, r.WarehouseID, r.DistrictID)
 	if err != nil {
 		log.Printf("[warn] get customer info error, err=%v", err)
 		return common.CreateOrderResp{}, err
 	}
+
+	totalAmount = totalAmount * (1 + districtRes.Tax + warehouseRes.Tax) * (1 - customerRes.Discount)
 	// 7. update self order by customer table
 	err = dao.InsertOrderByCustomerInfo(&common.OrderByCustomer{
 		CustomerID:     r.CustomerID,
@@ -137,13 +146,33 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		LastOrderID:    n,
 		CarrierID:      0,
 	})
-
-	// 7. update self oder line by customer
 	if err != nil {
 		log.Printf("[warn] create order by customer error, err=%v", err)
 		return common.CreateOrderResp{}, err
 	}
-	totalAmount = totalAmount * (1 + districtRes.Tax + warehouseRes.Tax) * (1 - customerRes.Discount)
+	// 8. add stock by order operations
+	err = dao.CreateStockByOrderLineOperationsInfo(&common.StockByOrderLine{
+		WarehouseID:        r.WarehouseID,
+		DistrictID:         r.DistrictID,
+		OrderEntryTime:     orderEntryDate,
+		StockQuantitiesMap: itemStockQuantity,
+	})
+	if err != nil {
+		log.Printf("[warn] create stock by order line error, err=%v", err)
+		return common.CreateOrderResp{}, err
+	}
+	// 9. add order line quantity by order operations
+	err = dao.CreateOrderLineQuantityByOrderOperationsInfo(&common.OrderLineQuantityByOrder{
+		WarehouseID:            r.WarehouseID,
+		DistrictID:             r.DistrictID,
+		OrderEntryTime:         orderEntryDate,
+		OrderLineQuantitiesMap: itemOrderQuantity,
+	})
+	if err != nil {
+		log.Printf("[warn] create stock by order line error, err=%v", err)
+		return common.CreateOrderResp{}, err
+	}
+	// final return resp
 	res = common.CreateOrderResp{
 		OrderID:      n,
 		WarehouseID:  r.WarehouseID,

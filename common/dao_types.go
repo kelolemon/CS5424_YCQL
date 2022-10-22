@@ -117,30 +117,20 @@ type OrderByCustomer struct {
 	CarrierID      int32     `cql:"o_carrier_id"`
 }
 
-type StockQuantities struct {
-	ItemID        int32 `cql:"i_id"`
-	StockQuantity int32 `cql:"s_quantity"`
-}
-
 type StockByOrderLine struct {
-	WarehouseID         int32             `cql:"w_id"`
-	DistrictID          int32             `cql:"d_id"`
-	OrderID             int32             `cql:"o_id"`
-	OrderEntryTime      time.Time         `cql:"o_entry_d"`
-	StockQuantitiesList []StockQuantities `cql:"s_quantities"`
-}
-
-type OrderLineQuantities struct {
-	ItemID            int32 `cql:"i_id"`
-	OrderLineQuantity int32 `cql:"ol_quantity"`
+	WarehouseID        int32           `cql:"w_id"`
+	DistrictID         int32           `cql:"d_id"`
+	OrderID            int32           `cql:"o_id"`
+	OrderEntryTime     time.Time       `cql:"o_entry_d"`
+	StockQuantitiesMap map[int32]int32 `cql:"s_quantities"`
 }
 
 type OrderLineQuantityByOrder struct {
-	WarehouseID             int32                 `cql:"w_id"`
-	DistrictID              int32                 `cql:"d_id"`
-	OrderID                 int32                 `cql:"o_id"`
-	OrderEntryTime          time.Time             `cql:"o_entry_d"`
-	OrderLineQuantitiesList []OrderLineQuantities `cql:"ol_quantities"`
+	WarehouseID            int32           `cql:"w_id"`
+	DistrictID             int32           `cql:"d_id"`
+	OrderID                int32           `cql:"o_id"`
+	OrderEntryTime         time.Time       `cql:"o_entry_d"`
+	OrderLineQuantitiesMap map[int32]int32 `cql:"ol_quantities"`
 }
 
 type CustomerBalance struct {
