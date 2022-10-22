@@ -85,3 +85,14 @@ type GetLastOrderStatusResp struct {
 	OrderCarrierID int32                     `json:"o_carrier_id"`
 	Items          []LastOrderStatusItemList `json:"last_o_items"`
 }
+
+type GetStockLevelLowItemNumberReq struct {
+	WarehouseID    int32 `json:"w_id"`
+	DistrictID     int32 `json:"d_id"`
+	StockThreshold int32 `json:"stock_threshold"`
+	LastOrders     int32 `json:"last_orders"`
+}
+
+type GetStockLevelLowItemNumberResp struct {
+	StockLevelLowItemNumber int32 `json:"stock_level_low_item_number"`
+}
