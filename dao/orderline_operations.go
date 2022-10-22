@@ -5,14 +5,12 @@ import (
 	"cs5234/common"
 	"fmt"
 	"log"
-	"time"
 )
 
-func CreateNewOrderLine(warehouseID int32, districtID int32, orderID int32, orderLineNumber int32, supplyWarehouseID int32,
-	deliveryDate time.Time, itemID int32, amount float64, quantity int32, distInfo string) (err error) {
+func CreateNewOrderLine(orderLine common.OrderLine) (err error) {
 	if err := client.Session.Query(`INSERT INTO orderline (ol_w_id, ol_d_id, ol_o_id, ol_number, ol_supply_w_id, 
                        ol_delivery_d, ol_i_id, ol_amount, ol_quantity, ol_dist_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		warehouseID, districtID, orderID, orderLineNumber, supplyWarehouseID, deliveryDate, itemID, amount, quantity, distInfo).Exec(); err != nil {
+		orderLine.WarehouseID, orderLine.DistrictID, orderLine.OrderID, orderLine.ID, orderLine.SupplyWarehouseID, orderLine.DeliveryTime, orderLine.ItemID, orderLine.Amount, orderLine.Quantity, orderLine.Info).Exec(); err != nil {
 		log.Printf("[warn] Create new orderline err, err=%v", err)
 		return err
 	}

@@ -67,7 +67,7 @@ type Order struct {
 	CustomerID     int32     `cql:"o_c_id"`
 	CarrierID      int32     `cql:"o_carrier_id"`
 	NumItemOrdered int32     `cql:"o_ol_cnt"`
-	OrderStatus    int32     `cql:"o_all_local"`
+	OrderAllLocal  int32     `cql:"o_all_local"`
 	OrderEntryTime time.Time `cql:"o_entry_d"`
 }
 
