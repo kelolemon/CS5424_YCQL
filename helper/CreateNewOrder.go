@@ -31,7 +31,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		}
 	}
 	orderEntryDate := time.Unix(time.Now().Unix(), 0)
-	err = dao.CreateNewOrder(common.Order{
+	err = dao.CreateNewOrder(&common.Order{
 		ID:             n,
 		WarehouseID:    r.WarehouseID,
 		DistrictID:     r.DistrictID,
@@ -85,7 +85,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		// (f) TOTAL AMOUNT = TOTAL AMOUNT + ITEM AMOUNT
 		totalAmount += itemAmount
 		// (g) Create a new order-line
-		err = dao.CreateNewOrderLine(common.OrderLine{
+		err = dao.CreateNewOrderLine(&common.OrderLine{
 			WarehouseID:       r.WarehouseID,
 			DistrictID:        r.DistrictID,
 			OrderID:           n,
@@ -122,6 +122,25 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 	customerRes, err := dao.GetCustomerInfo(r.CustomerID, r.WarehouseID, r.DistrictID)
 	if err != nil {
 		log.Printf("[warn] get customer info error, err=%v", err)
+		return common.CreateOrderResp{}, err
+	}
+	// 7. update self order by customer table
+	err = dao.InsertOrderByCustomerInfo(&common.OrderByCustomer{
+		CustomerID:     r.CustomerID,
+		WarehouseID:    r.WarehouseID,
+		DistrictID:     r.DistrictID,
+		OrderEntryTime: orderEntryDate,
+		FirstName:      customerRes.FirstName,
+		MiddleName:     customerRes.MiddleName,
+		LastName:       customerRes.LastName,
+		Balance:        customerRes.Balance,
+		LastOrderID:    n,
+		CarrierID:      0,
+	})
+
+	// 7. update self oder line by customer
+	if err != nil {
+		log.Printf("[warn] create order by customer error, err=%v", err)
 		return common.CreateOrderResp{}, err
 	}
 	totalAmount = totalAmount * (1 + districtRes.Tax + warehouseRes.Tax) * (1 - customerRes.Discount)
