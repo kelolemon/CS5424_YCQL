@@ -1,17 +1,16 @@
 package dao
 
 import (
+	"cs5234/common"
 	"log"
 
 	"cs5234/client"
-
-	"github.com/yugabyte/gocql"
 )
 
-func QueryTestDBMessage() (msg string, err error) {
-	if err := client.Session.Query(`SELECT test_msg FROM test LIMIT 1`).Consistency(gocql.One).Scan(&msg); err != nil {
+func QueryTestDBMessage() (msg common.DBTest, err error) {
+	if err = client.Session.Query(`SELECT * FROM test LIMIT 1`).Scan(&msg.TestID, &msg.TestNub, &msg.TestMsg); err != nil {
 		log.Printf("[warn] Query err, err=%v", err)
-		return "", err
+		return common.DBTest{}, err
 	}
 
 	return msg, nil

@@ -21,6 +21,20 @@ func GetCustomerBalanceInfo(customerID int32, warehouseID int32, districtID int3
 	return customerBalance, nil
 }
 
+func GetTopCustomerBalanceInfo() (customerBalances []common.CustomerBalance, err error) {
+	scanner := client.Session.Query(`SELECT * FROM customerbalance order by c_balance desc limit 10`).Iter().Scanner()
+	customerBalance := common.CustomerBalance{}
+	for scanner.Next() {
+		err = scanner.Scan(&customerBalance.WarehouseID, &customerBalance.DistrictID, &customerBalance.ID, &customerBalance.Balance, &customerBalance.FirstName, &customerBalance.MiddleName, &customerBalance.LastName, &customerBalance.WarehouseName, &customerBalance.DistrictName)
+		if err != nil {
+			log.Printf("[warn] read customer balance err, err=%v", err)
+			return nil, err
+		}
+		customerBalances = append(customerBalances, customerBalance)
+	}
+	return customerBalances, nil
+}
+
 func DeleteCustomerBalance(customerID int32, warehouseID int32, districtID int32) (err error) {
 	if err := client.Session.Query(`DELETE FROM customerbalance WHERE c_id = ? AND c_w_id = ? AND c_d_id = ?`, customerID, warehouseID, districtID, customerID).Exec(); err != nil {
 		log.Printf("[warn] Delete customer balance information err, err=%v", err)

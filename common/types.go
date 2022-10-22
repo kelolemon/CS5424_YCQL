@@ -96,3 +96,19 @@ type GetStockLevelLowItemNumberReq struct {
 type GetStockLevelLowItemNumberResp struct {
 	StockLevelLowItemNumber int32 `json:"stock_level_low_item_number"`
 }
+
+type GetTopBalanceCustomerReq struct {
+}
+
+type CustomerBalanceInfo struct {
+	FirstName     string  `json:"c_first"`
+	MiddleName    string  `json:"c_middle"`
+	LastName      string  `json:"c_last"`
+	Balance       float64 `json:"c_balance"`
+	WarehouseName string  `json:"w_name"`
+	DistrictName  string  `json:"d_name"`
+}
+
+type GetTopBalanceCustomerResp struct {
+	CustomerBalanceInfoList []CustomerBalanceInfo `json:"customer_balance_info_list"`
+}

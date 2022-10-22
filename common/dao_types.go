@@ -2,6 +2,12 @@ package common
 
 import "time"
 
+type DBTest struct {
+	TestID  int32  `cql:"test_id"`
+	TestMsg string `cql:"test_msg"`
+	TestNub int32  `cql:"test_nub"`
+}
+
 type Stock struct {
 	WarehouseID int32   `cql:"s_w_id"`
 	ItemID      int32   `cql:"s_i_id"`
