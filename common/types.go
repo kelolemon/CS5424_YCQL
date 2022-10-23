@@ -112,3 +112,11 @@ type CustomerBalanceInfo struct {
 type GetTopBalanceCustomerResp struct {
 	CustomerBalanceInfoList []CustomerBalanceInfo `json:"customer_balance_info_list"`
 }
+
+type CreateNewDeliveryReq struct {
+	WarehouseID int32 `json:"w_id"`
+	CarrierID   int32 `json:"carrier_id"`
+}
+
+type CreateNewDeliveryResp struct {
+}
