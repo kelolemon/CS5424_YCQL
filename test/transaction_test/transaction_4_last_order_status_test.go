@@ -19,14 +19,42 @@ func TestInsertLastOrderStatusTestData(t *testing.T) {
 		defer client.Session.Close()
 		// order 1 & its order lines
 		currentTime := time.Unix(time.Now().Unix(), 0)
-		err = dao.CreateNewOrder(1, 1, 1, 1, 1, 2, 1, currentTime)
+		newOrder := common.Order{
+			WarehouseID:    1,
+			DistrictID:     1,
+			ID:             1,
+			CustomerID:     1,
+			CarrierID:      1,
+			NumItemOrdered: 2,
+			OrderAllLocal:  1,
+			OrderEntryTime: currentTime,
+		}
+
+		err = dao.CreateNewOrder(&newOrder)
 		assert.NoError(t, err)
 
-		err = dao.CreateNewOrderLine(1, 1, 1, 1, 1, currentTime,
-			10, 5, 1, "NIL")
+		newOrderLine := common.OrderLine{
+			WarehouseID:       1,
+			DistrictID:        1,
+			OrderID:           1,
+			ID:                1,
+			ItemID:            10,
+			DeliveryTime:      currentTime,
+			Amount:            5,
+			SupplyWarehouseID: 1,
+			Quantity:          1,
+			Info:              "NIL",
+		}
+
+		err = dao.CreateNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
-		err = dao.CreateNewOrderLine(1, 1, 1, 2, 1, currentTime,
-			9, 40, 2, "NIL")
+
+		newOrderLine.ID = 9
+		newOrderLine.Amount = 40
+		newOrderLine.SupplyWarehouseID = 1
+		newOrderLine.Quantity = 2
+
+		err = dao.CreateNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
 
 		currentOrderByCustomer := common.OrderByCustomer{
@@ -47,15 +75,24 @@ func TestInsertLastOrderStatusTestData(t *testing.T) {
 		// order 2 and its order lines
 		time.Sleep(2 * time.Second)
 		currentTime = time.Unix(time.Now().Unix(), 0)
-		err = dao.CreateNewOrder(2, 1, 1, 1, 2, 2, 1,
-			time.Unix(time.Now().Unix(), 0))
+
+		newOrder.ID = 2
+		newOrder.CarrierID = 2
+		err = dao.CreateNewOrder(&newOrder)
 		assert.NoError(t, err)
 
-		err = dao.CreateNewOrderLine(1, 1, 2, 1, 1,
-			time.Unix(time.Now().Unix(), 0), 1, 400, 1, "NIL")
+		newOrderLine.OrderID = 2
+		newOrderLine.ItemID = 1
+		newOrderLine.Amount = 400
+		newOrderLine.Quantity = 1
+		err = dao.CreateNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
-		err = dao.CreateNewOrderLine(1, 1, 2, 2, 1,
-			time.Unix(time.Now().Unix(), 0), 2, 20, 2, "NIL")
+
+		newOrderLine.ID = 2
+		newOrderLine.ItemID = 2
+		newOrderLine.Amount = 20
+		newOrderLine.Quantity = 2
+		err = dao.CreateNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
 
 		orderByCustomer, err := dao.GetOrderByCustomerInfo(1, 1, 1)
@@ -71,15 +108,48 @@ func TestInsertLastOrderStatusTestData(t *testing.T) {
 		// order 3 and its order lines
 		time.Sleep(2 * time.Second)
 		currentTime = time.Unix(time.Now().Unix(), 0)
-		err = dao.CreateNewOrder(3, 1, 1, 1, 1, 2, 1,
-			time.Unix(time.Now().Unix(), 0))
+
+		newOrder = common.Order{
+			WarehouseID:    1,
+			DistrictID:     1,
+			ID:             3,
+			CustomerID:     1,
+			CarrierID:      1,
+			NumItemOrdered: 2,
+			OrderAllLocal:  1,
+			OrderEntryTime: currentTime,
+		}
+		err = dao.CreateNewOrder(&newOrder)
 		assert.NoError(t, err)
 
-		err = dao.CreateNewOrderLine(1, 1, 3, 1, 1,
-			time.Unix(time.Now().Unix(), 0), 3, 200, 1, "NIL")
+		newOrderLine = common.OrderLine{
+			WarehouseID:       1,
+			DistrictID:        1,
+			OrderID:           3,
+			ID:                1,
+			ItemID:            3,
+			DeliveryTime:      currentTime,
+			Amount:            200,
+			SupplyWarehouseID: 1,
+			Quantity:          1,
+			Info:              "NIL",
+		}
+		err = dao.CreateNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
-		err = dao.CreateNewOrderLine(1, 1, 3, 2, 1,
-			time.Unix(time.Now().Unix(), 0), 4, 50, 2, "NIL")
+
+		newOrderLine = common.OrderLine{
+			WarehouseID:       1,
+			DistrictID:        1,
+			OrderID:           3,
+			ID:                2,
+			ItemID:            4,
+			DeliveryTime:      currentTime,
+			Amount:            50,
+			SupplyWarehouseID: 1,
+			Quantity:          2,
+			Info:              "NIL",
+		}
+		err = dao.CreateNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
 
 		orderByCustomer, err = dao.GetOrderByCustomerInfo(1, 1, 1)
