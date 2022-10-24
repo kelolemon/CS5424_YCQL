@@ -4,9 +4,8 @@ import (
 	"cs5234/common"
 	"cs5234/helper"
 	"encoding/json"
-	"log"
-
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 // CreateNewOrder POST orders
@@ -30,6 +29,7 @@ func CreateNewOrder(c *gin.Context) {
 		c.JSON(500, gin.H{
 			"message": "internal error",
 		})
+		return
 	}
 	c.JSON(200, res)
 }
@@ -54,6 +54,7 @@ func CreateNewPayment(c *gin.Context) {
 		c.JSON(500, gin.H{
 			"message": "internal error",
 		})
+		return
 	}
 	c.JSON(200, res)
 }
@@ -77,8 +78,33 @@ func CreateNewDelivery(c *gin.Context) {
 		c.JSON(500, gin.H{
 			"message": "internal error",
 		})
+		return
 	}
 	c.JSON(200, gin.H{
 		"message": "create new delivery success",
 	})
+}
+
+// GetStockLowLevelItemNumber GET low level info
+// safe action, use get method
+func GetStockLowLevelItemNumber(c *gin.Context) {
+	var getStockLowLevelInfo common.GetStockLevelLowItemNumberReq
+	log.Printf("[info] create new delivery")
+	err := c.ShouldBindQuery(&getStockLowLevelInfo)
+	if err != nil {
+		log.Printf("get param error, err=%v", err)
+		c.JSON(400, gin.H{
+			"message": "bad request",
+		})
+		return
+	}
+	log.Printf("[info] Get param is %v", getStockLowLevelInfo)
+	res, err := helper.GetStockLevelLowItemNumber(getStockLowLevelInfo)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": "internal error",
+		})
+		return
+	}
+	c.JSON(200, res)
 }

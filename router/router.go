@@ -15,4 +15,5 @@ func InitRouters(e *gin.Engine) {
 	api.POST("/order", method.CreateNewOrder)
 	api.POST("/payment", method.CreateNewPayment)
 	api.POST("/delivery", method.CreateNewDelivery)
+	api.GET("/stock", method.GetStockLowLevelItemNumber)
 }

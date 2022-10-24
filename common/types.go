@@ -87,10 +87,10 @@ type GetLastOrderStatusResp struct {
 }
 
 type GetStockLevelLowItemNumberReq struct {
-	WarehouseID    int32 `json:"w_id"`
-	DistrictID     int32 `json:"d_id"`
-	StockThreshold int32 `json:"stock_threshold"`
-	LastOrders     int32 `json:"last_orders"`
+	WarehouseID    int32 `form:"w_id"`
+	DistrictID     int32 `form:"d_id"`
+	StockThreshold int32 `form:"stock_threshold"`
+	LastOrders     int32 `form:"last_orders"`
 }
 
 type GetStockLevelLowItemNumberResp struct {
