@@ -29,8 +29,8 @@ func CreateNewOrder(c *gin.Context) {
 	c.JSON(200, res)
 }
 
-// CreateNewPayment POST
-
+// CreateNewPayment POST payments
+// create a new payment
 func CreateNewPayment(c *gin.Context) {
 	raw, _ := c.GetRawData()
 	log.Printf("[info] create new payment, request body = %v", string(raw))
