@@ -7,7 +7,7 @@ import (
 )
 
 func SetNewCustomerPaymentInfo(customerID int32, customerWarehouseID int32, customerDistrictID int32, newCustomerBalance float64, newCustomerYTD float64, newCustomerPaymentCnt int32) (err error) {
-	if err := client.Session.Query(`UPDATE customer SET c_balance = ?, c_ytd_payment = ?, c_payment_cnt = ? WHERE c_id = ? AND c_w_id = ? AND c_d_id = ?`, newCustomerBalance, newCustomerYTD, newCustomerPaymentCnt, customerID, customerWarehouseID, customerDistrictID).Exec(); err != nil {
+	if err = client.Session.Query(`UPDATE customer SET c_balance = ?, c_ytd_payment = ?, c_payment_cnt = ? WHERE c_id = ? AND c_w_id = ? AND c_d_id = ?`, newCustomerBalance, newCustomerYTD, newCustomerPaymentCnt, customerID, customerWarehouseID, customerDistrictID).Exec(); err != nil {
 		log.Printf("[warn] Set new customer payment information err, err=%v", err)
 		return err
 	}
@@ -40,6 +40,15 @@ c_delivery_cnt, c_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
 		newCustomer.NumPaymentMade, newCustomer.NumDeliveryMade, newCustomer.Data).Exec()
 	if err != nil {
 		log.Printf("[warn] Insert new item information err, err=%v", err)
+		return err
+	}
+
+	return nil
+}
+
+func SetCustomerBalance(customerID int32, warehouseID int32, districtID int32, balance float64, deliveryCnt int32) (err error) {
+	if err = client.Session.Query(`UPDATE customer SET c_balance = ?, c_delivery_cnt = ? WHERE c_id = ? AND c_w_id = ? AND c_d_id = ?`, balance, deliveryCnt, customerID, warehouseID, districtID).Exec(); err != nil {
+		log.Printf("[warn] Set new customer balance information err, err=%v", err)
 		return err
 	}
 

@@ -4,6 +4,7 @@ import (
 	"cs5234/client"
 	"cs5234/common"
 	"log"
+	"time"
 )
 
 func GetOrderByCustomerInfo(customerID int32, warehouseID int32, districtID int32) (orderByCustomer common.OrderByCustomer, err error) {
@@ -42,6 +43,15 @@ func DeleteOrderByCustomerInfo(customerID int32, warehouseID int32, districtID i
 	err = client.Session.Query(`DELETE FROM orderbycustomer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?`, warehouseID, districtID, customerID).Exec()
 	if err != nil {
 		log.Printf("[warn] Delete order by customer information err, err=%v", err)
+		return err
+	}
+
+	return nil
+}
+
+func SetOrderByCustomerBalanceINfo(balance float64, carrierID int32, customerID int32, entryDate time.Time) (err error) {
+	if err = client.Session.Query(`UPDATE orderbycustomer SET c_balance = ?, o_carrier_id = ? WHERE c_id = ? AND o_entry_d ?`, balance, carrierID, customerID, entryDate).Exec(); err != nil {
+		log.Printf("[warn] Set new customer balance information err, err=%v", err)
 		return err
 	}
 

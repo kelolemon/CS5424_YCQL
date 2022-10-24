@@ -5,6 +5,7 @@ import (
 	"cs5234/common"
 	"fmt"
 	"log"
+	"time"
 )
 
 func CreateNewOrderLine(orderLine *common.OrderLine) (err error) {
@@ -40,4 +41,21 @@ func GetOrderLineByOrder(orderID int32) (orderLines []common.OrderLine, err erro
 	}
 
 	return orderLines, nil
+}
+
+func SetOrderLineDeliveryDate(deliveryDate time.Time, warehouseID int32, districtID int32, orderID int32) (err error) {
+	if err = client.Session.Query(`UPDATE orderline SET ol_delivery_d = ? WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?`, deliveryDate, warehouseID, districtID, orderID).Exec(); err != nil {
+		log.Printf("[warn] Set new carrier date err, err=%v", err)
+		return err
+	}
+
+	return nil
+}
+
+func GetOrderAmount(warehouseID int32, districtID int32, orderID int32) (amount float64, err error) {
+	if err = client.Session.Query(`elect sum(ol_amount) from orderline where ol_w_id = ? and ol_d_id = ? and ol_o_id = ?`, warehouseID, districtID, orderID).Scan(&amount); err != nil {
+		log.Printf("[warn] get order line amount err, err=%v", err)
+		return 0, err
+	}
+	return amount, nil
 }
