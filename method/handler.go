@@ -26,6 +26,11 @@ func CreateNewOrder(c *gin.Context) {
 		return
 	}
 	res, err := helper.CreateNewOrder(createNewOrderReq)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": "internal error",
+		})
+	}
 	c.JSON(200, res)
 }
 
@@ -45,5 +50,35 @@ func CreateNewPayment(c *gin.Context) {
 	}
 
 	res, err := helper.CreateNewPayment(createNewPaymentReq)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": "internal error",
+		})
+	}
 	c.JSON(200, res)
+}
+
+// CreateNewDelivery POST delivery
+// create a new delivery transaction
+func CreateNewDelivery(c *gin.Context) {
+	raw, _ := c.GetRawData()
+	log.Printf("[info] create new delivery, request body = %v", string(raw))
+	var createNewDelivery common.CreateNewDeliveryReq
+	err := json.Unmarshal(raw, &createNewDelivery)
+	if err != nil {
+		log.Printf("[warn] request json converted error, err = %v, request body = %v", err, string(raw))
+		c.JSON(400, gin.H{
+			"message": "bad request",
+		})
+		return
+	}
+	_, err = helper.CreateNewDelivery(createNewDelivery)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": "internal error",
+		})
+	}
+	c.JSON(200, gin.H{
+		"message": "create new delivery success",
+	})
 }
