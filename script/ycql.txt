@@ -137,7 +137,7 @@ CREATE TABLE CS5424.StockByOrderLine (
   D_ID int,
   O_ID int,
   O_ENTRY_D timestamp,
-  S_QUANTITY_MAP map<int, frozen<list<varchar>>>,
+  S_QUANTITY_MAP map<int, int>,
   PRIMARY KEY ((W_ID, D_ID, O_ID), O_ENTRY_D)
 )
 WITH CLUSTERING ORDER By (O_ENTRY_D DESC);
@@ -147,7 +147,7 @@ CREATE TABLE CS5424.OrderLineQuantityByOrder (
   D_ID int,
   O_ID int,
   O_ENTRY_D timestamp,
-  OL_QUANTITY_MAP map<int, frozen<list<varchar>>>,
+  OL_QUANTITY_MAP map<int, int>,
   PRIMARY KEY ((W_ID, D_ID, O_ID), O_ENTRY_D)
 )
 WITH CLUSTERING ORDER By (O_ENTRY_D DESC);

@@ -120,3 +120,25 @@ type CreateNewDeliveryReq struct {
 
 type CreateNewDeliveryResp struct {
 }
+
+type GetRelatedCustomerReq struct {
+	WarehouseID int32 `json:"c_w_id"`
+	DistrictID  int32 `json:"c_d_id"`
+	CustomerID  int32 `json:"c_id"`
+}
+
+type CustomerList struct {
+	WarehouseID int32 `json:"c_w_id"`
+	DistrictID  int32 `json:"c_d_id"`
+	CustomerID  int32 `json:"c_id"`
+}
+
+type GetRelatedCustomerResp struct {
+	CustomerList []CustomerList `json:"customer_list"`
+}
+
+type OrderIdentifierList struct {
+	WarehouseID int32 `json:"o_w_id"`
+	DistrictID  int32 `json:"o_d_id"`
+	OrderID     int32 `json:"o_id"`
+}

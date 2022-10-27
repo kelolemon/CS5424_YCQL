@@ -88,7 +88,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		// (f) TOTAL AMOUNT = TOTAL AMOUNT + ITEM AMOUNT
 		totalAmount += itemAmount
 		// (g) Create a new order-line
-		err = dao.CreateNewOrderLine(&common.OrderLine{
+		err = dao.InsertNewOrderLine(&common.OrderLine{
 			WarehouseID:       r.WarehouseID,
 			DistrictID:        r.DistrictID,
 			OrderID:           n,
@@ -151,7 +151,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		return common.CreateOrderResp{}, err
 	}
 	// 8. add stock by order operations
-	err = dao.CreateStockByOrderLineInfo(&common.StockByOrderLine{
+	err = dao.InsertStockByOrderLineInfo(&common.StockByOrderLine{
 		WarehouseID:        r.WarehouseID,
 		DistrictID:         r.DistrictID,
 		OrderEntryTime:     orderEntryDate,
@@ -162,7 +162,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		return common.CreateOrderResp{}, err
 	}
 	// 9. add order line quantity by order operations
-	err = dao.CreateOrderLineQuantityByOrderInfo(&common.OrderLineQuantityByOrder{
+	err = dao.InsertOrderLineQuantityByOrderInfo(&common.OrderLineQuantityByOrder{
 		WarehouseID:            r.WarehouseID,
 		DistrictID:             r.DistrictID,
 		OrderEntryTime:         orderEntryDate,

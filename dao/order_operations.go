@@ -42,3 +42,25 @@ func SetCarrierInfo(warehouseID int32, districtID int32, OrderID int32, CarrierI
 
 	return nil
 }
+
+func GetOrderIdentifier(warehouseID int32, districtID int32, customerID int32) (orderIdentifierLists []common.OrderIdentifierList, err error) {
+	scanner := client.Session.Query(`SELECT o_w_id, o_d_id, o_id FROM "order" WHERE o_w_id = ? AND o_d_id = ? AND o_c_id = ?`, warehouseID, districtID, customerID).Iter().Scanner()
+	orderIdentifierList := common.OrderIdentifierList{}
+	for scanner.Next() {
+		err := scanner.Scan(&orderIdentifierList.WarehouseID, &orderIdentifierList.DistrictID, &orderIdentifierList.OrderID)
+
+		if err != nil {
+			log.Printf("[warn] Order identifiers info. scan error, err=%v", err)
+			return []common.OrderIdentifierList{}, err
+		}
+
+		orderIdentifierLists = append(orderIdentifierLists, orderIdentifierList)
+	}
+
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
+		return []common.OrderIdentifierList{}, err
+	}
+
+	return orderIdentifierLists, nil
+}

@@ -54,3 +54,23 @@ func SetCustomerBalance(customerID int32, warehouseID int32, districtID int32, b
 
 	return nil
 }
+
+func GetDiffWarehouseCustomerList(customerID int32, warehouseID int32) (customerLists []common.CustomerList, err error) {
+	scanner := client.Session.Query(`SELECT c_w_id, c_d_id, c_id FROM customer WHERE c_id != ? AND c_w_id != ?`, customerID, warehouseID).Iter().Scanner()
+	customerList := common.CustomerList{}
+	for scanner.Next() {
+		err = scanner.Scan(&customerList.WarehouseID, &customerList.DistrictID, &customerList.CustomerID)
+		if err != nil {
+			log.Printf("[warn] Read different warehouse customer list err, err=%v", err)
+			return nil, err
+		}
+		customerLists = append(customerLists, customerList)
+	}
+
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
+		return []common.CustomerList{}, err
+	}
+
+	return customerLists, nil
+}

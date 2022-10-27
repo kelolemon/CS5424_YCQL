@@ -46,7 +46,7 @@ func TestInsertLastOrderStatusTestData(t *testing.T) {
 			Info:              "NIL",
 		}
 
-		err = dao.CreateNewOrderLine(&newOrderLine)
+		err = dao.InsertNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
 
 		newOrderLine.ID = 9
@@ -54,7 +54,7 @@ func TestInsertLastOrderStatusTestData(t *testing.T) {
 		newOrderLine.SupplyWarehouseID = 1
 		newOrderLine.Quantity = 2
 
-		err = dao.CreateNewOrderLine(&newOrderLine)
+		err = dao.InsertNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
 
 		currentOrderByCustomer := common.OrderByCustomer{
@@ -85,14 +85,14 @@ func TestInsertLastOrderStatusTestData(t *testing.T) {
 		newOrderLine.ItemID = 1
 		newOrderLine.Amount = 400
 		newOrderLine.Quantity = 1
-		err = dao.CreateNewOrderLine(&newOrderLine)
+		err = dao.InsertNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
 
 		newOrderLine.ID = 2
 		newOrderLine.ItemID = 2
 		newOrderLine.Amount = 20
 		newOrderLine.Quantity = 2
-		err = dao.CreateNewOrderLine(&newOrderLine)
+		err = dao.InsertNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
 
 		orderByCustomer, err := dao.GetOrderByCustomerInfo(1, 1, 1)
@@ -134,7 +134,7 @@ func TestInsertLastOrderStatusTestData(t *testing.T) {
 			Quantity:          1,
 			Info:              "NIL",
 		}
-		err = dao.CreateNewOrderLine(&newOrderLine)
+		err = dao.InsertNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
 
 		newOrderLine = common.OrderLine{
@@ -149,7 +149,7 @@ func TestInsertLastOrderStatusTestData(t *testing.T) {
 			Quantity:          2,
 			Info:              "NIL",
 		}
-		err = dao.CreateNewOrderLine(&newOrderLine)
+		err = dao.InsertNewOrderLine(&newOrderLine)
 		assert.NoError(t, err)
 
 		orderByCustomer, err = dao.GetOrderByCustomerInfo(1, 1, 1)

@@ -27,11 +27,17 @@ func GetTopCustomerBalanceInfo() (customerBalances []common.CustomerBalance, err
 	for scanner.Next() {
 		err = scanner.Scan(&customerBalance.WarehouseID, &customerBalance.DistrictID, &customerBalance.ID, &customerBalance.Balance, &customerBalance.FirstName, &customerBalance.MiddleName, &customerBalance.LastName, &customerBalance.WarehouseName, &customerBalance.DistrictName)
 		if err != nil {
-			log.Printf("[warn] read customer balance err, err=%v", err)
+			log.Printf("[warn] Read customer balance err, err=%v", err)
 			return nil, err
 		}
 		customerBalances = append(customerBalances, customerBalance)
 	}
+
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
+		return []common.CustomerBalance{}, err
+	}
+
 	return customerBalances, nil
 }
 

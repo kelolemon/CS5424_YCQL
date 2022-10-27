@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func CreateStockByOrderLineInfo(orderByCustomer *common.StockByOrderLine) (err error) {
+func InsertStockByOrderLineInfo(orderByCustomer *common.StockByOrderLine) (err error) {
 	err = client.Session.Query(`INSERT INTO StockByOrderLine (W_ID, D_ID, O_ID, O_ENTRY_D, S_QUANTITY_MAP) VALUES (?, ?, ?, ?, ?)`,
 		orderByCustomer.WarehouseID, orderByCustomer.DistrictID, orderByCustomer.OrderID, orderByCustomer.OrderEntryTime, orderByCustomer.StockQuantitiesMap).Exec()
 	if err != nil {
