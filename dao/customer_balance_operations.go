@@ -41,9 +41,9 @@ func GetTopCustomerBalanceInfo() (customerBalances []common.CustomerBalance, err
 	return customerBalances, nil
 }
 
-func DeleteCustomerBalance(customerID int32, warehouseID int32, districtID int32) (err error) {
-	if err := client.Session.Query(`DELETE FROM customerbalance WHERE c_id = ? AND c_w_id = ? AND c_d_id = ?`, customerID, warehouseID, districtID, customerID).Exec(); err != nil {
-		log.Printf("[warn] Delete customer balance information err, err=%v", err)
+func SetNewCustomerBalance(newCustomerBalance float64, warehouseID int32, districtID int32, customerID int32) (err error) {
+	if err := client.Session.Query(`UPDATE customerbalance SET c_balance = ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?`, newCustomerBalance, warehouseID, districtID, customerID).Exec(); err != nil {
+		log.Printf("[warn] Set new customer balance err, err=%v", err)
 		return err
 	}
 

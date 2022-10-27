@@ -38,24 +38,26 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 	// step 4. update customer balance (c_id) => if customer exists, update, else add a new record
 	_, err = dao.GetCustomerBalanceInfo(r.CustomerID, r.WarehouseID, r.DistrictID)
 
-	newCustomerBalanceInfo := common.CustomerBalance{
-		ID:            currentCustomerInfo.ID,
-		Balance:       newCustomerBalance,
-		FirstName:     currentCustomerInfo.FirstName,
-		MiddleName:    currentCustomerInfo.MiddleName,
-		LastName:      currentCustomerInfo.LastName,
-		DistrictName:  currentDistrictInfo.Name,
-		WarehouseName: currentWarehouseInfo.Name,
-	}
-
+	// if exists, update the customer balance
 	if err == nil {
-		if err = dao.DeleteCustomerBalance(r.CustomerID, r.WarehouseID, r.DistrictID); err != nil {
+		if err = dao.SetNewCustomerBalance(newCustomerBalance, r.WarehouseID, r.DistrictID, r.CustomerID); err != nil {
 			return common.CreateNewPaymentResp{}, err
 		}
-	}
+	} else {
+		// if not exists, insert new records
+		newCustomerBalanceInfo := common.CustomerBalance{
+			ID:            currentCustomerInfo.ID,
+			Balance:       newCustomerBalance,
+			FirstName:     currentCustomerInfo.FirstName,
+			MiddleName:    currentCustomerInfo.MiddleName,
+			LastName:      currentCustomerInfo.LastName,
+			DistrictName:  currentDistrictInfo.Name,
+			WarehouseName: currentWarehouseInfo.Name,
+		}
 
-	if err = dao.InsertCustomerBalanceInfo(&newCustomerBalanceInfo); err != nil {
-		return common.CreateNewPaymentResp{}, err
+		if err = dao.InsertCustomerBalanceInfo(&newCustomerBalanceInfo); err != nil {
+			return common.CreateNewPaymentResp{}, err
+		}
 	}
 
 	res = common.CreateNewPaymentResp{
