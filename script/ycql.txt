@@ -25,7 +25,7 @@ CREATE TABLE CS5424.Order (
   O_OL_CNT int,
   O_ALL_LOCAL int,
   O_ENTRY_D timestamp,
-  PRIMARY KEY ((O_ID, O_W_ID, O_D_ID))
+  PRIMARY KEY (O_ID, O_W_ID, O_D_ID)
 );
 
 CREATE TABLE CS5424.OrderLine (
@@ -33,10 +33,10 @@ CREATE TABLE CS5424.OrderLine (
   OL_D_ID int,
   OL_O_ID int,
   OL_NUMBER int,
-  OL_SUPPLY_W_ID int,
-  OL_DELIVERY_D timestamp,
   OL_I_ID int,
+  OL_DELIVERY_D timestamp,
   OL_AMOUNT double,
+  OL_SUPPLY_W_ID int,
   OL_QUANTITY int,
   OL_DIST_INFO text,
   PRIMARY KEY ((OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER), OL_SUPPLY_W_ID, OL_DELIVERY_D)
@@ -45,12 +45,12 @@ WITH CLUSTERING ORDER By (OL_SUPPLY_W_ID ASC, OL_DELIVERY_D ASC);
 
 CREATE TABLE CS5424.Warehouse (
   W_ID int,
-  W_ZIP text,
   W_NAME text,
   W_STREET_1 text,
   W_STREET_2 text,
   W_CITY text,
   W_STATE text,
+  W_ZIP text,
   W_TAX double,
   W_YTD double,
   PRIMARY KEY (W_ID)
@@ -59,12 +59,12 @@ CREATE TABLE CS5424.Warehouse (
 CREATE TABLE CS5424.District (
   D_W_ID int,
   D_ID int,
-  D_ZIP text,
   D_NAME text,
   D_STREET_1 text,
   D_STREET_2 text,
   D_CITY text,
   D_STATE text,
+  D_ZIP text,
   D_TAX double,
   D_YTD double,
   D_NEXT_O_ID int,
@@ -75,7 +75,6 @@ CREATE TABLE CS5424.Customer (
   C_W_ID int,
   C_D_ID int,
   C_ID int,
-  C_ZIP text,
   C_FIRST text,
   C_MIDDLE text,
   C_LAST text,
@@ -83,6 +82,7 @@ CREATE TABLE CS5424.Customer (
   C_STREET_2 text,
   C_CITY text,
   C_STATE text,
+  C_ZIP text,
   C_PHONE text,
   C_SINCE timestamp,
   C_CREDIT text,
@@ -114,7 +114,7 @@ CREATE TABLE CS5424.Stock (
   S_DIST_09 text,
   S_DIST_10 text,
   S_DATA text,
-  PRIMARY KEY ((S_W_ID, S_I_ID))
+  PRIMARY KEY (S_W_ID, S_I_ID)
 );
 
 CREATE TABLE CS5424.OrderByCustomer (
