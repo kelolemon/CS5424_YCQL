@@ -54,7 +54,7 @@ CREATE TABLE CS5424.Warehouse (
   W_TAX double,
   W_YTD double,
   PRIMARY KEY (W_ID)
-)
+);
 
 CREATE TABLE CS5424.District (
   D_W_ID int,
@@ -69,7 +69,7 @@ CREATE TABLE CS5424.District (
   D_YTD double,
   D_NEXT_O_ID int,
   PRIMARY KEY (D_W_ID, D_ID)
-)
+);
 
 CREATE TABLE CS5424.Customer (
   C_W_ID int,
@@ -94,7 +94,7 @@ CREATE TABLE CS5424.Customer (
   C_DELIVERY_CNT int,
   C_DATA text,
   PRIMARY KEY (C_W_ID, C_D_ID, C_ID)
-)
+);
 
 CREATE TABLE CS5424.Stock (
   S_W_ID int,
