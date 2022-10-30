@@ -142,3 +142,36 @@ type OrderIdentifierList struct {
 	DistrictID  int32 `json:"o_d_id"`
 	OrderID     int32 `json:"o_id"`
 }
+
+type GetPopularItemReq struct {
+	WarehouseID   int32 `json:"w_id"`
+	DistrictID    int32 `json:"d_id"`
+	NumLastOrders int32 `json:"num_last_orders"`
+}
+
+type GetPopularItemResp struct {
+	WarehouseID            int32
+	DistrictID             int32
+	NumLastOrders          int32
+	OrderPopularItems      []OrderPopularItem
+	PopularItemPercentages []*PopularItemPercentage
+}
+
+type OrderPopularItem struct {
+	OrderID            int32
+	OrderEntryTime     time.Time
+	CustomerFirstName  string
+	CustomerMiddleName string
+	CustomerLastName   string
+	PopularItems       []*PopularItem
+}
+
+type PopularItem struct {
+	ItemName string
+	Quantity int32
+}
+
+type PopularItemPercentage struct {
+	ItemName                string
+	PercentageOrderWithItem string
+}

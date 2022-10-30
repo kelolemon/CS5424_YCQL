@@ -7,8 +7,16 @@ import (
 )
 
 func InsertOrderLineQuantityByOrderInfo(orderByCustomer *common.OrderLineQuantityByOrder) (err error) {
-	err = client.Session.Query(`INSERT INTO OrderLineQuantityByOrder (W_ID, D_ID, O_ID, O_ENTRY_D, OL_QUANTITY_MAP) VALUES (?, ?, ?, ?, ?)`,
-		orderByCustomer.WarehouseID, orderByCustomer.DistrictID, orderByCustomer.OrderID, orderByCustomer.OrderEntryTime, orderByCustomer.OrderLineQuantitiesMap).Exec()
+	err = client.Session.Query(
+		`INSERT INTO OrderLineQuantityByOrder (W_ID, D_ID, O_ID, O_ENTRY_D, OL_QUANTITY_MAP, C_FIRST, C_MIDDLE, C_LAST) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+		orderByCustomer.WarehouseID,
+		orderByCustomer.DistrictID,
+		orderByCustomer.OrderID,
+		orderByCustomer.OrderEntryTime,
+		orderByCustomer.OrderLineQuantitiesMap,
+		orderByCustomer.CustomerFirstName,
+		orderByCustomer.CustomerMiddleName,
+		orderByCustomer.CustomerLastName).Exec()
 	if err != nil {
 		log.Printf("[warn] Insert new order line quantity by order err, err=%v", err)
 		return err

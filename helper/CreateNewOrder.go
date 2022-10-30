@@ -167,6 +167,9 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		DistrictID:             r.DistrictID,
 		OrderEntryTime:         orderEntryDate,
 		OrderLineQuantitiesMap: itemOrderQuantity,
+		CustomerFirstName:      customerRes.FirstName,
+		CustomerMiddleName:     customerRes.MiddleName,
+		CustomerLastName:       customerRes.LastName,
 	})
 	if err != nil {
 		log.Printf("[warn] create stock by order line error, err=%v", err)

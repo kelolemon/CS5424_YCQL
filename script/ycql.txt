@@ -149,6 +149,9 @@ CREATE TABLE CS5424.OrderLineQuantityByOrder (
   O_ID int,
   O_ENTRY_D timestamp,
   OL_QUANTITY_MAP map<int, int>,
+  C_FIRST text,
+  C_MIDDLE text,
+  C_LAST text,
   PRIMARY KEY ((W_ID, D_ID, O_ID), O_ENTRY_D)
 )
 WITH CLUSTERING ORDER By (O_ENTRY_D DESC);
@@ -165,3 +168,4 @@ CREATE TABLE CS5424.CustomerBalance (
   D_NAME text,
   PRIMARY KEY (C_W_ID, C_D_ID, C_ID)
 );
+
