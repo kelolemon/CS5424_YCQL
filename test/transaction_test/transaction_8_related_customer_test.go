@@ -26,6 +26,9 @@ func TestInsertRelatedCustomerTestData(t *testing.T) {
 			OrderID:                3,
 			OrderEntryTime:         time.Unix(time.Now().Unix(), 0),
 			OrderLineQuantitiesMap: itemQuantityMap1,
+			CustomerFirstName:      "A",
+			CustomerMiddleName:     "A",
+			CustomerLastName:       "A",
 		}
 
 		err = dao.InsertOrderLineQuantityByOrderInfo(&newOrderLineQuantity)
@@ -36,6 +39,9 @@ func TestInsertRelatedCustomerTestData(t *testing.T) {
 		itemQuantityMap2[9] = 40
 		newOrderLineQuantity.OrderID = 4
 		newOrderLineQuantity.OrderLineQuantitiesMap = itemQuantityMap2
+		newOrderLineQuantity.CustomerFirstName = "B"
+		newOrderLineQuantity.CustomerMiddleName = "B"
+		newOrderLineQuantity.CustomerLastName = "B"
 		err = dao.InsertOrderLineQuantityByOrderInfo(&newOrderLineQuantity)
 		assert.NoError(t, err)
 
@@ -44,6 +50,9 @@ func TestInsertRelatedCustomerTestData(t *testing.T) {
 		itemQuantityMap3[4] = 50
 		newOrderLineQuantity.OrderID = 5
 		newOrderLineQuantity.OrderLineQuantitiesMap = itemQuantityMap3
+		newOrderLineQuantity.CustomerFirstName = "C"
+		newOrderLineQuantity.CustomerMiddleName = "C"
+		newOrderLineQuantity.CustomerLastName = "C"
 		err = dao.InsertOrderLineQuantityByOrderInfo(&newOrderLineQuantity)
 		assert.NoError(t, err)
 	}

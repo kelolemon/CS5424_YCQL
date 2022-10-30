@@ -137,6 +137,9 @@ type OrderLineQuantityByOrder struct {
 	OrderID                int32           `cql:"o_id"`
 	OrderEntryTime         time.Time       `cql:"o_entry_d"`
 	OrderLineQuantitiesMap map[int32]int32 `cql:"ol_quantity_map"`
+	CustomerFirstName      string          `cql:"c_first"`
+	CustomerMiddleName     string          `cql:"c_middle"`
+	CustomerLastName       string          `cql:"c_last"`
 }
 
 type CustomerBalance struct {
