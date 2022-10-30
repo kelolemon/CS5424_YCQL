@@ -108,3 +108,26 @@ func GetStockLowLevelItemNumber(c *gin.Context) {
 	}
 	c.JSON(200, res)
 }
+
+// GetPopularItem Get most popular item for the last L orders
+func GetPopularItem(c *gin.Context) {
+	var getPopularItemReq common.GetPopularItemReq
+	err := c.ShouldBindQuery(&getPopularItemReq)
+	if err != nil {
+		log.Printf("get param error, err=%v", err)
+		c.JSON(400, gin.H{
+			"message": "bad request",
+		})
+		return
+	}
+	log.Printf("[info] getting popular items for last %d orders in warehouse %d district %d",
+		getPopularItemReq.NumLastOrders, getPopularItemReq.WarehouseID, getPopularItemReq.DistrictID)
+	res, err := helper.GetOrderPopularItems(getPopularItemReq)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": "internal error",
+		})
+		return
+	}
+	c.JSON(200, res)
+}
