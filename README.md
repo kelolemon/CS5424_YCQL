@@ -14,5 +14,7 @@ copy district from '../../project_files/data_files/district.csv' WITH delimiter=
 copy item from '../../project_files/data_files/item.csv' WITH delimiter=',' AND HEADER=FALSE;
 copy stock from '../../project_files/data_files/stock.csv' WITH delimiter=',' AND HEADER=FALSE;
 copy customer from '../../project_files/data_files/customer.csv' WITH delimiter=',' AND HEADER=FALSE;
+copy order from '../../project_files/data_files/order.csv' WITH delimiter=',' AND HEADER=FALSE;
+copy orderline from '../../project_files/data_files/order-line.csv' WITH delimiter=',' AND HEADER=FALSE;
 ```
 
