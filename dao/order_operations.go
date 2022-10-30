@@ -3,6 +3,7 @@ package dao
 import (
 	"cs5234/client"
 	"cs5234/common"
+	"fmt"
 	"log"
 )
 
@@ -63,4 +64,31 @@ func GetOrderIdentifier(warehouseID int32, districtID int32, customerID int32) (
 	}
 
 	return orderIdentifierLists, nil
+}
+
+func GetLastOrderInfo(warehouseID int32, districtID int32, customerID int32) (orderInfo common.Order, err error) {
+	scanner := client.Session.Query(`SELECT * FROM "order" WHERE o_w_id = ? AND o_d_id = ? AND o_c_id = ?`, warehouseID, districtID, customerID).Iter().Scanner()
+	for scanner.Next() {
+		orderInfoTemp := common.Order{}
+		err := scanner.Scan(&orderInfoTemp.WarehouseID, &orderInfoTemp.DistrictID, &orderInfoTemp.ID, &orderInfoTemp.CustomerID,
+			&orderInfoTemp.CarrierID, &orderInfoTemp.NumItemOrdered, &orderInfoTemp.OrderAllLocal, &orderInfoTemp.OrderEntryTime)
+
+		if err != nil {
+			log.Printf("[warn] Last order info. scan error, err=%v", err)
+			return common.Order{}, err
+		}
+
+		fmt.Print(orderInfo)
+		fmt.Print(orderInfoTemp)
+		if orderInfo.OrderEntryTime.Before(orderInfoTemp.OrderEntryTime) == true {
+			orderInfo = orderInfoTemp
+		}
+	}
+
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
+		return common.Order{}, err
+	}
+
+	return orderInfo, nil
 }
