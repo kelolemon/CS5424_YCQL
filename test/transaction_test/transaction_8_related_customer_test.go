@@ -38,6 +38,7 @@ func TestInsertRelatedCustomerTestData(t *testing.T) {
 		itemQuantityMap2[10] = 5
 		itemQuantityMap2[9] = 40
 		newOrderLineQuantity.OrderID = 4
+		newOrderLineQuantity.OrderEntryTime = time.Unix(time.Now().Add(1*time.Minute).Unix(), 0)
 		newOrderLineQuantity.OrderLineQuantitiesMap = itemQuantityMap2
 		newOrderLineQuantity.CustomerFirstName = "B"
 		newOrderLineQuantity.CustomerMiddleName = "B"
@@ -49,6 +50,7 @@ func TestInsertRelatedCustomerTestData(t *testing.T) {
 		itemQuantityMap3[3] = 200
 		itemQuantityMap3[4] = 50
 		newOrderLineQuantity.OrderID = 5
+		newOrderLineQuantity.OrderEntryTime = time.Unix(time.Now().Add(2*time.Minute).Unix(), 0)
 		newOrderLineQuantity.OrderLineQuantitiesMap = itemQuantityMap3
 		newOrderLineQuantity.CustomerFirstName = "C"
 		newOrderLineQuantity.CustomerMiddleName = "C"

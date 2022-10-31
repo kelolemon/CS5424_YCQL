@@ -41,3 +41,9 @@ func GetOrderLineQuantity(warehouseID int32, districtID int32, orderID int32) (o
 
 	return orderLineQuantity, nil
 }
+
+func GetLastLOrdersQuantity(warehouseID int32, districtID int32, orderID int32, numLastOrders int32) (orderQuantities []common.OrderLineQuantityByOrder, err error) {
+	//orderQuantities := make([]common.OrderLineQuantityByOrder, 0)
+	//stmt := `SELECT * FROM orderlinequantitybyorder WHERE w_id = ? AND d_id = ? AND o_id = ? LIMIT ? ORDER BY o_entry_d DESC`
+	return nil, nil
+}
