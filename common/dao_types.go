@@ -132,14 +132,15 @@ type StockByOrderLine struct {
 }
 
 type OrderLineQuantityByOrder struct {
-	WarehouseID            int32           `cql:"w_id"`
-	DistrictID             int32           `cql:"d_id"`
-	OrderID                int32           `cql:"o_id"`
-	OrderEntryTime         time.Time       `cql:"o_entry_d"`
-	OrderLineQuantitiesMap map[int32]int32 `cql:"ol_quantity_map"`
-	CustomerFirstName      string          `cql:"c_first"`
-	CustomerMiddleName     string          `cql:"c_middle"`
-	CustomerLastName       string          `cql:"c_last"`
+	WarehouseID            int32            `cql:"w_id"`
+	DistrictID             int32            `cql:"d_id"`
+	OrderID                int32            `cql:"o_id"`
+	OrderEntryTime         time.Time        `cql:"o_entry_d"`
+	OrderLineQuantitiesMap map[int32]int32  `cql:"ol_quantity_map"`
+	OrderItemsIDNameMap    map[int32]string `cql:"items_id_name_map"`
+	CustomerFirstName      string           `cql:"c_first"`
+	CustomerMiddleName     string           `cql:"c_middle"`
+	CustomerLastName       string           `cql:"c_last"`
 }
 
 type CustomerBalance struct {
