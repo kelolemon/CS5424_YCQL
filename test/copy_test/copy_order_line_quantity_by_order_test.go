@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+// deprecated
+
 func TestCopyOrderLineQuantityByOrder(t *testing.T) {
 	err := client.InitDB()
 	assert.NoError(t, err)

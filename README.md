@@ -25,6 +25,5 @@ import data from project_files/data_files/*.csv:
 ./cassandra-loader -f project_files/data_files/order-line.csv -host localhost -schema "cs5424.orderline(ol_w_id, ol_d_id, ol_o_id, ol_number, ol_i_id, ol_delivery_d, ol_amount, ol_supply_w_id, ol_quantity, ol_dist_info)" -dateFormat "YYYY-MM-DD hh:mm:ss"
 ./cassandra-loader -f project_files/data_files/customer.csv -host localhost -schema "cs5424.customer(c_w_id, c_d_id, c_id, c_zip, c_first, c_middle, c_last, c_street_1, c_street_2, c_city, c_state, c_phone, c_since, c_credit, c_credit_lim, c_discount, c_balance, c_ytd_payment, c_payment_cnt, c_delivery_cnt, c_data)" -dateFormat "YYYY-MM-DD hh:mm:ss"
 ./cassandra-loader -f project_files/data_files/stock.csv -host localhost -schema "cs5424.stock(s_w_id, s_i_id, s_quantity, s_ytd, s_order_cnt, s_remote_cnt, s_dist_01, s_dist_02, s_dist_03, s_dist_04, s_dist_05, s_dist_06, s_dist_07, s_dist_08, s_dist_09, s_dist_10, s_data)"
-./cassandra-loader -f project_files/data_files/order-line-quantity-by-order.csv -host localhost -schema "cs5424.orderlinequantitybyorder(W_ID, D_ID, O_ID, O_ENTRY_D, OL_QUANTITY_MAP, ITEMS_ID_NAME_MAP, C_FIRST, C_MIDDLE, C_LAST)" -dateFormat "YYYY-MM-DD hh:mm:ss" -charsPerColumn 409600
 ```
 

@@ -6,6 +6,8 @@ import (
 	"log"
 )
 
+// deprecated
+
 func InsertOrderLineQuantityByOrderInfo(orderByCustomer *common.OrderLineQuantityByOrder) (err error) {
 	err = client.Session.Query(
 		`INSERT INTO OrderLineQuantityByOrder (W_ID, D_ID, O_ID, O_ENTRY_D, OL_QUANTITY_MAP, ITEMS_ID_NAME_MAP, C_FIRST, C_MIDDLE, C_LAST) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
