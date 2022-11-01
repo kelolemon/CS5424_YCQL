@@ -50,6 +50,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 	//self stock by order & order line by order map
 	itemStockQuantity := make(map[int32]int32)
 	itemOrderQuantity := make(map[int32]int32)
+	itemIdNameMap := make(map[int32]string)
 	//5. handle data，
 	items := make([]common.ItemList, 0)
 	for i := int32(0); i < r.NumberItems; i++ {
@@ -116,6 +117,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		})
 		itemStockQuantity[r.ItemNumber[i]] = adjustedQTY
 		itemOrderQuantity[r.ItemNumber[i]] = r.Quantity[i]
+		itemIdNameMap[r.ItemNumber[i]] = itemRes.Name
 	}
 	// 6. TOTAL AMOUNT = TOTAL AMOUNT × (1+D TAX +W TAX) × (1−C DISCOUNT),
 	// where W TAX is the tax rate for warehouse W ID, D TAX is the tax rate for district (W ID, D ID),
@@ -167,6 +169,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		DistrictID:             r.DistrictID,
 		OrderEntryTime:         orderEntryDate,
 		OrderLineQuantitiesMap: itemOrderQuantity,
+		OrderItemsIDNameMap:    itemIdNameMap,
 		CustomerFirstName:      customerRes.FirstName,
 		CustomerMiddleName:     customerRes.MiddleName,
 		CustomerLastName:       customerRes.LastName,

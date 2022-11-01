@@ -8,12 +8,13 @@ import (
 
 func InsertOrderLineQuantityByOrderInfo(orderByCustomer *common.OrderLineQuantityByOrder) (err error) {
 	err = client.Session.Query(
-		`INSERT INTO OrderLineQuantityByOrder (W_ID, D_ID, O_ID, O_ENTRY_D, OL_QUANTITY_MAP, C_FIRST, C_MIDDLE, C_LAST) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+		`INSERT INTO OrderLineQuantityByOrder (W_ID, D_ID, O_ID, O_ENTRY_D, OL_QUANTITY_MAP, ITEMS_ID_NAME_MAP, C_FIRST, C_MIDDLE, C_LAST) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		orderByCustomer.WarehouseID,
 		orderByCustomer.DistrictID,
 		orderByCustomer.OrderID,
 		orderByCustomer.OrderEntryTime,
 		orderByCustomer.OrderLineQuantitiesMap,
+		orderByCustomer.OrderItemsIDNameMap,
 		orderByCustomer.CustomerFirstName,
 		orderByCustomer.CustomerMiddleName,
 		orderByCustomer.CustomerLastName).Exec()
@@ -40,4 +41,26 @@ func GetOrderLineQuantity(warehouseID int32, districtID int32, orderID int32) (o
 	}
 
 	return orderLineQuantity, nil
+}
+
+func GetLastLOrdersQuantity(warehouseID int32, districtID int32, numLastOrders int32) ([]common.OrderLineQuantityByOrder, error) {
+	orderQuantities := make([]common.OrderLineQuantityByOrder, 0)
+	stmt := `SELECT * FROM orderlinequantitybyorder WHERE w_id = ? and d_id = ? ORDER BY o_id DESC LIMIT ?`
+	iter := client.Session.Query(stmt, warehouseID, districtID, numLastOrders).Iter()
+
+	for {
+		rawMap := make(map[string]interface{})
+		var orderQuantity common.OrderLineQuantityByOrder
+		if !iter.MapScan(rawMap) {
+			break
+		}
+		err := common.ToCqlStruct(rawMap, &orderQuantity)
+		if err != nil {
+			log.Fatalf("error fetching orderQuantities: %s", err)
+			return nil, err
+		}
+		orderQuantities = append(orderQuantities, orderQuantity)
+	}
+
+	return orderQuantities, nil
 }

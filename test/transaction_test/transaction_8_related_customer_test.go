@@ -19,6 +19,9 @@ func TestInsertRelatedCustomerTestData(t *testing.T) {
 		itemQuantityMap1 := make(map[int32]int32)
 		itemQuantityMap1[1] = 400
 		itemQuantityMap1[2] = 20
+		itemIdNameMap1 := make(map[int32]string)
+		itemIdNameMap1[1] = "item1"
+		itemIdNameMap1[2] = "item2"
 
 		newOrderLineQuantity := common.OrderLineQuantityByOrder{
 			WarehouseID:            1,
@@ -26,6 +29,7 @@ func TestInsertRelatedCustomerTestData(t *testing.T) {
 			OrderID:                3,
 			OrderEntryTime:         time.Unix(time.Now().Unix(), 0),
 			OrderLineQuantitiesMap: itemQuantityMap1,
+			OrderItemsIDNameMap:    itemIdNameMap1,
 			CustomerFirstName:      "A",
 			CustomerMiddleName:     "A",
 			CustomerLastName:       "A",
@@ -37,6 +41,9 @@ func TestInsertRelatedCustomerTestData(t *testing.T) {
 		itemQuantityMap2 := make(map[int32]int32)
 		itemQuantityMap2[10] = 5
 		itemQuantityMap2[9] = 40
+		itemIdNameMap2 := make(map[int32]string)
+		itemIdNameMap2[10] = "item10"
+		itemIdNameMap2[9] = "item9"
 		newOrderLineQuantity.OrderID = 4
 		newOrderLineQuantity.OrderLineQuantitiesMap = itemQuantityMap2
 		newOrderLineQuantity.CustomerFirstName = "B"
@@ -48,6 +55,9 @@ func TestInsertRelatedCustomerTestData(t *testing.T) {
 		itemQuantityMap3 := make(map[int32]int32)
 		itemQuantityMap3[3] = 200
 		itemQuantityMap3[4] = 50
+		itemIdNameMap3 := make(map[int32]string)
+		itemIdNameMap3[3] = "item3"
+		itemIdNameMap3[4] = "item4"
 		newOrderLineQuantity.OrderID = 5
 		newOrderLineQuantity.OrderLineQuantitiesMap = itemQuantityMap3
 		newOrderLineQuantity.CustomerFirstName = "C"

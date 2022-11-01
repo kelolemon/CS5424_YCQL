@@ -153,7 +153,7 @@ type GetPopularItemResp struct {
 	WarehouseID            int32
 	DistrictID             int32
 	NumLastOrders          int32
-	OrderPopularItems      []OrderPopularItem
+	OrderPopularItems      []*OrderPopularItem
 	PopularItemPercentages []*PopularItemPercentage
 }
 
