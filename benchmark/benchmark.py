@@ -1,6 +1,8 @@
+import threading
 import time
 import requests
 import json
+import numpy as np
 
 
 def send_request(request_type, request_header, request_data, request_url):
@@ -155,10 +157,32 @@ def handler(s):
             latency_list.append(latency)
             # print response content at stdout
             print(response)
+    print('tot number of transactions is', requests_counter)
+    print('Total elapsed time for processing the transactions', time_counter / 1000)
+    print('throughput is', requests_counter / (time_counter / 1000))
+    print('Average transaction latency', np.mean(latency_list))
+    print('Median transaction latency', np.median(latency_list))
+    print('95th percentile transaction latency', np.percentile(latency_list, 95))
+    print('99th percentile transaction latency', np.percentile(latency_list, 99))
+
+
+def read_from_file(nub):
+    dirname = "../project_files/xact_files/"
+    filename = str(nub) + ".txt"
+    with open(dirname + filename, 'r+') as f:
+        s = [line[:-1].split(',') for line in f.readlines()]
+        return s
 
 
 def benchmark():
-    handler([])
+    threads = []
+    for i in range(0, 20):
+        threads.append(threading.Thread(target=handler, args=(read_from_file(i), )))
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        if thread.isAlive():
+            thread.join()
 
 
 if __name__ == "__main__":
