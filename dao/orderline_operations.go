@@ -58,3 +58,25 @@ func GetOrderAmount(warehouseID int32, districtID int32, orderID int32) (amount 
 	}
 	return amount, nil
 }
+
+func GetOrderIdentifiersByItemID(itemID int32) (orderIdentifiers []common.OrderIdentifierList, err error) {
+	stmt := `SELECT ol_w_id, ol_d_id, ol_o_id FROM orderline WHERE ol_i_id = ?`
+	scanner := client.Session.Query(stmt, itemID).Iter().Scanner()
+
+	for scanner.Next() {
+		orderIdentifier := common.OrderIdentifierList{}
+		err = scanner.Scan(&orderIdentifier.WarehouseID, &orderIdentifier.DistrictID, &orderIdentifier.OrderID)
+		if err != nil {
+			log.Printf("[warn] OrderLine info. scan error, err=%v", err)
+			return []common.OrderIdentifierList{}, err
+		}
+		orderIdentifiers = append(orderIdentifiers, orderIdentifier)
+	}
+
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
+		return []common.OrderIdentifierList{}, err
+	}
+
+	return orderIdentifiers, nil
+}

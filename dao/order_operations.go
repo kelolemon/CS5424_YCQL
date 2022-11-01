@@ -112,3 +112,12 @@ func GetAllOrderIdentifierWithDate() (orderWithDateLists []common.OrderWithDateL
 
 	return orderWithDateLists, nil
 }
+
+func GetCustomerIDByOrderIdentifier(warehouseID int32, districtID int32, orderID int32) (customerID int32, err error) {
+	if err := client.Session.Query(`SELECT o_c_id FROM "order" WHERE o_w_id = ? AND o_d_id = ? AND o_id = ?`, warehouseID, districtID, orderID).Scan(&customerID); err != nil {
+		log.Printf("[warn] Get customerID by order identifier err, err=%v", err)
+		return -1, err
+	}
+
+	return customerID, nil
+}

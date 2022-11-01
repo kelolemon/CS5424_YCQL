@@ -162,6 +162,7 @@ CREATE TABLE CS5424.OrderLineQuantityByOrder (
   O_ENTRY_D timestamp,
   OL_QUANTITY_MAP map<int, int>,
   ITEMS_ID_NAME_MAP map<int, text>,
+  C_ID int,
   C_FIRST text,
   C_MIDDLE text,
   C_LAST text,
