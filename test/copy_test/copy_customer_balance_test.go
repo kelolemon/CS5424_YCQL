@@ -1,4 +1,4 @@
-package dao_test
+package copy_test_test
 
 import (
 	"cs5234/client"
@@ -7,12 +7,12 @@ import (
 	"testing"
 )
 
-func TestCopyOrderByCustomer(t *testing.T) {
+func TestCopyCustomerBalance(t *testing.T) {
 	err := client.InitDB()
 	assert.NoError(t, err)
 
 	if client.Session != nil {
 		defer client.Session.Close()
-		helper.CopyOrderByCustomer()
+		helper.CopyCustomerBalance()
 	}
 }

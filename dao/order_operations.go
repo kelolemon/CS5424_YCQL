@@ -3,7 +3,6 @@ package dao
 import (
 	"cs5234/client"
 	"cs5234/common"
-	"fmt"
 	"log"
 )
 
@@ -78,8 +77,6 @@ func GetLastOrderInfo(warehouseID int32, districtID int32, customerID int32) (or
 			return common.Order{}, err
 		}
 
-		fmt.Print(orderInfo)
-		fmt.Print(orderInfoTemp)
 		if orderInfo.OrderEntryTime.Before(orderInfoTemp.OrderEntryTime) == true {
 			orderInfo = orderInfoTemp
 		}
@@ -91,4 +88,27 @@ func GetLastOrderInfo(warehouseID int32, districtID int32, customerID int32) (or
 	}
 
 	return orderInfo, nil
+}
+
+func GetAllOrderIdentifierWithDate() (orderWithDateLists []common.OrderWithDateList, err error) {
+	scanner := client.Session.Query(`SELECT o_w_id, o_d_id, o_id, o_c_id, o_entry_d FROM "order"`).Iter().Scanner()
+	for scanner.Next() {
+		orderWithDateList := common.OrderWithDateList{}
+		err := scanner.Scan(&orderWithDateList.WarehouseID, &orderWithDateList.DistrictID, &orderWithDateList.OrderID,
+			&orderWithDateList.CustomerID, &orderWithDateList.OrderEntryDate)
+
+		if err != nil {
+			log.Printf("[warn] Order with date info. scan error, err=%v", err)
+			return []common.OrderWithDateList{}, err
+		}
+
+		orderWithDateLists = append(orderWithDateLists, orderWithDateList)
+	}
+
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
+		return []common.OrderWithDateList{}, err
+	}
+
+	return orderWithDateLists, nil
 }

@@ -154,3 +154,32 @@ type CustomerBalance struct {
 	WarehouseName string  `cql:"w_name"`
 	DistrictName  string  `cql:"d_name"`
 }
+
+type CustomerBasicInfoList struct {
+	WarehouseID int32   `json:"c_w_id"`
+	DistrictID  int32   `json:"c_d_id"`
+	CustomerID  int32   `json:"c_id"`
+	Balance     float64 `json:"c_balance"`
+	FirstName   string  `json:"c_first"`
+	MiddleName  string  `json:"c_middle"`
+	LastName    string  `json:"c_last"`
+}
+
+type WarehouseWithNameList struct {
+	WarehouseID   int32  `json:"w_id"`
+	WarehouseName string `json:"w_name"`
+}
+
+type DistrictWithNameList struct {
+	WarehouseID  int32  `json:"d_w_id"`
+	DistrictID   int32  `json:"d_id"`
+	DistrictName string `json:"d_name"`
+}
+
+type OrderWithDateList struct {
+	WarehouseID    int32     `json:"o_w_id"`
+	DistrictID     int32     `json:"o_d_id"`
+	OrderID        int32     `json:"o_id"`
+	CustomerID     int32     `json:"o_c_id"`
+	OrderEntryDate time.Time `json:"o_entry_d"`
+}

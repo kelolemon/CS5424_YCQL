@@ -74,3 +74,33 @@ func GetDiffWarehouseCustomerList(customerID int32, warehouseID int32) (customer
 
 	return customerLists, nil
 }
+
+func GetAllCustomerList() (customerBasicInfoLists []common.CustomerBasicInfoList, err error) {
+	scanner := client.Session.Query(`SELECT c_w_id, c_d_id, c_id, c_balance, c_first, c_middle, c_last FROM customer`).Iter().Scanner()
+	customerBasicInfoList := common.CustomerBasicInfoList{}
+	for scanner.Next() {
+		err = scanner.Scan(&customerBasicInfoList.WarehouseID, &customerBasicInfoList.DistrictID, &customerBasicInfoList.CustomerID,
+			&customerBasicInfoList.Balance, &customerBasicInfoList.FirstName, &customerBasicInfoList.MiddleName, &customerBasicInfoList.LastName)
+		if err != nil {
+			log.Printf("[warn] Read customer basic info list err, err=%v", err)
+			return nil, err
+		}
+		customerBasicInfoLists = append(customerBasicInfoLists, customerBasicInfoList)
+	}
+
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
+		return []common.CustomerBasicInfoList{}, err
+	}
+
+	return customerBasicInfoLists, nil
+}
+
+func GetCustomerName(customerID int32) (firstName string, middleName string, lastName string, err error) {
+	if err := client.Session.Query(`SELECT c_first, c_middle, c_last FROM customer WHERE c_id = ?`, customerID).Scan(&firstName, &middleName, &lastName); err != nil {
+		log.Printf("[warn] Get customer name err, err=%v", err)
+		return firstName, middleName, lastName, err
+	}
+
+	return firstName, middleName, lastName, nil
+}

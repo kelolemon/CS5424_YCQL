@@ -6,9 +6,9 @@ import (
 	"log"
 )
 
-func GetItermInfo(itemID int32) (item common.Item, err error) {
+func GetItemInfo(itemID int32) (item common.Item, err error) {
 	rawMap := make(map[string]interface{})
-	if err := client.Session.Query(`SELECT * FROM item WHERE i_id = ?`, itemID).MapScan(rawMap); err != nil {
+	if err := client.Session.Query(`SELECT i_id, i_name, i_price, i_im_id, i_data FROM item WHERE i_id = ?`, itemID).MapScan(rawMap); err != nil {
 		log.Printf("[warn] Get item information error, err=%v", err)
 		return common.Item{}, err
 	}

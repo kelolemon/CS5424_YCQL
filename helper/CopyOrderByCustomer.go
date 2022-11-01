@@ -11,7 +11,7 @@ import (
 
 func CopyOrderByCustomer() {
 	// Step 1. Get all customer list
-	allCustomers, err := GetAllCustomerList()
+	allCustomers, err := dao.GetAllCustomerList()
 	if err != nil {
 		log.Printf("[warn] Get all customer list err, err=%v", err)
 	}

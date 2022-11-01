@@ -2,6 +2,7 @@ package client
 
 import (
 	"github.com/yugabyte/gocql"
+	"time"
 )
 
 const (
@@ -23,6 +24,8 @@ func InitDB() (err error) {
 	dbCluster = gocql.NewCluster(TesterIP)
 	dbCluster.Keyspace = KeySpace
 	dbCluster.Consistency = gocql.Quorum
+	dbCluster.Timeout = 1000000 * time.Millisecond
+
 	Session, err = dbCluster.CreateSession()
 	return err
 }

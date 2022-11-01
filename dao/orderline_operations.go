@@ -3,7 +3,6 @@ package dao
 import (
 	"cs5234/client"
 	"cs5234/common"
-	"fmt"
 	"log"
 	"time"
 )
@@ -19,20 +18,20 @@ func InsertNewOrderLine(orderLine *common.OrderLine) (err error) {
 	return nil
 }
 
-func GetOrderLineByOrder(orderID int32) (orderLines []common.OrderLine, err error) {
-	scanner := client.Session.Query(`SELECT * FROM orderline WHERE ol_o_id = ?`, orderID).Iter().Scanner()
+func GetOrderLineByOrder(warehouseID int32, districtID int32, orderID int32) (orderLines []common.OrderLine, err error) {
+	scanner := client.Session.Query(`SELECT ol_w_id, ol_d_id, ol_o_id, ol_number, ol_i_id, ol_delivery_d, ol_amount, ol_supply_w_id, ol_quantity, ol_dist_info FROM orderline WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?`,
+		warehouseID, districtID, orderID).Iter().Scanner()
 
-	var orderLine common.OrderLine
 	for scanner.Next() {
+		orderLine := common.OrderLine{}
 		err = scanner.Scan(&orderLine.WarehouseID, &orderLine.DistrictID, &orderLine.OrderID, &orderLine.ID,
-			&orderLine.SupplyWarehouseID, &orderLine.DeliveryTime, &orderLine.ItemID, &orderLine.Amount,
+			&orderLine.ItemID, &orderLine.DeliveryTime, &orderLine.Amount, &orderLine.SupplyWarehouseID,
 			&orderLine.Quantity, &orderLine.Info)
 		if err != nil {
 			log.Printf("[warn] OrderLine info. scan error, err=%v", err)
 			return []common.OrderLine{}, err
 		}
 		orderLines = append(orderLines, orderLine)
-		fmt.Println("OrderLine: ", orderLine)
 	}
 
 	if err = scanner.Err(); err != nil {
@@ -53,7 +52,7 @@ func SetOrderLineDeliveryDate(deliveryDate time.Time, warehouseID int32, distric
 }
 
 func GetOrderAmount(warehouseID int32, districtID int32, orderID int32) (amount float64, err error) {
-	if err = client.Session.Query(`elect sum(ol_amount) from orderline where ol_w_id = ? and ol_d_id = ? and ol_o_id = ?`, warehouseID, districtID, orderID).Scan(&amount); err != nil {
+	if err = client.Session.Query(`Select sum(ol_amount) from orderline where ol_w_id = ? and ol_d_id = ? and ol_o_id = ?`, warehouseID, districtID, orderID).Scan(&amount); err != nil {
 		log.Printf("[warn] get order line amount err, err=%v", err)
 		return 0, err
 	}

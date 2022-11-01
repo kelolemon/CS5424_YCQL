@@ -55,3 +55,23 @@ d_state, d_tax, d_ytd, d_next_o_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, n
 
 	return nil
 }
+
+func GetAllDistrictList() (districtBasicInfoLists []common.DistrictWithNameList, err error) {
+	scanner := client.Session.Query(`SELECT d_w_id, d_id, d_name FROM district`).Iter().Scanner()
+	districtBasicInfoList := common.DistrictWithNameList{}
+	for scanner.Next() {
+		err = scanner.Scan(&districtBasicInfoList.WarehouseID, &districtBasicInfoList.DistrictID, &districtBasicInfoList.DistrictName)
+		if err != nil {
+			log.Printf("[warn] Read district basic info list err, err=%v", err)
+			return nil, err
+		}
+		districtBasicInfoLists = append(districtBasicInfoLists, districtBasicInfoList)
+	}
+
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
+		return []common.DistrictWithNameList{}, err
+	}
+
+	return districtBasicInfoLists, nil
+}

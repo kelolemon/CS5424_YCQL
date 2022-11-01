@@ -13,7 +13,7 @@ func GetLastOrderStatus(r common.GetLastOrderStatusReq) (res common.GetLastOrder
 	}
 
 	// step 2. use orderByCustomer.c_last_o_id to get the orderLine information in table `orderLine`
-	orderLines, err := dao.GetOrderLineByOrder(orderByCustomer.LastOrderID)
+	orderLines, err := dao.GetOrderLineByOrder(orderByCustomer.WarehouseID, orderByCustomer.DistrictID, orderByCustomer.LastOrderID)
 
 	// step 3. pack the output data
 	res = common.GetLastOrderStatusResp{

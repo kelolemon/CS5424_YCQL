@@ -42,3 +42,23 @@ w_tax, w_ytd) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, newWarehouse.ID, newWarehouse
 
 	return nil
 }
+
+func GetAllWarehouseList() (warehouseBasicInfoLists []common.WarehouseWithNameList, err error) {
+	scanner := client.Session.Query(`SELECT w_id, w_name FROM warehouse`).Iter().Scanner()
+	warehouseBasicInfoList := common.WarehouseWithNameList{}
+	for scanner.Next() {
+		err = scanner.Scan(&warehouseBasicInfoList.WarehouseID, &warehouseBasicInfoList.WarehouseName)
+		if err != nil {
+			log.Printf("[warn] Read warehouse basic info list err, err=%v", err)
+			return nil, err
+		}
+		warehouseBasicInfoLists = append(warehouseBasicInfoLists, warehouseBasicInfoList)
+	}
+
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
+		return []common.WarehouseWithNameList{}, err
+	}
+
+	return warehouseBasicInfoLists, nil
+}

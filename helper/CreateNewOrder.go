@@ -80,7 +80,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 			return common.CreateOrderResp{}, err
 		}
 		// (e) ITEM AMOUNT = QUANTITY[i] × I PRICE, where I PRICE is the price of ITEM NUMBER[i]
-		itemRes, err := dao.GetItermInfo(r.ItemNumber[i])
+		itemRes, err := dao.GetItemInfo(r.ItemNumber[i])
 		if err != nil {
 			log.Printf("[warn] get item price error, err=%v", err)
 			return common.CreateOrderResp{}, err

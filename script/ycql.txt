@@ -25,9 +25,8 @@ CREATE TABLE CS5424.Order (
   O_OL_CNT int,
   O_ALL_LOCAL int,
   O_ENTRY_D timestamp,
-  PRIMARY KEY ((O_ID, O_W_ID, O_D_ID), O_ENTRY_D)
-)
-WITH CLUSTERING ORDER BY (O_ENTRY_D ASC);
+  PRIMARY KEY (O_ID, O_W_ID, O_D_ID)
+);
 
 CREATE TABLE CS5424.OrderLine (
   OL_W_ID int,
@@ -142,20 +141,6 @@ CREATE TABLE CS5424.StockByOrderLine (
   PRIMARY KEY ((W_ID, D_ID, O_ID), O_ENTRY_D)
 )
 WITH CLUSTERING ORDER By (O_ENTRY_D DESC);
-
-CREATE TABLE CS5424.OrderLineQuantityByOrder (
-  W_ID int,
-  D_ID int,
-  O_ID int,
-  O_ENTRY_D timestamp,
-  OL_QUANTITY_MAP map<int, int>,
-  ITEMS_ID_NAME_MAP map<int, text>,
-  C_FIRST text,
-  C_MIDDLE text,
-  C_LAST text,
-  PRIMARY KEY ((W_ID, D_ID), O_ID)
-)
-WITH CLUSTERING ORDER By (O_ID DESC);
 
 CREATE TABLE CS5424.CustomerBalance (
   C_W_ID int,
