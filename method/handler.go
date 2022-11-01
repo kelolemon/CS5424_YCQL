@@ -85,6 +85,10 @@ func CreateNewDelivery(c *gin.Context) {
 	})
 }
 
+func GetOrderStatus(c *gin.Context) {
+
+}
+
 // GetStockLowLevelItemNumber GET low level info
 // safe action, use get method
 func GetStockLowLevelItemNumber(c *gin.Context) {
@@ -130,4 +134,19 @@ func GetPopularItem(c *gin.Context) {
 		return
 	}
 	c.JSON(200, res)
+}
+
+func GetTopBalanceTransaction(c *gin.Context) {
+	res, err := helper.GetTopBalanceCustomer(common.GetTopBalanceCustomerReq{})
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": "internal error",
+		})
+		return
+	}
+	c.JSON(200, res)
+}
+
+func GetRelatedCustomerTransaction(c *gin.Context) {
+
 }
