@@ -35,27 +35,22 @@ func GetRelativeCustomer(r common.GetRelatedCustomerReq) (res common.GetRelatedC
 
 	// step 2. get orders of target customer
 	targetOrderIdentifiers, err := dao.GetOrderIdentifier(r.WarehouseID, r.DistrictID, r.CustomerID)
-	fmt.Printf("targetOrderIdentifiers: %v", targetOrderIdentifiers)
+	fmt.Printf("targetOrderIdentifiers: %v\n", targetOrderIdentifiers)
 
 	// step 3. get order items of target customer
 	targetItems := make([][]int32, len(targetOrderIdentifiers))
 	curr := 0
 	for _, v := range targetOrderIdentifiers {
-		fmt.Printf("v: %v", v)
-		orderLineQuantity, err := dao.GetOrderLineQuantity(v.WarehouseID, v.DistrictID, v.OrderID)
-		fmt.Printf("orderLineQuantity: %v\n", orderLineQuantity)
+		orderLines, err := dao.GetOrderLineByOrder(v.WarehouseID, v.DistrictID, v.OrderID)
 		if err != nil {
-			log.Printf("[warn] Get order line quantity err, err=%v", err)
+			log.Printf("[warn] Get order lines err, err=%v", err)
 			return common.GetRelatedCustomerResp{}, err
 		}
 
 		// item list of current order
-		targetItem := make([]int32, len(orderLineQuantity.OrderLineQuantitiesMap))
-
-		i := 0
-		for k := range orderLineQuantity.OrderLineQuantitiesMap {
-			targetItem[i] = k
-			i++
+		var targetItem []int32
+		for _, ol := range orderLines {
+			targetItem = append(targetItem, ol.ItemID)
 		}
 
 		// append to the targetItems
@@ -78,21 +73,19 @@ func GetRelativeCustomer(r common.GetRelatedCustomerReq) (res common.GetRelatedC
 
 		// for every order, get the order line and transform to item list
 		for _, candidateOrderIdentifier := range candidateOrderIdentifiers {
-			candidateOrderLineQuantity, err := dao.GetOrderLineQuantity(candidateOrderIdentifier.WarehouseID, candidateOrderIdentifier.DistrictID, candidateOrderIdentifier.OrderID)
+			candidateOrderLines, err := dao.GetOrderLineByOrder(candidateOrderIdentifier.WarehouseID, candidateOrderIdentifier.DistrictID, candidateOrderIdentifier.OrderID)
 			if err != nil {
 				log.Printf("Get candidate order line quantity err, err=%v", err)
 				return common.GetRelatedCustomerResp{}, err
 			}
 
 			// item list of current order
-			candidateItem := make([]int32, len(candidateOrderLineQuantity.OrderLineQuantitiesMap))
-
-			i := 0
-			for k := range candidateOrderLineQuantity.OrderLineQuantitiesMap {
-				candidateItem[i] = k
-				i++
+			var candidateItem []int32
+			for _, ol := range candidateOrderLines {
+				candidateItem = append(candidateItem, ol.ItemID)
 			}
 
+			// compare items
 			for _, targetItem := range targetItems {
 				if compareRes := compareItems(targetItem, candidateItem); compareRes == true {
 					res.CustomerList = append(res.CustomerList, candidateIdentifier)
