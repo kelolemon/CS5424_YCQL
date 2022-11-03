@@ -11,6 +11,8 @@ import (
 	"time"
 )
 
+// pass
+
 func TestInsertLastOrderStatusTestData(t *testing.T) {
 	err := client.InitDB()
 	assert.NoError(t, err)

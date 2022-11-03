@@ -162,27 +162,30 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		CarrierID:      0,
 	})
 	if err != nil {
-		log.Printf("[warn] create order by customer error, err=%v", err)
+		log.Printf("[warn] Create order by customer error, err=%v", err)
 		return common.CreateOrderResp{}, err
 	}
 	// 8. add stock by order operations
 	err = dao.InsertStockByOrderLineInfo(&common.StockByOrderLine{
 		WarehouseID:        r.WarehouseID,
 		DistrictID:         r.DistrictID,
+		OrderID:            n,
 		OrderEntryTime:     orderEntryDate,
 		StockQuantitiesMap: itemStockQuantity,
 	})
 	if err != nil {
-		log.Printf("[warn] create stock by order line error, err=%v", err)
+		log.Printf("[warn] Create stock by order line error, err=%v", err)
 		return common.CreateOrderResp{}, err
 	}
 	// 9. add order line quantity by order operations
 	err = dao.InsertOrderLineQuantityByOrderInfo(&common.OrderLineQuantityByOrder{
 		WarehouseID:            r.WarehouseID,
 		DistrictID:             r.DistrictID,
+		OrderID:                n,
 		OrderEntryTime:         orderEntryDate,
 		OrderLineQuantitiesMap: itemOrderQuantity,
 		OrderItemsIDNameMap:    itemIdNameMap,
+		CustomerID:             r.CustomerID,
 		CustomerFirstName:      customerRes.FirstName,
 		CustomerMiddleName:     customerRes.MiddleName,
 		CustomerLastName:       customerRes.LastName,
