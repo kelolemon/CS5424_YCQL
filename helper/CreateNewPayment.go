@@ -3,6 +3,7 @@ package helper
 import (
 	"cs5234/common"
 	"cs5234/dao"
+	"fmt"
 )
 
 func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPaymentResp, err error) {
@@ -17,6 +18,7 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 
 	// step 2. update district (c_w_id, c_d_id) => increment d_ytd by payment
 	currentDistrictInfo, err := dao.GetDistrictInfo(r.WarehouseID, r.DistrictID)
+
 	var newDistrictYTD = currentDistrictInfo.YTD + r.Payment
 
 	err = dao.SetNewDistrictYTD(r.WarehouseID, r.DistrictID, newDistrictYTD)
@@ -47,6 +49,8 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 		// if not exists, insert new records
 		newCustomerBalanceInfo := common.CustomerBalance{
 			ID:            currentCustomerInfo.ID,
+			WarehouseID:   currentWarehouseInfo.ID,
+			DistrictID:    currentDistrictInfo.ID,
 			Balance:       newCustomerBalance,
 			FirstName:     currentCustomerInfo.FirstName,
 			MiddleName:    currentCustomerInfo.MiddleName,
@@ -54,10 +58,12 @@ func CreateNewPayment(r common.CreateNewPaymentReq) (res common.CreateNewPayment
 			DistrictName:  currentDistrictInfo.Name,
 			WarehouseName: currentWarehouseInfo.Name,
 		}
-
+		fmt.Printf("%v", newCustomerBalanceInfo)
 		if err = dao.InsertCustomerBalanceInfo(&newCustomerBalanceInfo); err != nil {
 			return common.CreateNewPaymentResp{}, err
 		}
+
+		fmt.Printf("err: %v", err)
 	}
 
 	res = common.CreateNewPaymentResp{

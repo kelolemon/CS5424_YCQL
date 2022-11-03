@@ -3,7 +3,6 @@ package helper
 import (
 	"cs5234/common"
 	"cs5234/dao"
-	"fmt"
 	"log"
 )
 
@@ -30,10 +29,7 @@ func GetRelativeCustomer(r common.GetRelatedCustomerReq) (res common.GetRelatedC
 	var targetItemLists [][]int32
 	for _, targetOrderQuantity := range targetOrderQuantities {
 		targetItemLists = append(targetItemLists, mapKeysToList(targetOrderQuantity.OrderLineQuantitiesMap))
-		fmt.Print(mapKeysToList(targetOrderQuantity.OrderLineQuantitiesMap))
 	}
-	fmt.Print(targetItemLists)
-	fmt.Println()
 
 	// step 2. for every target order line, get the item related order identifiers (o_w_id, o_d_id, o_id)
 	errChan := make(chan error, len(targetItemLists))

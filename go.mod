@@ -7,6 +7,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/stretchr/testify v1.8.0
 	github.com/yugabyte/gocql v0.0.0-20220204171058-0bd8e6cb12d0
+	golang.org/x/sync v0.1.0
 )
 
 require (
