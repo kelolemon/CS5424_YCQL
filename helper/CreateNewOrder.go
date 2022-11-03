@@ -125,6 +125,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 			itemOrderQuantity[r.ItemNumber[i]] = r.Quantity[i]
 			itemIdNameMap[r.ItemNumber[i]] = itemRes.Name
 		}(i)
+		errChan <- nil
 	}
 	for i := int32(0); i < r.NumberItems; i++ {
 		if err := <-errChan; err != nil {
