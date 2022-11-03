@@ -13,13 +13,14 @@ import (
 func TestDelivery(t *testing.T) {
 	err := client.InitDB()
 	assert.NoError(t, err)
-	if err != nil {
+	if client.Session != nil {
 		defer client.Session.Close()
-		_, err := helper.CreateNewDelivery(common.CreateNewDeliveryReq{
+		resp, err := helper.CreateNewDelivery(common.CreateNewDeliveryReq{
 			WarehouseID: 1,
 			CarrierID:   5,
 		})
 
 		assert.NoError(t, err)
+		assert.NotNil(t, resp)
 	}
 }

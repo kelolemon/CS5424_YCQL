@@ -36,7 +36,7 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 			}
 			// (c) Update all the order-lines in X by setting OL DELIVERY D to the current date and time
 			orderDeliveryDate := time.Unix(time.Now().Unix(), 0)
-			err = dao.SetOrderLineDeliveryDate(orderDeliveryDate, r.WarehouseID, int32(districtID), lastOrderNotDelivery.ID)
+			err = dao.SetOrderLinesDeliveryDate(orderDeliveryDate, r.WarehouseID, int32(districtID), lastOrderNotDelivery.ID)
 			if err != nil {
 				log.Printf("[warn] update delivery date error err=%v", err)
 				errChan <- err
