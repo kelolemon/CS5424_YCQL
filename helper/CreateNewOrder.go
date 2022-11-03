@@ -53,71 +53,84 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 	itemIdNameMap := make(map[int32]string)
 	//5. handle data，
 	items := make([]common.ItemList, 0)
+	errChan := make(chan error, r.NumberItems)
 	for i := int32(0); i < r.NumberItems; i++ {
-		warehouseID := r.SupplyWarehouse[i]
-		itemID := r.ItemNumber[i]
-		// (a) Let S QUANTITY denote the stock quantity for item ITEM_NUMBER[i] and warehouse SUPPLIER_WAREHOUSE[i]
-		stockRes, err := dao.GetStockInfo(warehouseID, itemID)
-		if err != nil {
-			log.Printf("[warn] get stock info error, err=%v", err)
-			return common.CreateOrderResp{}, err
-		}
-		// (b) ADJUSTED QTY = S QUANTITY − QUANTITY [i]
-		adjustedQTY := stockRes.Quantity - r.Quantity[i]
-		// (c) If ADJUSTED QTY < 10, then set ADJUSTED QTY = ADJUSTED QTY + 100
-		if adjustedQTY < 10 {
-			adjustedQTY += 100
-		}
-		// (d) Update the stock for (ITEM NUMBER[i], SUPPLIER WAREHOUSE[i])
-		stockRes.YTD += float64(r.Quantity[i])
-		stockRes.OrderCnt += 1
-		if warehouseID != r.WarehouseID {
-			stockRes.RemoteCnt += 1
-		}
-		err = dao.UpdateStockInfo(warehouseID, itemID, adjustedQTY, stockRes.YTD, stockRes.OrderCnt, stockRes.RemoteCnt)
-		if err != nil {
-			log.Printf("[warn] update stock info error, err=%v", err)
-			return common.CreateOrderResp{}, err
-		}
-		// (e) ITEM AMOUNT = QUANTITY[i] × I PRICE, where I PRICE is the price of ITEM NUMBER[i]
-		itemRes, err := dao.GetItemInfo(r.ItemNumber[i])
-		if err != nil {
-			log.Printf("[warn] get item price error, err=%v", err)
-			return common.CreateOrderResp{}, err
-		}
-		itemAmount := float64(r.Quantity[i]) * itemRes.Price
-		// (f) TOTAL AMOUNT = TOTAL AMOUNT + ITEM AMOUNT
-		totalAmount += itemAmount
-		// (g) Create a new order-line
-		err = dao.InsertNewOrderLine(&common.OrderLine{
-			WarehouseID:       r.WarehouseID,
-			DistrictID:        r.DistrictID,
-			OrderID:           n,
-			ID:                i + 1,
-			SupplyWarehouseID: r.SupplyWarehouse[i],
-			DeliveryTime:      time.Unix(time.Now().Unix(), 0),
-			ItemID:            r.ItemNumber[i],
-			Amount:            itemAmount,
-			Quantity:          r.Quantity[i],
-			Info:              "S_DIST_" + strconv.FormatInt(int64(r.DistrictID), 10),
-		})
+		go func(i int32) {
+			warehouseID := r.SupplyWarehouse[i]
+			itemID := r.ItemNumber[i]
+			// (a) Let S QUANTITY denote the stock quantity for item ITEM_NUMBER[i] and warehouse SUPPLIER_WAREHOUSE[i]
+			stockRes, err := dao.GetStockInfo(warehouseID, itemID)
+			if err != nil {
+				log.Printf("[warn] get stock info error, err=%v", err)
+				errChan <- err
+				return
+			}
+			// (b) ADJUSTED QTY = S QUANTITY − QUANTITY [i]
+			adjustedQTY := stockRes.Quantity - r.Quantity[i]
+			// (c) If ADJUSTED QTY < 10, then set ADJUSTED QTY = ADJUSTED QTY + 100
+			if adjustedQTY < 10 {
+				adjustedQTY += 100
+			}
+			// (d) Update the stock for (ITEM NUMBER[i], SUPPLIER WAREHOUSE[i])
+			stockRes.YTD += float64(r.Quantity[i])
+			stockRes.OrderCnt += 1
+			if warehouseID != r.WarehouseID {
+				stockRes.RemoteCnt += 1
+			}
+			err = dao.UpdateStockInfo(warehouseID, itemID, adjustedQTY, stockRes.YTD, stockRes.OrderCnt, stockRes.RemoteCnt)
+			if err != nil {
+				log.Printf("[warn] update stock info error, err=%v", err)
+				errChan <- err
+				return
+			}
+			// (e) ITEM AMOUNT = QUANTITY[i] × I PRICE, where I PRICE is the price of ITEM NUMBER[i]
+			itemRes, err := dao.GetItemInfo(r.ItemNumber[i])
+			if err != nil {
+				log.Printf("[warn] get item price error, err=%v", err)
+				errChan <- err
+				return
+			}
+			itemAmount := float64(r.Quantity[i]) * itemRes.Price
+			// (f) TOTAL AMOUNT = TOTAL AMOUNT + ITEM AMOUNT
+			totalAmount += itemAmount
+			// (g) Create a new order-line
+			err = dao.InsertNewOrderLine(&common.OrderLine{
+				WarehouseID:       r.WarehouseID,
+				DistrictID:        r.DistrictID,
+				OrderID:           n,
+				ID:                i + 1,
+				SupplyWarehouseID: r.SupplyWarehouse[i],
+				DeliveryTime:      time.Unix(time.Now().Unix(), 0),
+				ItemID:            r.ItemNumber[i],
+				Amount:            itemAmount,
+				Quantity:          r.Quantity[i],
+				Info:              "S_DIST_" + strconv.FormatInt(int64(r.DistrictID), 10),
+			})
 
-		if err != nil {
-			log.Printf("[warn] create order line error, err=%v", err)
+			if err != nil {
+				log.Printf("[warn] create order line error, err=%v", err)
+				errChan <- err
+				return
+			}
+
+			items = append(items, common.ItemList{
+				ItemNumber:        r.ItemNumber[i],
+				ItemName:          itemRes.Name,
+				SupplyWarehouseID: r.SupplyWarehouse[i],
+				Quantity:          r.Quantity[i],
+				OrderAmount:       itemAmount,
+				StockQuantity:     adjustedQTY,
+			})
+			itemStockQuantity[r.ItemNumber[i]] = adjustedQTY
+			itemOrderQuantity[r.ItemNumber[i]] = r.Quantity[i]
+			itemIdNameMap[r.ItemNumber[i]] = itemRes.Name
+		}(i)
+		errChan <- nil
+	}
+	for i := int32(0); i < r.NumberItems; i++ {
+		if err := <-errChan; err != nil {
 			return common.CreateOrderResp{}, err
 		}
-
-		items = append(items, common.ItemList{
-			ItemNumber:        r.ItemNumber[i],
-			ItemName:          itemRes.Name,
-			SupplyWarehouseID: r.SupplyWarehouse[i],
-			Quantity:          r.Quantity[i],
-			OrderAmount:       itemAmount,
-			StockQuantity:     adjustedQTY,
-		})
-		itemStockQuantity[r.ItemNumber[i]] = adjustedQTY
-		itemOrderQuantity[r.ItemNumber[i]] = r.Quantity[i]
-		itemIdNameMap[r.ItemNumber[i]] = itemRes.Name
 	}
 	// 6. TOTAL AMOUNT = TOTAL AMOUNT × (1+D TAX +W TAX) × (1−C DISCOUNT),
 	// where W TAX is the tax rate for warehouse W ID, D TAX is the tax rate for district (W ID, D ID),
