@@ -14,7 +14,7 @@ func TestLastOrderInfo(t *testing.T) {
 
 	if client.Session != nil {
 		defer client.Session.Close()
-		res, err := dao.GetLastOrderInfo(1, 1, 1)
+		res, err := dao.GetALlOrdersNotDelivery(1, 1)
 		assert.NoError(t, err)
 		fmt.Printf("%v", res)
 	}

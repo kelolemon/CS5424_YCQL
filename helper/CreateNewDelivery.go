@@ -13,14 +13,22 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 		go func(districtID int) {
 			// (a) Let N denote the value of the smallest order number O ID for district (W ID,DISTRICT NO)
 			// with O CARRIER ID = null; i.e.,
-			orderRes, err := dao.GetOldestNotDelivery(r.WarehouseID, int32(districtID))
+			orderRes, err := dao.GetALlOrdersNotDelivery(r.WarehouseID, int32(districtID))
 			if err != nil {
 				log.Printf("[warn] get oldest not delivery error err=%v", err)
 				errChan <- err
 				return
 			}
+
+			lastOrderNotDelivery := common.Order{}
+			for _, o := range orderRes {
+				if o.ID >= lastOrderNotDelivery.ID {
+					lastOrderNotDelivery = o
+				}
+			}
+
 			// (b) Update the order X by setting O CARRIER ID to CARRIER ID
-			err = dao.SetCarrierInfo(r.WarehouseID, int32(districtID), orderRes.ID, r.CarrierID)
+			err = dao.SetCarrierInfo(r.WarehouseID, int32(districtID), lastOrderNotDelivery.ID, r.CarrierID)
 			if err != nil {
 				log.Printf("[warn] update delivery error err=%v", err)
 				errChan <- err
@@ -28,7 +36,7 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 			}
 			// (c) Update all the order-lines in X by setting OL DELIVERY D to the current date and time
 			orderDeliveryDate := time.Unix(time.Now().Unix(), 0)
-			err = dao.SetOrderLineDeliveryDate(orderDeliveryDate, r.WarehouseID, int32(districtID), orderRes.ID)
+			err = dao.SetOrderLineDeliveryDate(orderDeliveryDate, r.WarehouseID, int32(districtID), lastOrderNotDelivery.ID)
 			if err != nil {
 				log.Printf("[warn] update delivery date error err=%v", err)
 				errChan <- err
@@ -37,13 +45,13 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 			// Update customer C as follows:
 			//• Increment C BALANCE by B, where B denote the sum of OL AMOUNT for all the items placed in order X
 			//• Increment C DELIVERY CNT by 1
-			b, err := dao.GetOrderAmount(r.WarehouseID, int32(districtID), orderRes.ID)
+			b, err := dao.GetOrderAmount(r.WarehouseID, int32(districtID), lastOrderNotDelivery.ID)
 			if err != nil {
 				log.Printf("[warn] get tot amount error err=%v", err)
 				errChan <- err
 				return
 			}
-			customerRes, err := dao.GetCustomerInfo(orderRes.CustomerID, r.WarehouseID, int32(districtID))
+			customerRes, err := dao.GetCustomerInfo(lastOrderNotDelivery.CustomerID, r.WarehouseID, int32(districtID))
 			if err != nil {
 				log.Printf("[warn] get customer info error, err=%v", err)
 				errChan <- err
@@ -56,7 +64,7 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 				return
 			}
 			// update self order by customer table
-			err = dao.SetOrderByCustomerBalanceINfo(customerRes.Balance+b, r.CarrierID, customerRes.ID, orderRes.OrderEntryTime)
+			err = dao.SetOrderByCustomerBalanceINfo(customerRes.Balance+b, r.CarrierID, customerRes.ID, lastOrderNotDelivery.OrderEntryTime)
 			if err != nil {
 				log.Printf("[warn] update order by customer delivery balance error, err=%v", err)
 				errChan <- err
