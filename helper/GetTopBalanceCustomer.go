@@ -4,10 +4,17 @@ import (
 	"cs5234/common"
 	"cs5234/dao"
 	"log"
+	"sort"
 )
 
 func GetTopBalanceCustomer(r common.GetTopBalanceCustomerReq) (res common.GetTopBalanceCustomerResp, err error) {
 	TopLists, err := dao.GetTopCustomerBalanceInfo()
+	sort.Slice(TopLists, func(i, j int) bool {
+		return TopLists[i].Balance > TopLists[j].Balance
+	})
+	if len(TopLists) >= 10 {
+		TopLists = TopLists[:10]
+	}
 	if err != nil {
 		log.Printf("[warn] get top balance customer balance info error, err=%v", err)
 		return common.GetTopBalanceCustomerResp{}, err

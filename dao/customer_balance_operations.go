@@ -22,7 +22,7 @@ func GetCustomerBalanceInfo(customerID int32, warehouseID int32, districtID int3
 }
 
 func GetTopCustomerBalanceInfo() (customerBalances []common.CustomerBalance, err error) {
-	scanner := client.Session.Query(`SELECT * FROM customerbalance order by c_balance desc limit 10`).Iter().Scanner()
+	scanner := client.Session.Query(`SELECT * FROM customerbalance`).Iter().Scanner()
 	customerBalance := common.CustomerBalance{}
 	for scanner.Next() {
 		err = scanner.Scan(&customerBalance.WarehouseID, &customerBalance.DistrictID, &customerBalance.ID, &customerBalance.Balance, &customerBalance.FirstName, &customerBalance.MiddleName, &customerBalance.LastName, &customerBalance.WarehouseName, &customerBalance.DistrictName)
