@@ -1,7 +1,9 @@
+import sys
 import threading
 import time
 import requests
 import json
+import argparse
 import numpy as np
 
 
@@ -157,13 +159,13 @@ def handler(s):
             latency_list.append(latency)
             # print response content at stdout
             print(response)
-    print('tot number of transactions is', requests_counter)
-    print('Total elapsed time for processing the transactions', time_counter / 1000)
-    print('throughput is', requests_counter / (time_counter / 1000))
-    print('Average transaction latency', np.mean(latency_list))
-    print('Median transaction latency', np.median(latency_list))
-    print('95th percentile transaction latency', np.percentile(latency_list, 95))
-    print('99th percentile transaction latency', np.percentile(latency_list, 99))
+    print('tot number of transactions is', requests_counter, file=sys.stderr)
+    print('Total elapsed time for processing the transactions', time_counter / 1000, file=sys.stderr)
+    print('throughput is', requests_counter / (time_counter / 1000), file=sys.stderr)
+    print('Average transaction latency', np.mean(latency_list), file=sys.stderr)
+    print('Median transaction latency', np.median(latency_list), file=sys.stderr)
+    print('95th percentile transaction latency', np.percentile(latency_list, 95), file=sys.stderr)
+    print('99th percentile transaction latency', np.percentile(latency_list, 99), file=sys.stderr)
 
 
 def read_from_file(nub):
@@ -174,10 +176,15 @@ def read_from_file(nub):
         return s
 
 
+def read_from_stdin():
+    s = [line[:-1].split(',') for line in sys.stdin.readlines()]
+    return s
+
+
 def benchmark():
     threads = []
     for i in range(0, 20):
-        threads.append(threading.Thread(target=handler, args=(read_from_file(i), )))
+        threads.append(threading.Thread(target=handler, args=(read_from_file(i),)))
     for thread in threads:
         thread.start()
     for thread in threads:
@@ -185,5 +192,16 @@ def benchmark():
             thread.join()
 
 
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--benchmark', type=bool, default=None)
+    args = parser.parse_args()
+    if args.benchmark is not None:
+        benchmark()
+    else:
+        s = read_from_stdin()
+        handler(s)
+
+
 if __name__ == "__main__":
-    benchmark()
+    main()
