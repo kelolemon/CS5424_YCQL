@@ -36,42 +36,71 @@ func GetRelativeCustomer(r common.GetRelatedCustomerReq) (res common.GetRelatedC
 	fmt.Println()
 
 	// step 2. for every target order line, get the item related order identifiers (o_w_id, o_d_id, o_id)
+	errChan := make(chan error, len(targetItemLists))
 	var relatedOrderIdentifiers []common.OrderIdentifierList
 	for _, targetItemList := range targetItemLists {
-		var orderIdentifiersOnce []common.OrderIdentifierList
-
-		for _, targetItem := range targetItemList {
-			orderIdentifiers, err := dao.GetOrderIdentifiersByItemID(targetItem)
-			if err != nil {
-				log.Printf("[warn] Get order identifiers err, err=%v", orderIdentifiers)
-			}
-			for _, orderIdentifier := range orderIdentifiers {
-				if orderIdentifier.WarehouseID != r.WarehouseID {
-					if Contains(orderIdentifiersOnce, orderIdentifier) {
-						relatedOrderIdentifiers = append(relatedOrderIdentifiers, orderIdentifier)
-					} else {
-						orderIdentifiersOnce = append(orderIdentifiersOnce, orderIdentifier)
+		go func(targetItemList []int32) {
+			subErrChan := make(chan error, len(targetItemList))
+			var orderIdentifiersOnce []common.OrderIdentifierList
+			for _, targetItem := range targetItemList {
+				go func(targetItem int32) {
+					orderIdentifiers, err := dao.GetOrderIdentifiersByItemID(targetItem)
+					if err != nil {
+						log.Printf("[warn] Get order identifiers err, err=%v", orderIdentifiers)
+						subErrChan <- err
+						return
 					}
+					for _, orderIdentifier := range orderIdentifiers {
+						if orderIdentifier.WarehouseID != r.WarehouseID {
+							if Contains(orderIdentifiersOnce, orderIdentifier) {
+								relatedOrderIdentifiers = append(relatedOrderIdentifiers, orderIdentifier)
+							} else {
+								orderIdentifiersOnce = append(orderIdentifiersOnce, orderIdentifier)
+							}
+						}
+					}
+					subErrChan <- nil
+				}(targetItem)
+			}
+			for i := 0; i < len(targetItemList); i++ {
+				if err := <-subErrChan; err != nil {
+					errChan <- err
+					return
 				}
 			}
+			errChan <- nil
+		}(targetItemList)
+	}
+	for i := 0; i < len(targetItemLists); i++ {
+		if err := <-errChan; err != nil {
+			return common.GetRelatedCustomerResp{}, err
 		}
 	}
-
 	// step 3. find the customer identifiers wrt order identifiers in related orders
+	errChan = make(chan error, len(relatedOrderIdentifiers))
 	for _, relatedOrderIdentifier := range relatedOrderIdentifiers {
-		relatedCustomerID, err := dao.GetCustomerIDByOrderIdentifier(relatedOrderIdentifier.WarehouseID,
-			relatedOrderIdentifier.DistrictID, relatedOrderIdentifier.OrderID)
-		if err != nil {
-			log.Printf("[warn] Get customer id err, err=%v", err)
-		}
-		customerIdentifierList := common.CustomerList{
-			WarehouseID: relatedOrderIdentifier.WarehouseID,
-			DistrictID:  relatedOrderIdentifier.DistrictID,
-			CustomerID:  relatedCustomerID,
-		}
+		go func(relatedOrderIdentifier common.OrderIdentifierList) {
+			relatedCustomerID, err := dao.GetCustomerIDByOrderIdentifier(relatedOrderIdentifier.WarehouseID,
+				relatedOrderIdentifier.DistrictID, relatedOrderIdentifier.OrderID)
+			if err != nil {
+				log.Printf("[warn] Get customer id err, err=%v", err)
+				errChan <- err
+			}
+			customerIdentifierList := common.CustomerList{
+				WarehouseID: relatedOrderIdentifier.WarehouseID,
+				DistrictID:  relatedOrderIdentifier.DistrictID,
+				CustomerID:  relatedCustomerID,
+			}
 
-		if Contains(res.CustomerList, customerIdentifierList) == false {
-			res.CustomerList = append(res.CustomerList, customerIdentifierList)
+			if Contains(res.CustomerList, customerIdentifierList) == false {
+				res.CustomerList = append(res.CustomerList, customerIdentifierList)
+			}
+			errChan <- nil
+		}(relatedOrderIdentifier)
+	}
+	for i := 0; i < len(relatedOrderIdentifiers); i++ {
+		if err := <-errChan; err != nil {
+			return common.GetRelatedCustomerResp{}, err
 		}
 	}
 
