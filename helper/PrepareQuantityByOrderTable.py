@@ -15,6 +15,10 @@ import pandas as pd
 # )
 # WITH CLUSTERING ORDER By (O_ID DESC);
 
+# Command to import data into Cassandra table
+# COPY orderlinequantitybyorder(w_id, d_id, o_id, ol_quantity_map, items_id_name_map, c_id, o_entry_d, c_first, c_middle, c_last)
+# FROM '/Users/yiyangliu/Desktop/NUS Master/CS5424/CS5424_YCQL/data_files/orderline-quantity-by-order.csv' WITH header = true;
+
 # input csv
 customer_csv = '../data_files/customer.csv'
 item_csv = '../data_files/item.csv'
