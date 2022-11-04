@@ -7,7 +7,7 @@ import (
 )
 
 func TestReplaceNullValues(t *testing.T) {
-	err := filepath.Walk("D:\\GitHub\\CS5424_YCQL\\project_files\\data_files", dao.Visit)
+	err := filepath.Walk("/Users/yiyangliu/Desktop/NUS Master/CS5424/CS5424_YCQL/data_files", dao.ReplaceNullCarrier)
 	if err != nil {
 		panic(err)
 	}

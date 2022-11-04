@@ -17,7 +17,7 @@ func CopyOrderByCustomer() {
 	}
 
 	// Step 2. For every customer, get the last order info (o_id, o_entry_d, o_carrier_id)
-	csvFile, err := os.Create("D:\\GitHub\\CS5424_YCQL\\project_files\\data_files\\order-by-customer.csv")
+	csvFile, err := os.Create("/Users/yiyangliu/Desktop/NUS Master/CS5424/CS5424_YCQL/data_files/order-by-customer.csv")
 	if err != nil {
 		log.Fatalf("failed create file: %s", err)
 	}

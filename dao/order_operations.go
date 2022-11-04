@@ -17,21 +17,27 @@ func CreateNewOrder(order *common.Order) (err error) {
 	return nil
 }
 
-func GetOldestNotDelivery(warehouseID int32, districtID int32) (order common.Order, err error) {
-	rawMap := make(map[string]interface{})
-	err = client.Session.Query(`SELECT * FROM "order" WHERE o_w_id = ? AND o_d_id = ? AND o_carrier_id = 0 order by o_id asc LIMIT 1`, warehouseID, districtID).MapScan(rawMap)
-	if err != nil {
-		log.Printf("[warn] Get order by customer information error, err=%v", err)
-		return common.Order{}, err
+func GetALlOrdersNotDelivery(warehouseID int32, districtID int32) (ordersNotDelivery []common.Order, err error) {
+	scanner := client.Session.Query(`SELECT * FROM "order" WHERE o_w_id = ? AND o_d_id = ? AND o_carrier_id = 0`, warehouseID, districtID).Iter().Scanner()
+	for scanner.Next() {
+		var orderNotDelivery common.Order
+		err := scanner.Scan(&orderNotDelivery.WarehouseID, &orderNotDelivery.DistrictID, &orderNotDelivery.ID, &orderNotDelivery.CustomerID,
+			&orderNotDelivery.CarrierID, &orderNotDelivery.NumItemOrdered, &orderNotDelivery.OrderAllLocal, &orderNotDelivery.OrderEntryTime)
+
+		if err != nil {
+			log.Printf("[warn] Order identifiers info. scan error, err=%v", err)
+			return []common.Order{}, err
+		}
+
+		ordersNotDelivery = append(ordersNotDelivery, orderNotDelivery)
 	}
 
-	err = common.ToCqlStruct(rawMap, &order)
-	if err != nil {
-		log.Printf("[warn] To cql struct error, err=%v", err)
-		return common.Order{}, err
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
+		return []common.Order{}, err
 	}
 
-	return order, nil
+	return ordersNotDelivery, nil
 }
 
 func SetCarrierInfo(warehouseID int32, districtID int32, OrderID int32, CarrierID int32) (err error) {
