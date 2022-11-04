@@ -69,7 +69,7 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 				return
 			}
 			// update self order by customer table
-			err = dao.SetOrderByCustomerBalanceINfo(customerRes.Balance+b, r.CarrierID, customerRes.ID, lastOrderNotDelivery.OrderEntryTime)
+			err = dao.SetOrderByCustomerBalanceINfo(customerRes.Balance+b, r.CarrierID, r.WarehouseID, int32(districtID), customerRes.ID, lastOrderNotDelivery.OrderEntryTime)
 			if err != nil {
 				log.Printf("[warn] update order by customer delivery balance error, err=%v", err)
 				errChan <- err

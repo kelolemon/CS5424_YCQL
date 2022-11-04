@@ -49,8 +49,12 @@ func DeleteOrderByCustomerInfo(customerID int32, warehouseID int32, districtID i
 	return nil
 }
 
-func SetOrderByCustomerBalanceINfo(balance float64, carrierID int32, customerID int32, entryDate time.Time) (err error) {
-	if err = client.Session.Query(`UPDATE orderbycustomer SET c_balance = ?, o_carrier_id = ? WHERE c_id = ? AND o_entry_d ?`, balance, carrierID, customerID, entryDate).Exec(); err != nil {
+func SetOrderByCustomerBalanceINfo(balance float64, carrierID int32, warehouseID int32, districtID int32, customerID int32, entryDate time.Time) (err error) {
+	stmt := `UPDATE orderbycustomer SET c_balance = ?, o_carrier_id = ? 
+                       WHERE c_w_id = ? and c_d_id = ? and c_id = ? AND o_entry_d = ?`
+	if err = client.Session.Query(
+		stmt,
+		balance, carrierID, warehouseID, districtID, customerID, entryDate).Exec(); err != nil {
 		log.Printf("[warn] Set new customer balance information err, err=%v", err)
 		return err
 	}
