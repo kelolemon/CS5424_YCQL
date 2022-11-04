@@ -19,8 +19,8 @@ func CreateNewOrder(order *common.Order) (err error) {
 
 func GetALlOrdersNotDelivery(warehouseID int32, districtID int32) (ordersNotDelivery []common.Order, err error) {
 	scanner := client.Session.Query(`SELECT * FROM "order" WHERE o_w_id = ? AND o_d_id = ? AND o_carrier_id = 0`, warehouseID, districtID).Iter().Scanner()
-	orderNotDelivery := common.Order{}
 	for scanner.Next() {
+		var orderNotDelivery common.Order
 		err := scanner.Scan(&orderNotDelivery.WarehouseID, &orderNotDelivery.DistrictID, &orderNotDelivery.ID, &orderNotDelivery.CustomerID,
 			&orderNotDelivery.CarrierID, &orderNotDelivery.NumItemOrdered, &orderNotDelivery.OrderAllLocal, &orderNotDelivery.OrderEntryTime)
 

@@ -20,7 +20,12 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 				return
 			}
 
-			lastOrderNotDelivery := common.Order{}
+			if len(orderRes) == 0 {
+				errChan <- nil
+				return
+			}
+
+			var lastOrderNotDelivery common.Order
 			for _, o := range orderRes {
 				if o.ID >= lastOrderNotDelivery.ID {
 					lastOrderNotDelivery = o
