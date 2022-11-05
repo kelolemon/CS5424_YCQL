@@ -42,23 +42,33 @@ func GetOrderLineByOrder(warehouseID int32, districtID int32, orderID int32) (or
 	return orderLines, nil
 }
 
+type orderLineIDItem struct {
+	olNumber int32
+	olItemID int32
+}
+
 func SetOrderLinesDeliveryDate(deliveryDate time.Time, warehouseID int32, districtID int32, orderID int32) (err error) {
-	selectStmt := `SELECT ol_number FROM orderline WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?`
-	orderlineNumbers := make([]int32, 0)
+	selectStmt := `SELECT ol_number, ol_i_id FROM orderline WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?`
+
+	orderlines := make([]orderLineIDItem, 0)
 
 	iter := client.Session.Query(selectStmt, warehouseID, districtID, orderID).Iter()
 
 	for {
 		var olNumber int32
-		if !iter.Scan(&olNumber) {
+		var olItemID int32
+		if !iter.Scan(&olNumber, &olItemID) {
 			break
 		}
-		orderlineNumbers = append(orderlineNumbers, olNumber)
+		orderlines = append(orderlines, orderLineIDItem{
+			olNumber: olNumber,
+			olItemID: olItemID,
+		})
 	}
 
-	updateStmt := `UPDATE orderline SET ol_delivery_d = ? WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ? AND ol_number = ?`
-	for _, olNumber := range orderlineNumbers {
-		if err = client.Session.Query(updateStmt, deliveryDate, warehouseID, districtID, orderID, olNumber).Exec(); err != nil {
+	updateStmt := `UPDATE orderline SET ol_delivery_d = ? WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ? AND ol_number = ? AND ol_i_id = ?`
+	for _, ol := range orderlines {
+		if err = client.Session.Query(updateStmt, deliveryDate, warehouseID, districtID, orderID, ol.olNumber, ol.olItemID).Exec(); err != nil {
 			log.Printf("[warn] Set new carrier date err, err=%v", err)
 			return err
 		}

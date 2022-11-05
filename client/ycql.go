@@ -11,6 +11,7 @@ const (
 	Cluster2IP = "xcnd7.comp.nus.edu.sg"
 	Cluster3IP = "xcnd8.comp.nus.edu.sg"
 	Cluster4IP = "xcnd50.comp.nus.edu.sg"
+	TestIP     = "127.0.0.1"
 	KeySpace   = "cs5424"
 )
 
