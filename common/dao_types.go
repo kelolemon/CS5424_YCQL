@@ -123,14 +123,6 @@ type OrderByCustomer struct {
 	CarrierID      int32     `cql:"o_carrier_id"`
 }
 
-type StockByOrderLine struct {
-	WarehouseID        int32           `cql:"w_id"`
-	DistrictID         int32           `cql:"d_id"`
-	OrderID            int32           `cql:"o_id"`
-	OrderEntryTime     time.Time       `cql:"o_entry_d"`
-	StockQuantitiesMap map[int32]int32 `cql:"s_quantity_map"`
-}
-
 type OrderLineQuantityByOrder struct {
 	WarehouseID            int32            `cql:"w_id"`
 	DistrictID             int32            `cql:"d_id"`
@@ -183,4 +175,9 @@ type OrderWithDateList struct {
 	OrderID        int32     `json:"o_id"`
 	CustomerID     int32     `json:"o_c_id"`
 	OrderEntryDate time.Time `json:"o_entry_d"`
+}
+
+type ItemWithStockQtyList struct {
+	ItemID   int32 `json:"s_i_id"`
+	StockQty int32 `json:"s_quantity"`
 }

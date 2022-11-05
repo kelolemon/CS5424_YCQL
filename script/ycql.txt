@@ -131,16 +131,6 @@ CREATE TABLE CS5424.OrderByCustomer (
 )
 WITH CLUSTERING ORDER BY (O_ENTRY_D DESC);
 
-CREATE TABLE CS5424.StockByOrderLine (
-  W_ID int,
-  D_ID int,
-  O_ID int,
-  O_ENTRY_D timestamp,
-  S_QUANTITY_MAP map<int, int>,
-  PRIMARY KEY ((W_ID, D_ID, O_ID), O_ENTRY_D)
-)
-WITH CLUSTERING ORDER BY (O_ENTRY_D DESC);
-
 CREATE TABLE CS5424.CustomerBalance (
   C_W_ID int,
   C_D_ID int,

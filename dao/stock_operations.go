@@ -45,3 +45,25 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, newStock.WarehouseI
 
 	return nil
 }
+
+func GetStockInfoByStock(warehouseID int32) (stockQtyList []common.ItemWithStockQtyList, err error) {
+	stmt := `SELECT s_i_id, s_quantity FROM stock where s_w_id = ?`
+	scanner := client.Session.Query(stmt, warehouseID).Iter().Scanner()
+
+	for scanner.Next() {
+		itemAndQty := common.ItemWithStockQtyList{}
+		err = scanner.Scan(&itemAndQty.ItemID, &itemAndQty.StockQty)
+		if err != nil {
+			log.Printf("[warn] Stock quantity info. scan error, err=%v", err)
+			return []common.ItemWithStockQtyList{}, err
+		}
+		stockQtyList = append(stockQtyList, itemAndQty)
+	}
+
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
+		return []common.ItemWithStockQtyList{}, err
+	}
+
+	return stockQtyList, nil
+}
