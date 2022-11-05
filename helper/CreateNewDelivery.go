@@ -100,6 +100,7 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 	}
 	for i := 1; i <= 10; i++ {
 		if err := <-errChan; err != nil {
+			log.Printf("[error] create new delivery error err=%v", err)
 			return common.CreateNewDeliveryResp{}, err
 		}
 	}

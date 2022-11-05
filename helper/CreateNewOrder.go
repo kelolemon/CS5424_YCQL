@@ -129,6 +129,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 	}
 	for i := int32(0); i < r.NumberItems; i++ {
 		if err := <-errChan; err != nil {
+			log.Printf("[error] create new order error err=%v", err)
 			return common.CreateOrderResp{}, err
 		}
 	}
