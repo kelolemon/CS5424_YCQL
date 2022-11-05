@@ -40,8 +40,14 @@ func GetALlOrdersNotDelivery(warehouseID int32, districtID int32) (ordersNotDeli
 	return ordersNotDelivery, nil
 }
 
-func SetCarrierInfo(warehouseID int32, districtID int32, OrderID int32, CarrierID int32) (err error) {
-	if err := client.Session.Query(`UPDATE "order" SET o_carrier_id = ? WHERE o_w_id = ? AND o_d_id = ? AND o_id = ?`, CarrierID, warehouseID, districtID, OrderID).Exec(); err != nil {
+func SetCarrierInfo(warehouseID int32, districtID int32, order common.Order, carrierID int32) (err error) {
+	deleteStmt := `DELETE from "order" where o_w_id = ? AND o_d_id = ? AND o_id = ? AND o_carrier_id`
+	if err := client.Session.Query(deleteStmt, warehouseID, districtID, order.ID, 0).Exec(); err != nil {
+		log.Printf("[warn] Set new carrier information err, err=%v", err)
+		return err
+	}
+	order.CarrierID = carrierID
+	if err := CreateNewOrder(&order); err != nil {
 		log.Printf("[warn] Set new carrier information err, err=%v", err)
 		return err
 	}

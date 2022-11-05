@@ -33,7 +33,7 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 			}
 
 			// (b) Update the order X by setting O CARRIER ID to CARRIER ID
-			err = dao.SetCarrierInfo(r.WarehouseID, int32(districtID), lastOrderNotDelivery.ID, r.CarrierID)
+			err = dao.SetCarrierInfo(r.WarehouseID, int32(districtID), lastOrderNotDelivery, r.CarrierID)
 			if err != nil {
 				log.Printf("[warn] update delivery error err=%v", err)
 				errChan <- err
