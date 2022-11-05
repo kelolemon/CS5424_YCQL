@@ -50,18 +50,18 @@ def handler(s):
             # print response content at stdout
             print(response)
         elif trans_type == 'N':
-            w_id = s[i][1]
-            d_id = s[i][2]
-            c_id = s[i][3]
-            num_items = s[i][4]
+            w_id = int(s[i][1])
+            d_id = int(s[i][2])
+            c_id = int(s[i][3])
+            num_items = int(s[i][4])
             item_ids = []
             supply_warehouse = []
             quantity = []
             for cnt in range(0, num_items):
                 i += 1
-                item_ids.append(s[i][0])
-                supply_warehouse.append(s[i][1])
-                quantity.append(s[i][2])
+                item_ids.append(int(s[i][0]))
+                supply_warehouse.append(int(s[i][1]))
+                quantity.append(int(s[i][2]))
             request_str = {
                 'w_id': w_id,
                 'd_id': d_id,
@@ -78,8 +78,8 @@ def handler(s):
             # print response content at stdout
             print(response)
         elif trans_type == 'D':
-            w_id = s[i][1]
-            carrier_id = s[i][2]
+            w_id = int(s[i][1])
+            carrier_id = int(s[i][2])
             request_str = {
                 'w_id': w_id,
                 'carrier_id': carrier_id
@@ -91,25 +91,25 @@ def handler(s):
             # print response content at stdout
             print(response)
         elif trans_type == 'O':
-            c_w_id = s[i][1]
-            c_d_id = s[i][2]
-            c_id = s[i][3]
+            c_w_id = int(s[i][1])
+            c_d_id = int(s[i][2])
+            c_id = int(s[i][3])
             request_str = {
                 'c_w_id': c_w_id,
                 'c_d_id': c_d_id,
                 'c_id': c_id
             }
-            response, latency = send_request('GET', header, request_str, api_url + '/order_status')
+            response, latency = send_request('GET', header, request_str, api_url + '/status')
             time_counter += latency
             requests_counter += 1
             latency_list.append(latency)
             # print response content at stdout
             print(response)
         elif trans_type == 'S':
-            w_id = s[i][1]
-            d_id = s[i][2]
-            t = s[i][3]
-            l = s[i][4]
+            w_id = int(s[i][1])
+            d_id = int(s[i][2])
+            t = int(s[i][3])
+            l = int(s[i][4])
             request_str = {
                 'w_id': w_id,
                 'd_id': d_id,
@@ -123,9 +123,9 @@ def handler(s):
             # print response content at stdout
             print(response)
         elif trans_type == 'I':
-            w_id = s[i][1]
-            d_id = s[i][2]
-            l = s[i][3]
+            w_id = int(s[i][1])
+            d_id = int(s[i][2])
+            l = int(s[i][3])
             request_str = {
                 'w_id': w_id,
                 'd_id': d_id,
@@ -145,9 +145,9 @@ def handler(s):
             # print response content at stdout
             print(response)
         elif trans_type == 'R':
-            c_w_id = s[i][1]
-            c_d_id = s[i][2]
-            c_id = s[i][3]
+            c_w_id = int(s[i][1])
+            c_d_id = int(s[i][2])
+            c_id = int(s[i][3])
             request_str = {
                 'c_w_id': c_w_id,
                 'c_d_id': c_d_id,
