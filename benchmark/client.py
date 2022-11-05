@@ -50,9 +50,9 @@ def handler(s):
             # print response content at stdout
             print(response)
         elif trans_type == 'N':
-            w_id = int(s[i][1])
-            d_id = int(s[i][2])
-            c_id = int(s[i][3])
+            w_id = int(s[i][2])
+            d_id = int(s[i][3])
+            c_id = int(s[i][1])
             num_items = int(s[i][4])
             item_ids = []
             supply_warehouse = []

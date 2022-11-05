@@ -78,7 +78,7 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 			// update select customer balance table
 			customerBalanceRes, err := dao.GetCustomerBalanceInfo(customerRes.ID, r.WarehouseID, int32(districtID))
 			if err != nil {
-				log.Printf("[warn] get customer balance info error, err=%v", err)
+				log.Printf("[warn] get customer balance info error, err=%v, costomer=%v", err, customerRes)
 				errChan <- err
 				return
 			}
