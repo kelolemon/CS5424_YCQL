@@ -42,7 +42,7 @@ func GetRelatedCustomer(r common.GetRelatedCustomerReq) (res common.GetRelatedCu
 				go func(targetItem int32) {
 					orderIdentifiers, err := dao.GetOrderIdentifiersByItemID(targetItem)
 					if err != nil {
-						log.Printf("[warn] Get order identifiers err, err=%v", orderIdentifiers)
+						log.Printf("[warn] Get order identifiers err, err=%v", err)
 						subErrChan <- err
 						return
 					}
