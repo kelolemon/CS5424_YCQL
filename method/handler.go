@@ -85,8 +85,27 @@ func CreateNewDelivery(c *gin.Context) {
 	})
 }
 
+// GetOrderStatus GET last order status
 func GetOrderStatus(c *gin.Context) {
-
+	var getOrderStatus common.GetLastOrderStatusReq
+	err := c.ShouldBindQuery(&getOrderStatus)
+	if err != nil {
+		log.Printf("get param error, err=%v", err)
+		c.JSON(400, gin.H{
+			"message": "bad request",
+		})
+		return
+	}
+	log.Printf("[info] getting last order status for warehouse_id: %d, district_id: %d, customer_id: %d",
+		getOrderStatus.WarehouseID, getOrderStatus.DistrictID, getOrderStatus.CustomerID)
+	res, err := helper.GetLastOrderStatus(getOrderStatus)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": "internal error",
+		})
+		return
+	}
+	c.JSON(200, res)
 }
 
 // GetStockLowLevelItemNumber GET low level info
@@ -136,6 +155,7 @@ func GetPopularItem(c *gin.Context) {
 	c.JSON(200, res)
 }
 
+// GetTopBalanceTransaction Get top customer balance
 func GetTopBalanceTransaction(c *gin.Context) {
 	res, err := helper.GetTopBalanceCustomer(common.GetTopBalanceCustomerReq{})
 	if err != nil {
@@ -147,6 +167,25 @@ func GetTopBalanceTransaction(c *gin.Context) {
 	c.JSON(200, res)
 }
 
+// GetRelatedCustomerTransaction Get most related customer
 func GetRelatedCustomerTransaction(c *gin.Context) {
-
+	var getRelatedCustomerReq common.GetRelatedCustomerReq
+	err := c.ShouldBindQuery(&getRelatedCustomerReq)
+	if err != nil {
+		log.Printf("get param error, err=%v", err)
+		c.JSON(400, gin.H{
+			"message": "bad request",
+		})
+		return
+	}
+	log.Printf("[info] getting related customers for warehouse_id: %d, district_id: %d, customer_id: %d",
+		getRelatedCustomerReq.WarehouseID, getRelatedCustomerReq.DistrictID, getRelatedCustomerReq.CustomerID)
+	res, err := helper.GetRelatedCustomer(getRelatedCustomerReq)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": "internal error",
+		})
+		return
+	}
+	c.JSON(200, res)
 }

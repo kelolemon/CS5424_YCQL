@@ -260,10 +260,10 @@ func TestGetRelatedCustomer(t *testing.T) {
 		relatedCustomerReq := common.GetRelatedCustomerReq{
 			WarehouseID: 1,
 			DistrictID:  1,
-			CustomerID:  1,
+			CustomerID:  3000,
 		}
 
-		relatedCustomerResp, _ := helper.GetRelativeCustomer(relatedCustomerReq)
+		relatedCustomerResp, _ := helper.GetRelatedCustomer(relatedCustomerReq)
 		fmt.Printf("%v+\n", relatedCustomerResp)
 	}
 }

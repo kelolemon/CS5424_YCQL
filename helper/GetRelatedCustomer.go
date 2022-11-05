@@ -22,7 +22,7 @@ func Contains[T comparable](s []T, e T) bool {
 	return false
 }
 
-func GetRelativeCustomer(r common.GetRelatedCustomerReq) (res common.GetRelatedCustomerResp, err error) {
+func GetRelatedCustomer(r common.GetRelatedCustomerReq) (res common.GetRelatedCustomerResp, err error) {
 	// step 1. get all orders of the target customer
 	targetOrderQuantities, err := dao.GetAllOrderLineQuantitiesByCustomer(r.WarehouseID, r.DistrictID, r.CustomerID)
 
