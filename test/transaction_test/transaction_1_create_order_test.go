@@ -29,7 +29,7 @@ func TestInsertCreateNewOrderTestData(t *testing.T) {
 		Zip:         "123456",
 		Tax:         0,
 		YTD:         0,
-		NextOrderID: 3,
+		NextOrderID: 1,
 	}
 
 	err = dao.InsertNewDistrictInfo(&newDistrict)
