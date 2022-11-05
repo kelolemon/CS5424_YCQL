@@ -19,6 +19,7 @@ func GetStockLevelLowItemNumber(r common.GetStockLevelLowItemNumberReq) (res com
 	totalNumberItems := int32(0)
 	ItemAndQtyList, err := dao.GetStockInfoByStock(r.WarehouseID)
 	ItemQtyMap := make(map[int32]int32)
+
 	for _, v := range ItemAndQtyList {
 		ItemQtyMap[v.ItemID] = v.StockQty
 	}
@@ -27,8 +28,9 @@ func GetStockLevelLowItemNumber(r common.GetStockLevelLowItemNumberReq) (res com
 	for i := n - r.LastOrders; i < n; i++ {
 		go func(i int32) {
 			stockByOrderLineRes, err := dao.GetOrderLineQuantity(r.WarehouseID, r.DistrictID, i)
+
 			if err != nil {
-				log.Printf("[warn] get last stock by order line info error, err=%v", err)
+				log.Printf("[warn] Get last stock by order line info error, err=%v", err)
 				errChan <- err
 				return
 			}

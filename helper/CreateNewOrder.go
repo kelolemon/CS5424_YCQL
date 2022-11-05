@@ -165,19 +165,8 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		log.Printf("[warn] Create order by customer error, err=%v", err)
 		return common.CreateOrderResp{}, err
 	}
-	// 8. add stock by order operations
-	err = dao.InsertStockByOrderLineInfo(&common.StockByOrderLine{
-		WarehouseID:        r.WarehouseID,
-		DistrictID:         r.DistrictID,
-		OrderID:            n,
-		OrderEntryTime:     orderEntryDate,
-		StockQuantitiesMap: itemStockQuantity,
-	})
-	if err != nil {
-		log.Printf("[warn] Create stock by order line error, err=%v", err)
-		return common.CreateOrderResp{}, err
-	}
-	// 9. add order line quantity by order operations
+
+	// 8. add order line quantity by order operations
 	err = dao.InsertOrderLineQuantityByOrderInfo(&common.OrderLineQuantityByOrder{
 		WarehouseID:            r.WarehouseID,
 		DistrictID:             r.DistrictID,

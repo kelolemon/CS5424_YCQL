@@ -11,7 +11,7 @@ import (
 
 func TestStockLevel(t *testing.T) {
 	err := client.InitDB()
-	assert.Error(t, err)
+	assert.NoError(t, err)
 
 	if client.Session != nil {
 		defer client.Session.Close()
