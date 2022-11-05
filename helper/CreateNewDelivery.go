@@ -3,6 +3,7 @@ package helper
 import (
 	"cs5234/common"
 	"cs5234/dao"
+	"fmt"
 	"log"
 	"time"
 )
@@ -31,7 +32,7 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 					lastOrderNotDelivery = o
 				}
 			}
-
+			fmt.Println(lastOrderNotDelivery)
 			// (b) Update the order X by setting O CARRIER ID to CARRIER ID
 			err = dao.SetCarrierInfo(r.WarehouseID, int32(districtID), lastOrderNotDelivery, r.CarrierID)
 			if err != nil {
@@ -57,6 +58,7 @@ func CreateNewDelivery(r common.CreateNewDeliveryReq) (res common.CreateNewDeliv
 				return
 			}
 			customerRes, err := dao.GetCustomerInfo(lastOrderNotDelivery.CustomerID, r.WarehouseID, int32(districtID))
+
 			if err != nil {
 				log.Printf("[warn] get customer info error, err=%v", err)
 				errChan <- err

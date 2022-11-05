@@ -18,7 +18,7 @@ func CreateNewOrder(order *common.Order) (err error) {
 }
 
 func GetALlOrdersNotDelivery(warehouseID int32, districtID int32) (ordersNotDelivery []common.Order, err error) {
-	scanner := client.Session.Query(`SELECT * FROM "order" WHERE o_w_id = ? AND o_d_id = ? AND o_carrier_id = 0`, warehouseID, districtID).Iter().Scanner()
+	scanner := client.Session.Query(`SELECT o_w_id, o_d_id, o_id, o_c_id, o_carrier_id, o_ol_cnt, o_all_local, o_entry_d FROM "order" WHERE o_w_id = ? AND o_d_id = ? AND o_carrier_id = 0`, warehouseID, districtID).Iter().Scanner()
 	for scanner.Next() {
 		var orderNotDelivery common.Order
 		err := scanner.Scan(&orderNotDelivery.WarehouseID, &orderNotDelivery.DistrictID, &orderNotDelivery.ID, &orderNotDelivery.CustomerID,
@@ -41,7 +41,7 @@ func GetALlOrdersNotDelivery(warehouseID int32, districtID int32) (ordersNotDeli
 }
 
 func SetCarrierInfo(warehouseID int32, districtID int32, order common.Order, carrierID int32) (err error) {
-	deleteStmt := `DELETE from "order" where o_w_id = ? AND o_d_id = ? AND o_id = ? AND o_carrier_id`
+	deleteStmt := `DELETE from "order" where o_w_id = ? AND o_d_id = ? AND o_id = ? AND o_carrier_id = ?`
 	if err := client.Session.Query(deleteStmt, warehouseID, districtID, order.ID, 0).Exec(); err != nil {
 		log.Printf("[warn] Set new carrier information err, err=%v", err)
 		return err
