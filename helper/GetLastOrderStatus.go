@@ -3,6 +3,7 @@ package helper
 import (
 	"cs5234/common"
 	"cs5234/dao"
+	"log"
 )
 
 func GetLastOrderStatus(r common.GetLastOrderStatusReq) (res common.GetLastOrderStatusResp, err error) {
@@ -14,7 +15,7 @@ func GetLastOrderStatus(r common.GetLastOrderStatusReq) (res common.GetLastOrder
 
 	// step 2. use orderByCustomer.c_last_o_id to get the orderLine information in table `orderLine`
 	orderLines, err := dao.GetOrderLineByOrder(orderByCustomer.WarehouseID, orderByCustomer.DistrictID, orderByCustomer.LastOrderID)
-
+	log.Printf("[error] get orderline by order err=%v, r=%v", err, r)
 	// step 3. pack the output data
 	res = common.GetLastOrderStatusResp{
 		FirstName:      orderByCustomer.FirstName,

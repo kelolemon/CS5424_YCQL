@@ -62,9 +62,9 @@ type CreateNewPaymentResp struct {
 }
 
 type GetLastOrderStatusReq struct {
-	WarehouseID int32 `json:"c_w_id"`
-	DistrictID  int32 `json:"c_d_id"`
-	CustomerID  int32 `json:"c_id"`
+	WarehouseID int32 `form:"c_w_id"`
+	DistrictID  int32 `form:"c_d_id"`
+	CustomerID  int32 `form:"c_id"`
 }
 
 type LastOrderStatusItemList struct {
@@ -122,9 +122,9 @@ type CreateNewDeliveryResp struct {
 }
 
 type GetRelatedCustomerReq struct {
-	WarehouseID int32 `json:"c_w_id"`
-	DistrictID  int32 `json:"c_d_id"`
-	CustomerID  int32 `json:"c_id"`
+	WarehouseID int32 `form:"c_w_id"`
+	DistrictID  int32 `form:"c_d_id"`
+	CustomerID  int32 `form:"c_id"`
 }
 
 type CustomerList struct {
@@ -144,9 +144,9 @@ type OrderIdentifierList struct {
 }
 
 type GetPopularItemReq struct {
-	WarehouseID   int32 `json:"w_id"`
-	DistrictID    int32 `json:"d_id"`
-	NumLastOrders int32 `json:"num_last_orders"`
+	WarehouseID   int32 `form:"w_id"`
+	DistrictID    int32 `form:"d_id"`
+	NumLastOrders int32 `form:"num_last_orders"`
 }
 
 type GetPopularItemResp struct {
