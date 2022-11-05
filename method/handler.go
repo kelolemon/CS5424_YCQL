@@ -21,6 +21,7 @@ func CreateNewOrder(c *gin.Context) {
 		log.Printf("[warn] request json converted error, err = %v, request body = %v", err, string(raw))
 		c.JSON(400, gin.H{
 			"message": "bad request",
+			"err":     err,
 		})
 		return
 	}
@@ -28,6 +29,7 @@ func CreateNewOrder(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{
 			"message": "internal error",
+			"err":     err,
 		})
 		return
 	}
@@ -45,6 +47,7 @@ func CreateNewPayment(c *gin.Context) {
 		log.Printf("[warn] request json converted error, err = %v, request body = %v", err, string(raw))
 		c.JSON(400, gin.H{
 			"message": "bad request",
+			"err":     err,
 		})
 		return
 	}
@@ -53,6 +56,7 @@ func CreateNewPayment(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{
 			"message": "internal error",
+			"err":     err,
 		})
 		return
 	}
@@ -70,6 +74,7 @@ func CreateNewDelivery(c *gin.Context) {
 		log.Printf("[warn] request json converted error, err = %v, request body = %v", err, string(raw))
 		c.JSON(400, gin.H{
 			"message": "bad request",
+			"err":     err,
 		})
 		return
 	}
@@ -77,6 +82,7 @@ func CreateNewDelivery(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{
 			"message": "internal error",
+			"err":     err,
 		})
 		return
 	}
@@ -93,6 +99,7 @@ func GetOrderStatus(c *gin.Context) {
 		log.Printf("get param error, err=%v", err)
 		c.JSON(400, gin.H{
 			"message": "bad request",
+			"err":     err,
 		})
 		return
 	}
@@ -102,6 +109,7 @@ func GetOrderStatus(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{
 			"message": "internal error",
+			"err":     err,
 		})
 		return
 	}
@@ -118,6 +126,7 @@ func GetStockLowLevelItemNumber(c *gin.Context) {
 		log.Printf("get param error, err=%v", err)
 		c.JSON(400, gin.H{
 			"message": "bad request",
+			"err":     err,
 		})
 		return
 	}
@@ -126,6 +135,7 @@ func GetStockLowLevelItemNumber(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{
 			"message": "internal error",
+			"err":     err,
 		})
 		return
 	}
@@ -140,6 +150,7 @@ func GetPopularItem(c *gin.Context) {
 		log.Printf("get param error, err=%v", err)
 		c.JSON(400, gin.H{
 			"message": "bad request",
+			"err":     err,
 		})
 		return
 	}
@@ -149,6 +160,7 @@ func GetPopularItem(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{
 			"message": "internal error",
+			"err":     err,
 		})
 		return
 	}
@@ -161,6 +173,7 @@ func GetTopBalanceTransaction(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{
 			"message": "internal error",
+			"err":     err,
 		})
 		return
 	}
@@ -175,6 +188,7 @@ func GetRelatedCustomerTransaction(c *gin.Context) {
 		log.Printf("get param error, err=%v", err)
 		c.JSON(400, gin.H{
 			"message": "bad request",
+			"err":     err,
 		})
 		return
 	}
@@ -184,6 +198,7 @@ func GetRelatedCustomerTransaction(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{
 			"message": "internal error",
+			"err":     err,
 		})
 		return
 	}
