@@ -129,7 +129,7 @@ def handler(s, nub):
             request_str = {
                 'w_id': w_id,
                 'd_id': d_id,
-                'l': l
+                'num_last_orders': l
             }
             response, latency = send_request('GET', header, request_str, api_url + '/item')
             time_counter += latency
