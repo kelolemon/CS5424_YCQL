@@ -24,7 +24,7 @@ def send_request(request_type, request_header, request_data, request_url):
         return response, latency
 
 
-def handler(s):
+def handler(s, nub):
     time_counter = 0
     requests_counter = 0
     latency_list = []
@@ -159,13 +159,9 @@ def handler(s):
             latency_list.append(latency)
             # print response content at stdout
             print(response)
-    print('tot number of transactions is', requests_counter, file=sys.stderr)
-    print('Total elapsed time for processing the transactions', time_counter / 1000, file=sys.stderr)
-    print('throughput is', requests_counter / (time_counter / 1000), file=sys.stderr)
-    print('Average transaction latency', np.mean(latency_list), file=sys.stderr)
-    print('Median transaction latency', np.median(latency_list), file=sys.stderr)
-    print('95th percentile transaction latency', np.percentile(latency_list, 95), file=sys.stderr)
-    print('99th percentile transaction latency', np.percentile(latency_list, 99), file=sys.stderr)
+    print(nub + "," + requests_counter + "," + time_counter / 1000 + "," + requests_counter / (time_counter / 1000)
+          + "," + np.mean(latency_list) + "," + np.median(latency_list) + "," + np.percentile(latency_list, 95) + ","
+          + np.percentile(latency_list, 99))
 
 
 def read_from_file(nub):

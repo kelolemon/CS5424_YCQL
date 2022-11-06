@@ -14,4 +14,5 @@ mkdir -p /mnt/ramdisk/cs4224c/disk2
 --fs_data_dirs "/mnt/ramdisk/cs4224c/disk,/mnt/ramdisk/cs4224c/disk2" \
 --redis_proxy_bind_address "${1}":6479 \
 --redis_proxy_webserver_port 11100 \
+--client_read_write_timeout_ms=10000000 \
 >& /temp/cs4224c/ygdb_tserver.log &

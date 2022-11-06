@@ -24,7 +24,9 @@ func InitDB() (err error) {
 	dbCluster = gocql.NewCluster(TestIP)
 	dbCluster.Keyspace = KeySpace
 	dbCluster.Consistency = gocql.Quorum
-	dbCluster.Timeout = 1000000 * time.Millisecond
+	dbCluster.Timeout = 100000000 * time.Millisecond
+	dbCluster.ConnectTimeout = 100000000 * time.Millisecond
+	dbCluster.MaxWaitSchemaAgreement = 100000000 * time.Millisecond
 	dbCluster.Port = 9042
 
 	Session, err = dbCluster.CreateSession()
