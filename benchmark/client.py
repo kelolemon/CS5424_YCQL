@@ -188,7 +188,7 @@ def benchmark():
     for thread in threads:
         thread.start()
     for thread in threads:
-        if thread.isAlive():
+        if thread.is_alive():
             thread.join()
 
 

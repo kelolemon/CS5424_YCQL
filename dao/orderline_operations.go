@@ -77,12 +77,26 @@ func SetOrderLinesDeliveryDate(deliveryDate time.Time, warehouseID int32, distri
 	return nil
 }
 
-func GetOrderAmount(warehouseID int32, districtID int32, orderID int32) (amount float64, err error) {
-	if err = client.Session.Query(`Select sum(ol_amount) from orderline where ol_w_id = ? and ol_d_id = ? and ol_o_id = ?`, warehouseID, districtID, orderID).Scan(&amount); err != nil {
-		log.Printf("[warn] get order line amount err, err=%v", err)
+func GetOrderAmount(warehouseID int32, districtID int32, orderID int32) (sum float64, err error) {
+	stmt := `Select ol_amount from orderline where ol_w_id = ? and ol_d_id = ? and ol_o_id = ?`
+	scanner := client.Session.Query(stmt, warehouseID, districtID, orderID).Iter().Scanner()
+
+	for scanner.Next() {
+		temp := float64(0)
+		err = scanner.Scan(&temp)
+		if err != nil {
+			log.Printf("[warn] Scan order line amount err, err=%v", err)
+			return 0, err
+		}
+		sum += temp
+	}
+
+	if err = scanner.Err(); err != nil {
+		log.Printf("[warn] Scanner err, err=%v", err)
 		return 0, err
 	}
-	return amount, nil
+
+	return sum, nil
 }
 
 func GetOrderIdentifiersByItemID(itemID int32) (orderIdentifiers []common.OrderIdentifierList, err error) {
