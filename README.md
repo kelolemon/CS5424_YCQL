@@ -1,6 +1,11 @@
 # CS5424_YCQL
 
+## config 
+the config file is in config.yaml, we can config cluster ips and cql ports in it.
+here is a sample 
+```
 
+```
 
 
 

@@ -1,0 +1,7 @@
+port: 9142
+ips:
+  - "xcnd5.comp.nus.edu.sg"
+  - "xcnd6.comp.nus.edu.sg"
+  - "xcnd7.comp.nus.edu.sg"
+  - "xcnd8.comp.nus.edu.sg"
+  - "xcnd50.comp.nus.edu.sg"

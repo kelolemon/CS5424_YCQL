@@ -1,18 +1,19 @@
 package client
 
 import (
+	"cs5234/config"
 	"github.com/yugabyte/gocql"
 	"time"
 )
 
 const (
-	//Cluster0IP = "xcnd5.comp.nus.edu.sg"
-	//Cluster1IP = "xcnd6.comp.nus.edu.sg"
-	//Cluster2IP = "xcnd7.comp.nus.edu.sg"
-	//Cluster3IP = "xcnd8.comp.nus.edu.sg"
-	//Cluster4IP = "xcnd50.comp.nus.edu.sg"
-	TestIP   = "127.0.0.1"
-	KeySpace = "cs5424"
+	Cluster0IP = "xcnd5.comp.nus.edu.sg"
+	Cluster1IP = "xcnd6.comp.nus.edu.sg"
+	Cluster2IP = "xcnd7.comp.nus.edu.sg"
+	Cluster3IP = "xcnd8.comp.nus.edu.sg"
+	Cluster4IP = "xcnd50.comp.nus.edu.sg"
+	TestIP     = "127.0.0.1"
+	KeySpace   = "cs5424"
 )
 
 var (
@@ -21,12 +22,12 @@ var (
 
 func InitDB() (err error) {
 	var dbCluster *gocql.ClusterConfig
-	dbCluster = gocql.NewCluster(TestIP)
+	dbCluster = gocql.NewCluster(config.ClusterConfig.Ips...)
 	dbCluster.Keyspace = KeySpace
 	dbCluster.Consistency = gocql.Quorum
 
 	dbCluster.Timeout = 1000000 * time.Millisecond
-	dbCluster.Port = 9042
+	dbCluster.Port = config.ClusterConfig.Port
 	dbCluster.ConnectTimeout = 100000000 * time.Millisecond
 	dbCluster.MaxWaitSchemaAgreement = 100000000 * time.Millisecond
 
