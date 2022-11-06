@@ -5,6 +5,7 @@ import (
 	"cs5234/dao"
 	"log"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -48,11 +49,16 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 	//4.Initialize TOTAL AMOUNT = 0
 	totalAmount := float64(0)
 	//self stock by order & order line by order map
-	itemStockQuantity := make(map[int32]int32)
-	itemOrderQuantity := make(map[int32]int32)
-	itemIdNameMap := make(map[int32]string)
 	//5. handle data，
-	items := make([]common.ItemList, 0)
+	type itemsWithLock struct {
+		items             []common.ItemList
+		itemStockQuantity map[int32]int32
+		itemOrderQuantity map[int32]int32
+		itemIdNameMap     map[int32]string
+		mu                sync.Mutex
+	}
+	itemFieldsWithLock := itemsWithLock{}
+
 	errChan := make(chan error, r.NumberItems)
 	for i := int32(0); i < r.NumberItems; i++ {
 		go func(i int32) {
@@ -113,7 +119,8 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 				return
 			}
 
-			items = append(items, common.ItemList{
+			itemFieldsWithLock.mu.Lock()
+			itemFieldsWithLock.items = append(itemFieldsWithLock.items, common.ItemList{
 				ItemNumber:        r.ItemNumber[i],
 				ItemName:          itemRes.Name,
 				SupplyWarehouseID: r.SupplyWarehouse[i],
@@ -121,11 +128,14 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 				OrderAmount:       itemAmount,
 				StockQuantity:     adjustedQTY,
 			})
-			itemStockQuantity[r.ItemNumber[i]] = adjustedQTY
-			itemOrderQuantity[r.ItemNumber[i]] = r.Quantity[i]
-			itemIdNameMap[r.ItemNumber[i]] = itemRes.Name
+			itemFieldsWithLock.itemStockQuantity[r.ItemNumber[i]] = adjustedQTY
+			itemFieldsWithLock.itemOrderQuantity[r.ItemNumber[i]] = r.Quantity[i]
+			itemFieldsWithLock.itemIdNameMap[r.ItemNumber[i]] = itemRes.Name
+			itemFieldsWithLock.mu.Unlock()
+
+			errChan <- nil
+			return
 		}(i)
-		errChan <- nil
 	}
 	for i := int32(0); i < r.NumberItems; i++ {
 		if err := <-errChan; err != nil {
@@ -173,8 +183,8 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		DistrictID:             r.DistrictID,
 		OrderID:                n,
 		OrderEntryTime:         orderEntryDate,
-		OrderLineQuantitiesMap: itemOrderQuantity,
-		OrderItemsIDNameMap:    itemIdNameMap,
+		OrderLineQuantitiesMap: itemFieldsWithLock.itemOrderQuantity,
+		OrderItemsIDNameMap:    itemFieldsWithLock.itemIdNameMap,
 		CustomerID:             r.CustomerID,
 		CustomerFirstName:      customerRes.FirstName,
 		CustomerMiddleName:     customerRes.MiddleName,
@@ -198,7 +208,7 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		EntryDate:    orderEntryDate,
 		NumberItems:  r.NumberItems,
 		TotalAmount:  totalAmount,
-		Items:        items,
+		Items:        itemFieldsWithLock.items,
 	}
 	return res, nil
 }
