@@ -25,7 +25,7 @@ CREATE TABLE CS5424.Order (
   O_OL_CNT int,
   O_ALL_LOCAL int,
   O_ENTRY_D timestamp,
-  PRIMARY KEY (O_ID, O_W_ID, O_D_ID)
+  PRIMARY KEY ((O_ID, O_W_ID, O_D_ID), O_CARRIER_ID)
 );
 
 CREATE TABLE CS5424.OrderLine (
