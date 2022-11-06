@@ -1,0 +1,5 @@
+ssh x0 "./kill.sh"
+ssh x1 "./kill.sh"
+ssh x2 "./kill.sh"
+ssh x3 "./kill.sh"
+ssh x4 "./kill.sh"

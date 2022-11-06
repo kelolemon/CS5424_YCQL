@@ -1,0 +1,5 @@
+ssh x0 "./tserver_without_r.sh xcnd5.comp.nus.edu.sg"
+ssh x1 "./tserver_without_r.sh xcnd6.comp.nus.edu.sg"
+ssh x2 "./tserver_without_r.sh xcnd7.comp.nus.edu.sg"
+ssh x3 "./tserver_without_r.sh xcnd8.comp.nus.edu.sg"
+ssh x4 "./tserver_without_r.sh xcnd50.comp.nus.edu.sg"

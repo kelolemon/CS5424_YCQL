@@ -1,0 +1,5 @@
+ssh x0 "rm -rf /mnt/ramdisk/cs4224c"
+ssh x1 "rm -rf /mnt/ramdisk/cs4224c"
+ssh x2 "rm -rf /mnt/ramdisk/cs4224c"
+ssh x3 "rm -rf /mnt/ramdisk/cs4224c"
+ssh x4 "rm -rf /mnt/ramdisk/cs4224c"
