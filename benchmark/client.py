@@ -66,7 +66,7 @@ def handler(s, nub):
                 'w_id': w_id,
                 'd_id': d_id,
                 'c_id': c_id,
-                'num_items': num_items,
+                'number_items': num_items,
                 'item_number': item_ids,
                 'supply_warehouse': supply_warehouse,
                 'quantity': quantity
