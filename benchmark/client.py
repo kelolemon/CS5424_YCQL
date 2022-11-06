@@ -180,11 +180,11 @@ def read_from_stdin():
 def benchmark():
     threads = []
     for i in range(0, 20):
-        threads.append(threading.Thread(target=handler, args=(read_from_file(i),)))
+        threads.append(threading.Thread(target=handler, args=(read_from_file(i), i,)))
     for thread in threads:
         thread.start()
     for thread in threads:
-        if thread.isAlive():
+        if thread.is_alive():
             thread.join()
 
 
@@ -196,7 +196,7 @@ def main():
         benchmark()
     else:
         s = read_from_stdin()
-        handler(s)
+        handler(s, -1)
 
 
 if __name__ == "__main__":
