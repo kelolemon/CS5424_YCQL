@@ -57,7 +57,12 @@ func CreateNewOrder(r common.CreateOrderReq) (res common.CreateOrderResp, err er
 		itemIdNameMap     map[int32]string
 		mu                sync.Mutex
 	}
-	itemFieldsWithLock := itemsWithLock{}
+	itemFieldsWithLock := itemsWithLock{
+		items:             make([]common.ItemList, 0),
+		itemStockQuantity: make(map[int32]int32),
+		itemOrderQuantity: make(map[int32]int32),
+		itemIdNameMap:     make(map[int32]string),
+	}
 
 	errChan := make(chan error, r.NumberItems)
 	for i := int32(0); i < r.NumberItems; i++ {
