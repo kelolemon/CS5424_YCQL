@@ -159,6 +159,8 @@ def handler(s, nub):
             latency_list.append(latency)
             # print response content at stdout
             print(response)
+        else:
+            pass
     print(str(nub) + "," + str(requests_counter) + "," + str(time_counter) + "," + str(requests_counter / time_counter )
           + "," + str(np.mean(latency_list * 1000)) + "," + str(np.median(latency_list) * 1000) + "," + str(np.percentile(latency_list, 95) * 1000) + ","
           + str(np.percentile(latency_list, 99) * 1000), file=sys.stderr)
@@ -179,7 +181,7 @@ def read_from_stdin():
 
 def benchmark():
     threads = []
-    for i in range(0, 20):
+    for i in range(0, 5):
         threads.append(threading.Thread(target=handler, args=(read_from_file(i), i,)))
     for thread in threads:
         thread.start()
