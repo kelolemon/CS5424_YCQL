@@ -49,7 +49,7 @@ func DeleteOrderByCustomerInfo(customerID int32, warehouseID int32, districtID i
 	return nil
 }
 
-func SetOrderByCustomerBalanceINfo(balance float64, carrierID int32, warehouseID int32, districtID int32, customerID int32, entryDate time.Time) (err error) {
+func SetOrderByCustomerBalanceInfo(balance float64, carrierID int32, warehouseID int32, districtID int32, customerID int32, entryDate time.Time) (err error) {
 	stmt := `UPDATE orderbycustomer SET c_balance = ?, o_carrier_id = ? 
                        WHERE c_w_id = ? and c_d_id = ? and c_id = ? AND o_entry_d = ?`
 	if err = client.Session.Query(
