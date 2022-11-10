@@ -135,12 +135,12 @@ func TestCreateNewOrder(t *testing.T) {
 
 	createNewOrderReq := common.CreateOrderReq{
 		WarehouseID:     1,
-		DistrictID:      1,
-		CustomerID:      20,
-		NumberItems:     2,
-		ItemNumber:      []int32{1, 2},
-		SupplyWarehouse: []int32{1, 1},
-		Quantity:        []int32{4, 5},
+		DistrictID:      3,
+		CustomerID:      75,
+		NumberItems:     10,
+		ItemNumber:      []int32{4163, 6182, 6215, 15587, 72903, 78205, 81380, 85050, 85671, 98023},
+		SupplyWarehouse: []int32{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		Quantity:        []int32{3, 4, 5, 10, 1, 1, 3, 6, 4, 4},
 	}
 
 	createNewOrderResp, err := helper.CreateNewOrder(createNewOrderReq)
