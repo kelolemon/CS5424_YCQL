@@ -58,10 +58,10 @@ def handler(s, nub):
             supply_warehouse = []
             quantity = []
             for cnt in range(0, num_items):
-                i += 1
-                item_ids.append(int(s[i][0]))
-                supply_warehouse.append(int(s[i][1]))
-                quantity.append(int(s[i][2]))
+                line = i + cnt + 1
+                item_ids.append(int(s[line][0]))
+                supply_warehouse.append(int(s[line][1]))
+                quantity.append(int(s[line][2]))
             request_str = {
                 'w_id': w_id,
                 'd_id': d_id,
