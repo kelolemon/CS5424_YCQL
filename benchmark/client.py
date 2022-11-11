@@ -181,7 +181,7 @@ def read_from_stdin():
 
 def benchmark():
     threads = []
-    for i in range(0, 5):
+    for i in range(0, 20):
         threads.append(threading.Thread(target=handler, args=(read_from_file(i), i,)))
     for thread in threads:
         thread.start()

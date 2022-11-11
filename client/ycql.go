@@ -1,7 +1,6 @@
 package client
 
 import (
-	"cs5234/config"
 	"github.com/yugabyte/gocql"
 	"time"
 )
@@ -22,12 +21,12 @@ var (
 
 func InitDB() (err error) {
 	var dbCluster *gocql.ClusterConfig
-	dbCluster = gocql.NewCluster(config.ClusterConfig.Ips...)
+	dbCluster = gocql.NewCluster(TestIP)
 	dbCluster.Keyspace = KeySpace
 	dbCluster.Consistency = gocql.Quorum
 
 	dbCluster.Timeout = 1000000 * time.Millisecond
-	dbCluster.Port = config.ClusterConfig.Port
+	dbCluster.Port = 9042
 	dbCluster.ConnectTimeout = 100000000 * time.Millisecond
 	dbCluster.MaxWaitSchemaAgreement = 100000000 * time.Millisecond
 

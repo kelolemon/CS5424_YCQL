@@ -16,8 +16,8 @@ func TestDelivery(t *testing.T) {
 	if client.Session != nil {
 		defer client.Session.Close()
 		resp, err := helper.CreateNewDelivery(common.CreateNewDeliveryReq{
-			WarehouseID: 1,
-			CarrierID:   5,
+			WarehouseID: 3,
+			CarrierID:   2,
 		})
 
 		assert.NoError(t, err)
